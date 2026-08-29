@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Generator;
 use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Api\OperationInterface;
 
 /**
@@ -65,8 +66,11 @@ abstract class ProviderTestCase extends DbTestCase
         ]));
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Provider successfully executed"
 }

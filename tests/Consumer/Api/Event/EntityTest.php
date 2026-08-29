@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Consumer\Api\Event;
 
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * EntityTest
@@ -49,9 +50,11 @@ class EntityTest extends DbTestCase
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "id": {$this->eventId},
     "status": 1,
     "name": "foo-event",
@@ -74,9 +77,11 @@ JSON;
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "id": {$this->eventId},
     "status": 1,
     "name": "foo-event",

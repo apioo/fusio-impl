@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\CronjobRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private CronjobRow $existing;
-
-    public function __construct(CronjobRow $existing, UserContext $context)
+    public function __construct(private readonly CronjobRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): CronjobRow

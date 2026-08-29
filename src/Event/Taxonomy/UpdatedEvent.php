@@ -34,15 +34,9 @@ use Fusio\Model\Backend\TaxonomyUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private TaxonomyUpdate $taxonomy;
-    private TaxonomyRow $existing;
-
-    public function __construct(TaxonomyUpdate $taxonomy, TaxonomyRow $existing, UserContext $context)
+    public function __construct(private readonly TaxonomyUpdate $taxonomy, private readonly TaxonomyRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->taxonomy = $taxonomy;
-        $this->existing = $existing;
     }
 
     public function getTaxonomy(): TaxonomyUpdate

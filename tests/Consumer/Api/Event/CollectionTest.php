@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Consumer\Api\Event;
 
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -52,14 +53,17 @@ class CollectionTest extends DbTestCase
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": {$this->eventFooId},
             "status": 1,
             "name": "foo-event",
@@ -69,6 +73,7 @@ class CollectionTest extends DbTestCase
             }
         },
         {
+            "kind": "[kind]",
             "id": {$this->eventSecondId},
             "status": 1,
             "name": "second-event",
@@ -93,14 +98,17 @@ JSON;
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": {$this->eventFooId},
             "status": 1,
             "name": "foo-event",

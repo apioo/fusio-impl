@@ -44,6 +44,7 @@ class EntityTest extends DbTestCase
 
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "id": 1,
     "userId": 2,
     "planId": 2,

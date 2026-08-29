@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
-use Fusio\Impl\Backend\Filter\Audit\AuditQueryFilter;
 use Fusio\Impl\Backend\Filter\Log;
 use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
@@ -49,7 +48,7 @@ class RequestsPerIP extends ChartViewAbstract
                       FROM fusio_log log
                      WHERE ' . $expression . '
                   GROUP BY log.ip
-                  ORDER BY COUNT(log.id) DESC';
+                  ORDER BY COUNT(log.id) DESC, log.ip ASC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 

@@ -34,15 +34,9 @@ use Fusio\Model\Backend\UserUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private UserUpdate $user;
-    private UserRow $existing;
-
-    public function __construct(UserUpdate $user, UserRow $existing, UserContext $context)
+    public function __construct(private readonly UserUpdate $user, private readonly UserRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->user = $user;
-        $this->existing = $existing;
     }
 
     public function getUser(): UserUpdate

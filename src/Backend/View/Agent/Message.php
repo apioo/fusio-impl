@@ -24,6 +24,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
@@ -38,7 +39,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Message extends ViewAbstract
 {
-    public function getCollection(int $agentId, ?string $chatId, ContextInterface $context)
+    public function getCollection(int $agentId, ?string $chatId, ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AgentMessageColumn::AGENT_ID, $agentId);
@@ -63,10 +64,12 @@ class Message extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\AgentMessageCollection::class)),
             'totalResults' => $count,
             'startIndex' => 0,
             'itemsPerPage' => Service\Agent\Sender::CONTEXT_MESSAGES_LENGTH,
             'entry' => $builder->doCollection([$this->getTable(Table\Agent\Message::class), 'findBy'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\AgentMessage::class)),
                 'id' => $builder->fieldInteger(Table\Generated\AgentMessageTable::COLUMN_ID),
                 'chatId' => Table\Generated\AgentMessageTable::COLUMN_CHAT_ID,
                 'role' => $builder->fieldCallback(Table\Generated\AgentMessageTable::COLUMN_ORIGIN, function ($value) {

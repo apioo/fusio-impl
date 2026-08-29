@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Scope;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * EntityTest
@@ -49,95 +50,98 @@ class EntityTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
-    "id": 60,
+    "kind": "[kind]",
+    "id": 61,
     "name": "bar",
     "description": "Bar access",
     "operations": [
         {
+            "id": 285,
+            "scopeId": 61,
+            "operationId": 292,
+            "allow": true
+        },
+        {
+            "id": 284,
+            "scopeId": 61,
+            "operationId": 291,
+            "allow": true
+        },
+        {
+            "id": 283,
+            "scopeId": 61,
+            "operationId": 290,
+            "allow": true
+        },
+        {
+            "id": 282,
+            "scopeId": 61,
+            "operationId": 289,
+            "allow": true
+        },
+        {
+            "id": 281,
+            "scopeId": 61,
+            "operationId": 288,
+            "allow": true
+        },
+        {
+            "id": 280,
+            "scopeId": 61,
+            "operationId": 287,
+            "allow": true
+        },
+        {
             "id": 279,
-            "scopeId": 60,
-            "operationId": 285,
+            "scopeId": 61,
+            "operationId": 286,
             "allow": true
         },
         {
             "id": 278,
-            "scopeId": 60,
-            "operationId": 284,
+            "scopeId": 61,
+            "operationId": 285,
             "allow": true
         },
         {
             "id": 277,
-            "scopeId": 60,
-            "operationId": 283,
+            "scopeId": 61,
+            "operationId": 284,
             "allow": true
         },
         {
             "id": 276,
-            "scopeId": 60,
-            "operationId": 282,
-            "allow": true
-        },
-        {
-            "id": 275,
-            "scopeId": 60,
-            "operationId": 281,
+            "scopeId": 61,
+            "operationId": 283,
             "allow": true
         },
         {
             "id": 274,
-            "scopeId": 60,
-            "operationId": 280,
-            "allow": true
-        },
-        {
-            "id": 273,
-            "scopeId": 60,
-            "operationId": 279,
+            "scopeId": 61,
+            "operationId": 282,
             "allow": true
         },
         {
             "id": 272,
-            "scopeId": 60,
-            "operationId": 278,
+            "scopeId": 61,
+            "operationId": 281,
             "allow": true
         },
         {
             "id": 271,
-            "scopeId": 60,
-            "operationId": 277,
+            "scopeId": 61,
+            "operationId": 280,
             "allow": true
         },
         {
             "id": 270,
-            "scopeId": 60,
-            "operationId": 276,
-            "allow": true
-        },
-        {
-            "id": 268,
-            "scopeId": 60,
-            "operationId": 275,
-            "allow": true
-        },
-        {
-            "id": 266,
-            "scopeId": 60,
-            "operationId": 274,
-            "allow": true
-        },
-        {
-            "id": 265,
-            "scopeId": 60,
-            "operationId": 273,
-            "allow": true
-        },
-        {
-            "id": 264,
-            "scopeId": 60,
-            "operationId": 272,
+            "scopeId": 61,
+            "operationId": 279,
             "allow": true
         }
     ]
@@ -155,95 +159,98 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
-    "id": 60,
+    "kind": "[kind]",
+    "id": 61,
     "name": "bar",
     "description": "Bar access",
     "operations": [
         {
+            "id": 285,
+            "scopeId": 61,
+            "operationId": 292,
+            "allow": true
+        },
+        {
+            "id": 284,
+            "scopeId": 61,
+            "operationId": 291,
+            "allow": true
+        },
+        {
+            "id": 283,
+            "scopeId": 61,
+            "operationId": 290,
+            "allow": true
+        },
+        {
+            "id": 282,
+            "scopeId": 61,
+            "operationId": 289,
+            "allow": true
+        },
+        {
+            "id": 281,
+            "scopeId": 61,
+            "operationId": 288,
+            "allow": true
+        },
+        {
+            "id": 280,
+            "scopeId": 61,
+            "operationId": 287,
+            "allow": true
+        },
+        {
             "id": 279,
-            "scopeId": 60,
-            "operationId": 285,
+            "scopeId": 61,
+            "operationId": 286,
             "allow": true
         },
         {
             "id": 278,
-            "scopeId": 60,
-            "operationId": 284,
+            "scopeId": 61,
+            "operationId": 285,
             "allow": true
         },
         {
             "id": 277,
-            "scopeId": 60,
-            "operationId": 283,
+            "scopeId": 61,
+            "operationId": 284,
             "allow": true
         },
         {
             "id": 276,
-            "scopeId": 60,
-            "operationId": 282,
-            "allow": true
-        },
-        {
-            "id": 275,
-            "scopeId": 60,
-            "operationId": 281,
+            "scopeId": 61,
+            "operationId": 283,
             "allow": true
         },
         {
             "id": 274,
-            "scopeId": 60,
-            "operationId": 280,
-            "allow": true
-        },
-        {
-            "id": 273,
-            "scopeId": 60,
-            "operationId": 279,
+            "scopeId": 61,
+            "operationId": 282,
             "allow": true
         },
         {
             "id": 272,
-            "scopeId": 60,
-            "operationId": 278,
+            "scopeId": 61,
+            "operationId": 281,
             "allow": true
         },
         {
             "id": 271,
-            "scopeId": 60,
-            "operationId": 277,
+            "scopeId": 61,
+            "operationId": 280,
             "allow": true
         },
         {
             "id": 270,
-            "scopeId": 60,
-            "operationId": 276,
-            "allow": true
-        },
-        {
-            "id": 268,
-            "scopeId": 60,
-            "operationId": 275,
-            "allow": true
-        },
-        {
-            "id": 266,
-            "scopeId": 60,
-            "operationId": 274,
-            "allow": true
-        },
-        {
-            "id": 265,
-            "scopeId": 60,
-            "operationId": 273,
-            "allow": true
-        },
-        {
-            "id": 264,
-            "scopeId": 60,
-            "operationId": 272,
+            "scopeId": 61,
+            "operationId": 279,
             "allow": true
         }
     ]
@@ -297,12 +304,15 @@ JSON;
             'metadata' => $metadata,
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Scope successfully updated",
-    "id": "60"
+    "id": "61"
 }
 JSON;
 
@@ -334,12 +344,15 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Scope successfully deleted",
-    "id": "60"
+    "id": "61"
 }
 JSON;
 

@@ -31,7 +31,6 @@ use PSX\Api\Attribute\Outgoing;
 use PSX\Api\Attribute\Path;
 use PSX\Api\Attribute\Post;
 use PSX\Framework\Controller\ControllerAbstract;
-use PSX\Framework\Environment\IPResolver;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;

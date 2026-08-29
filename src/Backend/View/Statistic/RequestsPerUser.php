@@ -21,7 +21,6 @@
 namespace Fusio\Impl\Backend\View\Statistic;
 
 use Fusio\Engine\ContextInterface;
-use Fusio\Impl\Backend\Filter\Audit\AuditQueryFilter;
 use Fusio\Impl\Backend\Filter\Log;
 use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Table;
@@ -52,7 +51,7 @@ class RequestsPerUser extends ChartViewAbstract
                         ON log.user_id = usr.id
                      WHERE ' . $expression . '
                   GROUP BY log.user_id, usr.name
-                  ORDER BY COUNT(log.id) DESC';
+                  ORDER BY COUNT(log.id) DESC, usr.name ASC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 

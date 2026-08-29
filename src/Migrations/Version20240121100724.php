@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fusio\Impl\Migrations;
 
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
@@ -231,6 +232,9 @@ final class Version20240121100724 extends AbstractMigration
         $this->connection->executeQuery('UPDATE fusio_log_error SET insert_date = ? WHERE insert_date IS NULL', [date('Y-m-d H:i:s')]);
     }
 
+    /**
+     * @param AbstractSchemaManager<MySQLPlatform> $schemaManager
+     */
     private function dropTable(AbstractSchemaManager $schemaManager, string $tableName): void
     {
         $foreignKeys = $schemaManager->listTableForeignKeys($tableName);
@@ -241,6 +245,9 @@ final class Version20240121100724 extends AbstractMigration
         $this->connection->createSchemaManager()->dropTable($tableName);
     }
 
+    /**
+     * @param list<string> $columns
+     */
     private function dropIndexForColumn(Table $table, array $columns): void
     {
         $indexes = $table->getIndexes();

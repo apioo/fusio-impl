@@ -18,47 +18,38 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\User\Captcha;
+namespace Fusio\Impl\Tests\Backend\Specification;
 
-use PSX\Http\Client\ClientInterface;
-use PSX\Http\RequestInterface;
-use PSX\Json\Parser;
+use Fusio\Impl\Tests\DbTestCase;
 
 /**
- * ReCaptcha
+ * PublishTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly abstract class CaptchaAbstract implements CaptchaInterface
+class PublishTest extends DbTestCase
 {
-    public function __construct(private ClientInterface $httpClient)
+    public function testPost(): void
     {
-    }
+        $response = $this->sendRequest('/backend/specification', 'POST', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ], \json_encode([
+            'name' => 'document',
+        ]));
 
-    protected function request(RequestInterface $request, string $successProperty = 'success'): bool
-    {
-        $response = $this->httpClient->request($request);
-        if ($response->getStatusCode() !== 200) {
-            return false;
-        }
+        $body = (string) $response->getBody();
 
-        try {
-            $data = Parser::decode((string) $response->getBody());
-        } catch (\JsonException) {
-            return false;
-        }
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Specification published successfully"
+}
+JSON;
 
-        if (!$data instanceof \stdClass) {
-            return false;
-        }
-
-        $success = $data->{$successProperty} ?? null;
-        if ($success !== true) {
-            return false;
-        }
-
-        return true;
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 }

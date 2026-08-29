@@ -5,185 +5,140 @@ namespace Fusio\Impl\Table\Generated;
 class UserRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
-    
     private ?int $identityId = null;
-    
     private ?string $tenantId = null;
-    
     private ?int $roleId = null;
-    
     private ?int $planId = null;
-    
     private ?int $status = null;
-    
     private ?string $remoteId = null;
-    
     private ?string $externalId = null;
-    
     private ?string $name = null;
-    
     private ?string $email = null;
-    
     private ?string $password = null;
-    
     private ?int $points = null;
-    
     private ?string $token = null;
-    
     private ?string $metadata = null;
-    
     private ?\PSX\DateTime\LocalDateTime $date = null;
-    
     public function setId(int $id): void
     {
         $this->id = $id;
     }
-    
     public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    
     public function setIdentityId(?int $identityId): void
     {
         $this->identityId = $identityId;
     }
-    
     public function getIdentityId(): ?int
     {
         return $this->identityId;
     }
-    
     public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
-    
     public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
-    
     public function setRoleId(int $roleId): void
     {
         $this->roleId = $roleId;
     }
-    
     public function getRoleId(): int
     {
         return $this->roleId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "role_id" was provided');
     }
-    
     public function setPlanId(?int $planId): void
     {
         $this->planId = $planId;
     }
-    
     public function getPlanId(): ?int
     {
         return $this->planId;
     }
-    
     public function setStatus(int $status): void
     {
         $this->status = $status;
     }
-    
     public function getStatus(): int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
     }
-    
     public function setRemoteId(?string $remoteId): void
     {
         $this->remoteId = $remoteId;
     }
-    
     public function getRemoteId(): ?string
     {
         return $this->remoteId;
     }
-    
     public function setExternalId(?string $externalId): void
     {
         $this->externalId = $externalId;
     }
-    
     public function getExternalId(): ?string
     {
         return $this->externalId;
     }
-    
     public function setName(string $name): void
     {
         $this->name = $name;
     }
-    
     public function getName(): string
     {
         return $this->name ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "name" was provided');
     }
-    
     public function setEmail(?string $email): void
     {
         $this->email = $email;
     }
-    
     public function getEmail(): ?string
     {
         return $this->email;
     }
-    
     public function setPassword(?string $password): void
     {
         $this->password = $password;
     }
-    
     public function getPassword(): ?string
     {
         return $this->password;
     }
-    
     public function setPoints(?int $points): void
     {
         $this->points = $points;
     }
-    
     public function getPoints(): ?int
     {
         return $this->points;
     }
-    
     public function setToken(?string $token): void
     {
         $this->token = $token;
     }
-    
     public function getToken(): ?string
     {
         return $this->token;
     }
-    
     public function setMetadata(?string $metadata): void
     {
         $this->metadata = $metadata;
     }
-    
     public function getMetadata(): ?string
     {
         return $this->metadata;
     }
-    
     public function setDate(\PSX\DateTime\LocalDateTime $date): void
     {
         $this->date = $date;
     }
-    
     public function getDate(): \PSX\DateTime\LocalDateTime
     {
         return $this->date ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "date" was provided');
     }
-    
     public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -205,12 +160,13 @@ class UserRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('date', $this->date);
         return $record;
     }
-    
     public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    
+    /**
+     * @param array<string, mixed>|\ArrayAccess<string, mixed> $data
+     */
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();

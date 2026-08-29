@@ -127,6 +127,7 @@ readonly class Publisher
     }
 
     /**
+     * @param list<string> $actionIds
      * @return array<MarketplaceBundleAction>
      */
     private function buildActions(array $actionIds, UserContext $context): array
@@ -160,6 +161,7 @@ readonly class Publisher
     }
 
     /**
+     * @param list<string> $schemaIds
      * @return array<MarketplaceBundleSchema>
      */
     private function buildSchemas(array $schemaIds, UserContext $context): array
@@ -192,6 +194,7 @@ readonly class Publisher
     }
 
     /**
+     * @param list<string> $eventIds
      * @return array<MarketplaceBundleEvent>
      */
     private function buildEvents(array $eventIds, UserContext $context): array
@@ -215,6 +218,7 @@ readonly class Publisher
     }
 
     /**
+     * @param list<string> $cronjobIds
      * @return array<MarketplaceBundleCronjob>
      */
     private function buildCronjobs(array $cronjobIds, UserContext $context): array
@@ -238,7 +242,8 @@ readonly class Publisher
     }
 
     /**
-     * @return array<MarketplaceBundleTrigger>
+     * @param list<string> $triggerIds
+     * @return list<MarketplaceBundleTrigger>
      */
     private function buildTriggers(array $triggerIds, UserContext $context): array
     {

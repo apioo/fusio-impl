@@ -27,6 +27,7 @@ use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Provider\ConnectionProvider;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use Fusio\Model\Common\FormElementInput;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
@@ -41,7 +42,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Connection extends ViewAbstract
 {
-    public function getCollection(ClassQueryFilter $filter, ContextInterface $context)
+    public function getCollection(ClassQueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -56,10 +57,12 @@ class Connection extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\ConnectionCollection::class)),
             'totalResults' => $this->getTable(Table\Connection::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Connection::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Connection::class)),
                 'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
                 'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
@@ -71,11 +74,12 @@ class Connection extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id, ContextInterface $context)
+    public function getEntity(string $id, ContextInterface $context): mixed
     {
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Connection::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Connection::class)),
             'id' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
             'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
@@ -86,7 +90,7 @@ class Connection extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityWithConfig(string $id, string $secretKey, ConnectionProvider $connectionProvider, ContextInterface $context)
+    public function getEntityWithConfig(string $id, string $secretKey, ConnectionProvider $connectionProvider, ContextInterface $context): mixed
     {
         $builder = new Builder($this->connection);
 

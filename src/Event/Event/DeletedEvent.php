@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\EventRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private EventRow $existing;
-
-    public function __construct(EventRow $existing, UserContext $context)
+    public function __construct(private readonly EventRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): EventRow

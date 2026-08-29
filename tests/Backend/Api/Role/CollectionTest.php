@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Role;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -38,26 +39,32 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 3,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 1,
             "categoryId": 1,
             "status": 1,
             "name": "Administrator"
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "categoryId": 1,
             "status": 1,
             "name": "Backend"
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "categoryId": 1,
             "status": 1,
@@ -78,14 +85,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 2,
             "categoryId": 1,
             "status": 1,
@@ -106,26 +117,32 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 3,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 1,
             "categoryId": 1,
             "status": 1,
             "name": "Administrator"
         },
         {
+            "kind": "[kind]",
             "id": 2,
             "categoryId": 1,
             "status": 1,
             "name": "Backend"
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "categoryId": 1,
             "status": 1,
@@ -150,9 +167,12 @@ JSON;
             'scopes'     => ['backend.action', 'backend.schema'],
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Role successfully created",
     "id": "4"

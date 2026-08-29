@@ -34,6 +34,7 @@ class Normalizer
         $data = self::normalizeUuid($data);
         $data = self::normalizeDateTime($data);
         $data = self::normalizeHttpDateTime($data);
+        $data = self::normalizeKind($data);
         return $data;
     }
 
@@ -50,6 +51,15 @@ class Normalizer
     public static function normalizeHttpDateTime(string $data): string
     {
         return preg_replace('/\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT/m', '[datetime]', $data);
+    }
+
+    public static function normalizeKind(string $data): string
+    {
+        return preg_replace(
+            '~"https:(/|\\\\/){2}typehub\.cloud(/|\\\\/)s(/|\\\\/)fusio(/|\\\\/)sdk(/|\\\\/)\d+\.\d+\.\d+(/|\\\\/)\w+"~',
+            '"[kind]"',
+            $data
+        );
     }
 
     public static function normalizeNewLine(string $data): string

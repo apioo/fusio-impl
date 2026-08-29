@@ -124,7 +124,7 @@ class UserAddCommand extends Command
             $question = new Question('Enter the password: ');
             $question->setHidden(true);
             $question->setValidator(function ($value) {
-                $this->validator->assertPassword($value, $this->configService->getValue('user_pw_length'));
+                $this->validator->assertPassword($value, $this->configService->getInt('user_pw_length'));
                 return $value;
             });
 
@@ -147,7 +147,7 @@ class UserAddCommand extends Command
                 throw new RuntimeException('Provided an invalid password');
             }
 
-            $this->validator->assertPassword($password, $this->configService->getValue('user_pw_length'));
+            $this->validator->assertPassword($password, $this->configService->getInt('user_pw_length'));
         }
 
         // resolve role for tenant

@@ -33,6 +33,7 @@ use Fusio\Impl\Event\Action\UpdatedEvent;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\ActionCreate;
 use Fusio\Model\Backend\ActionUpdate;
+use JsonException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
@@ -201,6 +202,10 @@ readonly class Action
         }
     }
 
+    /**
+     * @param array<string, mixed>|null $config
+     * @throws JsonException
+     */
     public static function serializeConfig(?array $config = null): ?string
     {
         if (empty($config)) {
@@ -210,12 +215,16 @@ readonly class Action
         return Parser::encode($config);
     }
 
+    /**
+     * @return array<string, mixed>|null
+     * @throws JsonException
+     */
     public static function unserializeConfig(?string $data): ?array
     {
         if (empty($data)) {
             return null;
         }
 
-        return Parser::decode($data, true);
+        return Parser::decodeAsArray($data);
     }
 }

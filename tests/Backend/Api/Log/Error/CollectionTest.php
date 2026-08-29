@@ -43,22 +43,24 @@ class CollectionTest extends DbTestCase
         $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
+{
+    "kind": "[kind]",
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
         {
-            "totalResults": 1,
-            "startIndex": 0,
-            "itemsPerPage": 16,
-            "entry": [
-                {
-                    "id": 1,
-                    "logId": 1,
-                    "message": "Syntax error, malformed JSON",
-                    "file": "[file]",
-                    "line": 74,
-                    "insertDate": "[datetime]"
-                }
-            ]
+            "kind": "[kind]",
+            "id": 1,
+            "logId": 1,
+            "message": "Syntax error, malformed JSON",
+            "file": "[file]",
+            "line": 74,
+            "insertDate": "[datetime]"
         }
-        JSON;
+    ]
+}
+JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
@@ -75,22 +77,24 @@ class CollectionTest extends DbTestCase
         $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
+{
+    "kind": "[kind]",
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
         {
-            "totalResults": 1,
-            "startIndex": 0,
-            "itemsPerPage": 16,
-            "entry": [
-                {
-                    "id": 1,
-                    "logId": 1,
-                    "message": "Syntax error, malformed JSON",
-                    "file": "[file]",
-                    "line": 74,
-                    "insertDate": "[datetime]"
-                }
-            ]
+            "kind": "[kind]",
+            "id": 1,
+            "logId": 1,
+            "message": "Syntax error, malformed JSON",
+            "file": "[file]",
+            "line": 74,
+            "insertDate": "[datetime]"
         }
-        JSON;
+    ]
+}
+JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
@@ -107,22 +111,24 @@ class CollectionTest extends DbTestCase
         $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
+{
+    "kind": "[kind]",
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 80,
+    "entry": [
         {
-            "totalResults": 1,
-            "startIndex": 0,
-            "itemsPerPage": 80,
-            "entry": [
-                {
-                    "id": 1,
-                    "logId": 1,
-                    "message": "Syntax error, malformed JSON",
-                    "file": "[file]",
-                    "line": 74,
-                    "insertDate": "[datetime]"
-                }
-            ]
+            "kind": "[kind]",
+            "id": 1,
+            "logId": 1,
+            "message": "Syntax error, malformed JSON",
+            "file": "[file]",
+            "line": 74,
+            "insertDate": "[datetime]"
         }
-        JSON;
+    ]
+}
+JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);

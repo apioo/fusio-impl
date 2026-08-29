@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Command\System;
 
 use DateInterval;
+use DateMalformedIntervalStringException;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use RuntimeException;
@@ -126,11 +127,17 @@ class TokenCommand extends Command
         return $user;
     }
 
+    /**
+     * @return list<string>
+     */
     private function parseScopes(?string $tenantId, mixed $scopes, Table\Generated\AppRow $app, Table\Generated\UserRow $user): array
     {
         return $this->scopeService->getValidScopes($tenantId, (string) $scopes, $app->getId(), $user->getId());
     }
 
+    /**
+     * @throws DateMalformedIntervalStringException
+     */
     private function parseExpire(mixed $expire): DateInterval
     {
         return new DateInterval((string) $expire);

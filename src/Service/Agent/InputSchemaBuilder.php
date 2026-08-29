@@ -25,8 +25,7 @@ use Fusio\Impl\Table\Generated\OperationRow;
 use PSX\Api\Util\Inflection;
 use PSX\Json\Parser;
 use PSX\Schema\Definitions;
-use PSX\Schema\Generator\Config;
-use PSX\Schema\Generator\JsonSchema;
+use PSX\Schema\Generator\JsonSchemaOpenAI;
 use PSX\Schema\Parser\TypeSchema;
 use PSX\Schema\SchemaManager;
 use PSX\Schema\Type\Factory\PropertyTypeFactory;
@@ -49,6 +48,9 @@ readonly class InputSchemaBuilder
         $this->schemaParser = new TypeSchema($schemaManager);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function build(OperationRow $operation): array
     {
         $rootType = new StructDefinitionType();
@@ -78,10 +80,7 @@ readonly class InputSchemaBuilder
         $rootName = 'Root_' . uniqid();
         $definitions->addType($rootName, $rootType);
 
-        $config = new Config();
-        $config->put('openai_mode', true);
-
-        return (new JsonSchema($config))->toArray($definitions, $rootName);
+        return new JsonSchemaOpenAI()->toArray($definitions, $rootName);
     }
 
     private function buildSchemaFromParameters(OperationRow $operation, StructDefinitionType $rootType): void

@@ -24,6 +24,7 @@ use Fusio\Impl\Table\Operation as TableRoutes;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Api\OperationInterface;
 
 /**
@@ -51,10 +52,13 @@ class EntityTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
-    "id": 272,
+    "kind": "[kind]",
+    "id": 279,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -93,10 +97,13 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
-    "id": 272,
+    "kind": "[kind]",
+    "id": 279,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -190,12 +197,15 @@ JSON;
             'metadata' => $metadata,
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Operation successfully updated",
-    "id": "272"
+    "id": "279"
 }
 JSON;
 
@@ -238,12 +248,15 @@ JSON;
             'scopes'     => ['foo', 'baz'],
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Operation successfully updated",
-    "id": "273"
+    "id": "280"
 }
 JSON;
 
@@ -287,12 +300,15 @@ JSON;
             'metadata' => $metadata,
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Operation successfully updated",
-    "id": "272"
+    "id": "279"
 }
 JSON;
 
@@ -310,12 +326,15 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Operation successfully deleted",
-    "id": "272"
+    "id": "279"
 }
 JSON;
 

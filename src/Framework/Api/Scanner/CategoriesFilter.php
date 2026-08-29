@@ -30,13 +30,13 @@ use PSX\Api\Scanner\FilterInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class CategoriesFilter implements FilterInterface
+readonly class CategoriesFilter implements FilterInterface
 {
-    private array $ids;
-
-    public function __construct(array $ids)
+    /**
+     * @param list<scalar> $ids
+     */
+    public function __construct(private array $ids)
     {
-        $this->ids = $ids;
     }
 
     public function match(OperationInterface $operation): bool
@@ -50,6 +50,9 @@ class CategoriesFilter implements FilterInterface
         return implode(',', $this->ids);
     }
 
+    /**
+     * @return list<string>
+     */
     public function getIds(): array
     {
         return $this->ids;

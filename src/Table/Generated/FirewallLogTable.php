@@ -8,27 +8,19 @@ namespace Fusio\Impl\Table\Generated;
 class FirewallLogTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_firewall_log';
-    
     public const COLUMN_ID = 'id';
-    
     public const COLUMN_TENANT_ID = 'tenant_id';
-    
     public const COLUMN_IP = 'ip';
-    
     public const COLUMN_RESPONSE_CODE = 'response_code';
-    
     public const COLUMN_INSERT_DATE = 'insert_date';
-    
     public function getName(): string
     {
         return self::NAME;
     }
-    
     public function getColumns(): array
     {
         return [self::COLUMN_ID => 0x3020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_IP => 0xa00027, self::COLUMN_RESPONSE_CODE => 0x20000a, self::COLUMN_INSERT_DATE => 0x40800000];
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\FirewallLogRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -37,7 +29,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\FirewallLogRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -46,7 +37,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -54,7 +44,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -64,7 +53,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $id);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\FirewallLogRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -75,7 +63,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -85,7 +72,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -95,7 +81,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -105,7 +90,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\FirewallLogRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -116,7 +100,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -126,7 +109,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -136,7 +118,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -146,7 +127,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\FirewallLogRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -157,7 +137,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->like('ip', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -167,7 +146,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->like('ip', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -177,7 +155,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->like('ip', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -187,7 +164,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->like('ip', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\FirewallLogRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -198,7 +174,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->equals('response_code', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -208,7 +183,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->equals('response_code', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -218,7 +192,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->equals('response_code', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -228,7 +201,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->equals('response_code', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\FirewallLogRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -239,7 +211,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -249,7 +220,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -259,7 +229,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -269,7 +238,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
         $condition->equals('insert_date', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -277,7 +245,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
     {
         return $this->doCreate($record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -285,7 +252,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdate($record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -293,7 +259,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -301,7 +266,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDelete($record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -309,7 +273,6 @@ class FirewallLogTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @param array<string, mixed> $row
      */

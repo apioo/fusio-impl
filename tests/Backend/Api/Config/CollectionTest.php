@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Config;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -38,14 +39,18 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $actual = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "totalResults": 38,
+    "kind": "[kind]",
+    "totalResults": 39,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 1,
             "type": 2,
             "name": "app_approval",
@@ -53,6 +58,7 @@ class CollectionTest extends DbTestCase
             "value": false
         },
         {
+            "kind": "[kind]",
             "id": 5,
             "type": 1,
             "name": "authorization_url",
@@ -60,6 +66,31 @@ class CollectionTest extends DbTestCase
             "value": ""
         },
         {
+            "kind": "[kind]",
+            "id": 21,
+            "type": 1,
+            "name": "captcha_key",
+            "description": "Captcha Key",
+            "value": ""
+        },
+        {
+            "kind": "[kind]",
+            "id": 22,
+            "type": 1,
+            "name": "captcha_secret",
+            "description": "Captcha Secret",
+            "value": ""
+        },
+        {
+            "kind": "[kind]",
+            "id": 20,
+            "type": 1,
+            "name": "captcha_type",
+            "description": "Captcha Type, must be one of: friendly, hcaptcha, recaptcha or fusio",
+            "value": "fusio"
+        },
+        {
+            "kind": "[kind]",
             "id": 2,
             "type": 3,
             "name": "consumer_max_apps",
@@ -67,6 +98,7 @@ class CollectionTest extends DbTestCase
             "value": 16
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "type": 3,
             "name": "consumer_max_tokens",
@@ -74,6 +106,7 @@ class CollectionTest extends DbTestCase
             "value": 16
         },
         {
+            "kind": "[kind]",
             "id": 4,
             "type": 3,
             "name": "consumer_max_webhooks",
@@ -81,6 +114,7 @@ class CollectionTest extends DbTestCase
             "value": 8
         },
         {
+            "kind": "[kind]",
             "id": 11,
             "type": 1,
             "name": "info_contact_email",
@@ -88,6 +122,7 @@ class CollectionTest extends DbTestCase
             "value": ""
         },
         {
+            "kind": "[kind]",
             "id": 9,
             "type": 1,
             "name": "info_contact_name",
@@ -95,6 +130,7 @@ class CollectionTest extends DbTestCase
             "value": ""
         },
         {
+            "kind": "[kind]",
             "id": 10,
             "type": 1,
             "name": "info_contact_url",
@@ -102,6 +138,7 @@ class CollectionTest extends DbTestCase
             "value": ""
         },
         {
+            "kind": "[kind]",
             "id": 7,
             "type": 1,
             "name": "info_description",
@@ -109,6 +146,7 @@ class CollectionTest extends DbTestCase
             "value": "Self-Hosted API Management for Builders."
         },
         {
+            "kind": "[kind]",
             "id": 12,
             "type": 1,
             "name": "info_license_name",
@@ -116,6 +154,7 @@ class CollectionTest extends DbTestCase
             "value": ""
         },
         {
+            "kind": "[kind]",
             "id": 13,
             "type": 1,
             "name": "info_license_url",
@@ -123,6 +162,7 @@ class CollectionTest extends DbTestCase
             "value": ""
         },
         {
+            "kind": "[kind]",
             "id": 6,
             "type": 1,
             "name": "info_title",
@@ -130,39 +170,19 @@ class CollectionTest extends DbTestCase
             "value": "Fusio"
         },
         {
+            "kind": "[kind]",
             "id": 8,
             "type": 1,
             "name": "info_tos",
             "description": "A URL to the Terms of Service for the API. MUST be in the format of a URL",
             "value": ""
-        },
-        {
-            "id": 19,
-            "type": 6,
-            "name": "mail_points_body",
-            "description": "Body of the points threshold mail",
-            "value": "Hello {name},\n\nyour account has reached the configured threshold of {points} points.\nIf your account reaches 0 points your are not longer able to invoke specific endpoints.\nTo prevent this please go to the developer portal to purchase new points:\n{apps_url}\/developer"
-        },
-        {
-            "id": 18,
-            "type": 1,
-            "name": "mail_points_subject",
-            "description": "Subject of the points threshold mail",
-            "value": "Fusio points threshold reached"
-        },
-        {
-            "id": 17,
-            "type": 6,
-            "name": "mail_pw_reset_body",
-            "description": "Body of the password reset mail",
-            "value": "Hello {name},\n\nyou have requested to reset your password.\nTo set a new password please visit the following link:\n{apps_url}\/developer\/password\/confirm\/{token}\n\nPlease ignore this email if you have not requested a password reset."
         }
     ]
 }
 JSON;
 
-        $this->assertEquals(200, $response->getStatusCode(), $actual);
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
     public function testGetSearch(): void
@@ -172,14 +192,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $actual = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 14,
             "type": 1,
             "name": "mail_register_subject",
@@ -190,8 +214,8 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(200, $response->getStatusCode(), $actual);
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
     public function testGetCount(): void
@@ -201,14 +225,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $actual = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
-    "totalResults": 38,
+    "kind": "[kind]",
+    "totalResults": 39,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 1,
             "type": 2,
             "name": "app_approval",
@@ -216,6 +244,7 @@ JSON;
             "value": false
         },
         {
+            "kind": "[kind]",
             "id": 5,
             "type": 1,
             "name": "authorization_url",
@@ -223,6 +252,31 @@ JSON;
             "value": ""
         },
         {
+            "kind": "[kind]",
+            "id": 21,
+            "type": 1,
+            "name": "captcha_key",
+            "description": "Captcha Key",
+            "value": ""
+        },
+        {
+            "kind": "[kind]",
+            "id": 22,
+            "type": 1,
+            "name": "captcha_secret",
+            "description": "Captcha Secret",
+            "value": ""
+        },
+        {
+            "kind": "[kind]",
+            "id": 20,
+            "type": 1,
+            "name": "captcha_type",
+            "description": "Captcha Type, must be one of: friendly, hcaptcha, recaptcha or fusio",
+            "value": "fusio"
+        },
+        {
+            "kind": "[kind]",
             "id": 2,
             "type": 3,
             "name": "consumer_max_apps",
@@ -230,6 +284,7 @@ JSON;
             "value": 16
         },
         {
+            "kind": "[kind]",
             "id": 3,
             "type": 3,
             "name": "consumer_max_tokens",
@@ -237,6 +292,7 @@ JSON;
             "value": 16
         },
         {
+            "kind": "[kind]",
             "id": 4,
             "type": 3,
             "name": "consumer_max_webhooks",
@@ -244,6 +300,7 @@ JSON;
             "value": 8
         },
         {
+            "kind": "[kind]",
             "id": 11,
             "type": 1,
             "name": "info_contact_email",
@@ -251,6 +308,7 @@ JSON;
             "value": ""
         },
         {
+            "kind": "[kind]",
             "id": 9,
             "type": 1,
             "name": "info_contact_name",
@@ -258,6 +316,7 @@ JSON;
             "value": ""
         },
         {
+            "kind": "[kind]",
             "id": 10,
             "type": 1,
             "name": "info_contact_url",
@@ -265,6 +324,7 @@ JSON;
             "value": ""
         },
         {
+            "kind": "[kind]",
             "id": 7,
             "type": 1,
             "name": "info_description",
@@ -272,6 +332,7 @@ JSON;
             "value": "Self-Hosted API Management for Builders."
         },
         {
+            "kind": "[kind]",
             "id": 12,
             "type": 1,
             "name": "info_license_name",
@@ -279,6 +340,7 @@ JSON;
             "value": ""
         },
         {
+            "kind": "[kind]",
             "id": 13,
             "type": 1,
             "name": "info_license_url",
@@ -286,6 +348,7 @@ JSON;
             "value": ""
         },
         {
+            "kind": "[kind]",
             "id": 6,
             "type": 1,
             "name": "info_title",
@@ -293,6 +356,7 @@ JSON;
             "value": "Fusio"
         },
         {
+            "kind": "[kind]",
             "id": 8,
             "type": 1,
             "name": "info_tos",
@@ -300,6 +364,7 @@ JSON;
             "value": ""
         },
         {
+            "kind": "[kind]",
             "id": 19,
             "type": 6,
             "name": "mail_points_body",
@@ -307,6 +372,7 @@ JSON;
             "value": "Hello {name},\n\nyour account has reached the configured threshold of {points} points.\nIf your account reaches 0 points your are not longer able to invoke specific endpoints.\nTo prevent this please go to the developer portal to purchase new points:\n{apps_url}\/developer"
         },
         {
+            "kind": "[kind]",
             "id": 18,
             "type": 1,
             "name": "mail_points_subject",
@@ -314,6 +380,7 @@ JSON;
             "value": "Fusio points threshold reached"
         },
         {
+            "kind": "[kind]",
             "id": 17,
             "type": 6,
             "name": "mail_pw_reset_body",
@@ -321,6 +388,7 @@ JSON;
             "value": "Hello {name},\n\nyou have requested to reset your password.\nTo set a new password please visit the following link:\n{apps_url}\/developer\/password\/confirm\/{token}\n\nPlease ignore this email if you have not requested a password reset."
         },
         {
+            "kind": "[kind]",
             "id": 16,
             "type": 1,
             "name": "mail_pw_reset_subject",
@@ -328,6 +396,7 @@ JSON;
             "value": "Fusio password reset"
         },
         {
+            "kind": "[kind]",
             "id": 15,
             "type": 6,
             "name": "mail_register_body",
@@ -335,6 +404,7 @@ JSON;
             "value": "Hello {name},\n\nyou have successful registered at Fusio.\nTo activate you account please visit the following link:\n{apps_url}\/developer\/register\/activate\/{token}"
         },
         {
+            "kind": "[kind]",
             "id": 14,
             "type": 1,
             "name": "mail_register_subject",
@@ -342,133 +412,136 @@ JSON;
             "value": "Fusio registration"
         },
         {
-            "id": 32,
+            "kind": "[kind]",
+            "id": 33,
             "type": 1,
             "name": "marketplace_client_id",
             "description": "Marketplace Client-Id, this is either your username or app key of the Fusio marketplace (marketplace.fusio-project.org)",
             "value": ""
         },
         {
-            "id": 33,
+            "kind": "[kind]",
+            "id": 34,
             "type": 1,
             "name": "marketplace_client_secret",
             "description": "Marketplace Client-Secret, this is either your password or app secret of the Fusio marketplace (marketplace.fusio-project.org)",
             "value": ""
         },
         {
-            "id": 24,
+            "kind": "[kind]",
+            "id": 25,
             "type": 1,
             "name": "payment_currency",
             "description": "The three-character ISO-4217 currency code which is used to process payments",
             "value": ""
         },
         {
-            "id": 23,
+            "kind": "[kind]",
+            "id": 24,
             "type": 1,
             "name": "payment_stripe_portal_configuration",
             "description": "The stripe portal configuration id",
             "value": ""
         },
         {
-            "id": 22,
+            "kind": "[kind]",
+            "id": 23,
             "type": 1,
             "name": "payment_stripe_secret",
             "description": "The stripe webhook secret which is needed to verify a webhook request",
             "value": ""
         },
         {
-            "id": 26,
+            "kind": "[kind]",
+            "id": 27,
             "type": 3,
             "name": "points_default",
             "description": "The default amount of points which a user receives if he registers",
             "value": 0
         },
         {
-            "id": 27,
+            "kind": "[kind]",
+            "id": 28,
             "type": 3,
             "name": "points_threshold",
             "description": "If a user goes below this points threshold we send an information to the user",
             "value": 0
         },
         {
-            "id": 20,
-            "type": 1,
-            "name": "recaptcha_key",
-            "description": "ReCaptcha Key",
-            "value": ""
-        },
-        {
-            "id": 21,
-            "type": 1,
-            "name": "recaptcha_secret",
-            "description": "ReCaptcha Secret",
-            "value": ""
-        },
-        {
-            "id": 25,
+            "kind": "[kind]",
+            "id": 26,
             "type": 1,
             "name": "role_default",
             "description": "Default role which a user gets assigned on registration",
             "value": "Consumer"
         },
         {
-            "id": 34,
+            "kind": "[kind]",
+            "id": 35,
             "type": 1,
             "name": "sdkgen_client_id",
             "description": "SDKgen Client-Id, this is either your username or app key of the SDKgen app (sdkgen.app)",
             "value": ""
         },
         {
-            "id": 35,
+            "kind": "[kind]",
+            "id": 36,
             "type": 1,
             "name": "sdkgen_client_secret",
             "description": "SDKgen Client-Secret, this is either your password or app secret of the SDKgen app (sdkgen.app)",
             "value": ""
         },
         {
-            "id": 29,
+            "kind": "[kind]",
+            "id": 30,
             "type": 1,
             "name": "system_dispatcher",
             "description": "Optional the name of an HTTP or Message-Queue connection which is used to dispatch events. By default the system uses simply cron and an internal table to dispatch such events, for better performance you can provide a Message-Queue connection and Fusio will only dispatch the event to the queue, then your worker must execute the actual webhook HTTP request",
             "value": ""
         },
         {
-            "id": 28,
+            "kind": "[kind]",
+            "id": 29,
             "type": 1,
             "name": "system_mailer",
             "description": "Optional the name of an SMTP connection which is used as mailer, by default the system uses the connection configured through the APP_MAILER environment variable",
             "value": ""
         },
         {
-            "id": 36,
+            "kind": "[kind]",
+            "id": 37,
             "type": 1,
             "name": "typehub_client_id",
             "description": "TypeHub Client-Id, this is either your username or app key of the TypeHub app (typehub.cloud)",
-            "value": ""
+            "value": "client_id"
         },
         {
-            "id": 37,
+            "kind": "[kind]",
+            "id": 38,
             "type": 1,
             "name": "typehub_client_secret",
             "description": "TypeHub Client-Secret, this is either your password or app secret of the TypeHub app (typehub.cloud)",
-            "value": ""
+            "value": "client_secret"
         },
         {
-            "id": 38,
+            "kind": "[kind]",
+            "id": 39,
             "type": 1,
             "name": "typehub_document_name",
             "description": "Name of the TypeHub document under which the specification gets published",
-            "value": ""
+            "value": "document_name"
         },
         {
-            "id": 31,
+            "kind": "[kind]",
+            "id": 32,
             "type": 2,
             "name": "user_approval",
             "description": "Whether the user needs to activate the account through an email",
             "value": true
         },
         {
-            "id": 30,
+            "kind": "[kind]",
+            "id": 31,
             "type": 3,
             "name": "user_pw_length",
             "description": "Minimal required password length",
@@ -478,8 +551,8 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(200, $response->getStatusCode(), $actual);
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
     public function testPost(): void

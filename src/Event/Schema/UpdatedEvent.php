@@ -34,15 +34,9 @@ use Fusio\Model\Backend\SchemaUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private SchemaUpdate $schema;
-    private SchemaRow $existing;
-
-    public function __construct(SchemaUpdate $schema, SchemaRow $existing, UserContext $context)
+    public function __construct(private readonly SchemaUpdate $schema, private readonly SchemaRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->schema = $schema;
-        $this->existing = $existing;
     }
 
     public function getSchema(): SchemaUpdate

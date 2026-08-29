@@ -26,7 +26,9 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Cronjob;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
 use Fusio\Model\Backend\CronjobUpdate;
+use Fusio\Model\Common\Message;
 
 /**
  * Update
@@ -54,6 +56,7 @@ readonly class Update implements ActionInterface
         );
 
         return [
+            'kind' => KindBuilder::build(Message::class),
             'success' => true,
             'message' => 'Cronjob successfully updated',
             'id' => '' . $id,

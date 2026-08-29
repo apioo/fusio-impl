@@ -29,6 +29,7 @@ use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
+use Throwable;
 
 /**
  * Sdk
@@ -84,8 +85,8 @@ readonly class Sdk
 
         try {
             $this->console->run(new ArrayInput($parameters), new NullOutput());
-        } catch (\Throwable $e) {
-            throw new StatusCode\InternalServerErrorException('Could not generate SDK: ' . $e->getMessage(), $e);
+        } catch (Throwable $e) {
+            throw new StatusCode\InternalServerErrorException($e->getMessage(), $e);
         } finally {
             $this->console->setAutoExit($autoExit);
             $this->console->setCatchExceptions($catchExceptions);
@@ -94,6 +95,9 @@ readonly class Sdk
         return $this->frameworkConfig->getUrl('sdk', $file);
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getTypes(): array
     {
         $registry = $this->factory->factory();
@@ -111,6 +115,8 @@ readonly class Sdk
                 $result[$type] = null;
             }
         }
+
+        ksort($result);
 
         return $result;
     }

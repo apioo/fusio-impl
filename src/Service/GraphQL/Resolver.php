@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service\GraphQL;
 
+use Closure;
 use Fusio\Engine\Request;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service\Action\Invoker;
@@ -59,6 +60,10 @@ readonly class Resolver
         $this->normalizer = new Normalizer\GraphQL();
     }
 
+    /**
+     * @param array{fields: Closure} $typeConfig
+     * @return array{fields: Closure}
+     */
     public function resolveQuery(array $typeConfig, Context $context): array
     {
         $typeConfig['fields'] = function () use ($typeConfig, $context): array {
@@ -99,6 +104,10 @@ readonly class Resolver
         return $typeConfig;
     }
 
+    /**
+     * @param array{fields: Closure} $typeConfig
+     * @return array{fields: Closure}
+     */
     public function resolveType(array $typeConfig): array
     {
         $typeConfig['fields'] = function () use ($typeConfig): array {

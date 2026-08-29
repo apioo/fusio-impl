@@ -41,18 +41,18 @@ class FormTest extends DbTestCase
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
+{
+    "element": [
         {
-            "element": [
-                {
-                    "element": "textarea",
-                    "name": "response",
-                    "title": "Response",
-                    "help": "The response in JSON format",
-                    "mode": "json"
-                }
-            ]
+            "element": "textarea",
+            "name": "response",
+            "title": "Response",
+            "help": "The response in JSON format",
+            "mode": "json"
         }
-        JSON;
+    ]
+}
+JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);

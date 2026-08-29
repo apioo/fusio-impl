@@ -34,15 +34,9 @@ use Fusio\Model\Backend\CategoryUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private CategoryUpdate $category;
-    private CategoryRow $existing;
-
-    public function __construct(CategoryUpdate $category, CategoryRow $existing, UserContext $context)
+    public function __construct(private readonly CategoryUpdate $category, private readonly CategoryRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->category = $category;
-        $this->existing = $existing;
     }
 
     public function getCategory(): CategoryUpdate

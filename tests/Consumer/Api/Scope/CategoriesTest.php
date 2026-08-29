@@ -110,7 +110,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/scope/categories', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -124,7 +124,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/scope/categories', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -138,7 +138,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/scope/categories', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ], json_encode([
             'foo' => 'bar',
         ]));

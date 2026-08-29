@@ -154,7 +154,7 @@ class OpenAPI implements ProviderInterface
         $setup->addOperation($create);
     }
 
-    private function normalizePath($path): string
+    private function normalizePath(string $path): string
     {
         $path = '/' . implode('/', array_filter(explode('/', $path)));
         $path = (string) preg_replace('/(\{(\w+)\})/i', ':$2', $path);

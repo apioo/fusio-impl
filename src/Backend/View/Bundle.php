@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
@@ -36,7 +38,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Bundle extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -50,10 +52,12 @@ class Bundle extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\BundleCollection::class)),
             'totalResults' => $this->getTable(Table\Bundle::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Bundle::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Bundle::class)),
                 'id' => $builder->fieldInteger(Table\Generated\BundleTable::COLUMN_ID),
                 'status' => $builder->fieldInteger(Table\Generated\BundleTable::COLUMN_STATUS),
                 'name' => Table\Generated\BundleTable::COLUMN_NAME,
@@ -66,11 +70,12 @@ class Bundle extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id, ContextInterface $context)
+    public function getEntity(string $id, ContextInterface $context): mixed
     {
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Bundle::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Bundle::class)),
             'id' => $builder->fieldInteger(Table\Generated\BundleTable::COLUMN_ID),
             'status' => $builder->fieldInteger(Table\Generated\BundleTable::COLUMN_STATUS),
             'name' => Table\Generated\BundleTable::COLUMN_NAME,

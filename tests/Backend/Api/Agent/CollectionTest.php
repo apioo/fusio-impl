@@ -41,79 +41,94 @@ class CollectionTest extends DbTestCase
         ]);
 
         $body = (string) $response->getBody();
-        $body = Normalizer::normalizeDateTime($body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
+{
+    "kind": "[kind]",
+    "totalResults": 7,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
         {
-            "totalResults": 7,
-            "startIndex": 0,
-            "itemsPerPage": 16,
-            "entry": [
-                {
-                    "id": 7,
-                    "status": 1,
-                    "connection": 8,
-                    "type": 0,
-                    "name": "agent-test",
-                    "description": "An agent test",
-                    "outgoing": "schema:\/\/Entry-Schema",
-                    "insertDate": "[datetime]"
-                },
-                {
-                    "id": 6,
-                    "status": 1,
-                    "type": 5,
-                    "name": "Fusio-Seed",
-                    "description": "Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.",
-                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Seed",
-                    "insertDate": "[datetime]"
-                },
-                {
-                    "id": 5,
-                    "status": 1,
-                    "type": 4,
-                    "name": "Fusio-Database",
-                    "description": "Designs database table structures including columns, types, and constraints.",
-                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
-                    "insertDate": "[datetime]"
-                },
-                {
-                    "id": 4,
-                    "status": 1,
-                    "type": 3,
-                    "name": "Fusio-Schema",
-                    "description": "Designs JSON schemas to define and validate request\/response data structures.",
-                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
-                    "insertDate": "[datetime]"
-                },
-                {
-                    "id": 3,
-                    "status": 1,
-                    "type": 2,
-                    "name": "Fusio-Action",
-                    "description": "Develops custom business logic and backend code for your API operations.",
-                    "insertDate": "[datetime]"
-                },
-                {
-                    "id": 2,
-                    "status": 1,
-                    "type": 1,
-                    "name": "Fusio-Architect",
-                    "description": "Builds complete API operations by coordinating schemas, database tables, and business logic.",
-                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
-                    "insertDate": "[datetime]"
-                },
-                {
-                    "id": 1,
-                    "status": 1,
-                    "type": 0,
-                    "name": "Fusio-General",
-                    "description": "Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.",
-                    "insertDate": "[datetime]"
-                }
-            ]
+            "kind": "[kind]",
+            "id": 7,
+            "status": 1,
+            "connection": 8,
+            "public": true,
+            "type": 0,
+            "name": "agent-test",
+            "description": "An agent test",
+            "outgoing": "schema:\/\/Entry-Schema",
+            "insertDate": "[datetime]"
+        },
+        {
+            "kind": "[kind]",
+            "id": 6,
+            "status": 1,
+            "public": false,
+            "type": 5,
+            "name": "Fusio-Seed",
+            "description": "Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.",
+            "outgoing": "php+class:\/\/Fusio.Model.Agent.Seed",
+            "insertDate": "[datetime]"
+        },
+        {
+            "kind": "[kind]",
+            "id": 5,
+            "status": 1,
+            "public": false,
+            "type": 4,
+            "name": "Fusio-Database",
+            "description": "Designs database table structures including columns, types, and constraints.",
+            "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
+            "insertDate": "[datetime]"
+        },
+        {
+            "kind": "[kind]",
+            "id": 4,
+            "status": 1,
+            "public": false,
+            "type": 3,
+            "name": "Fusio-Schema",
+            "description": "Designs JSON schemas to define and validate request\/response data structures.",
+            "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
+            "insertDate": "[datetime]"
+        },
+        {
+            "kind": "[kind]",
+            "id": 3,
+            "status": 1,
+            "public": false,
+            "type": 2,
+            "name": "Fusio-Action",
+            "description": "Develops custom business logic and backend code for your API operations.",
+            "insertDate": "[datetime]"
+        },
+        {
+            "kind": "[kind]",
+            "id": 2,
+            "status": 1,
+            "public": false,
+            "type": 1,
+            "name": "Fusio-Architect",
+            "description": "Builds complete API operations by coordinating schemas, database tables, and business logic.",
+            "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
+            "insertDate": "[datetime]"
+        },
+        {
+            "kind": "[kind]",
+            "id": 1,
+            "status": 1,
+            "public": false,
+            "type": 0,
+            "name": "Fusio-General",
+            "description": "Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.",
+            "insertDate": "[datetime]"
         }
-        JSON;
+    ]
+}
+JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
@@ -126,22 +141,27 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 7,
             "status": 1,
             "connection": 8,
+            "public": true,
             "type": 0,
             "name": "agent-test",
             "description": "An agent test",
             "outgoing": "schema:\/\/Entry-Schema",
-            "insertDate": "2026-02-22T13:06:00Z"
+            "insertDate": "[datetime]"
         }
     ]
 }
@@ -159,79 +179,94 @@ JSON;
         ]);
 
         $body = (string) $response->getBody();
-        $body = Normalizer::normalizeDateTime($body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
+{
+    "kind": "[kind]",
+    "totalResults": 7,
+    "startIndex": 0,
+    "itemsPerPage": 80,
+    "entry": [
         {
-            "totalResults": 7,
-            "startIndex": 0,
-            "itemsPerPage": 80,
-            "entry": [
-                {
-                    "id": 7,
-                    "status": 1,
-                    "connection": 8,
-                    "type": 0,
-                    "name": "agent-test",
-                    "description": "An agent test",
-                    "outgoing": "schema:\/\/Entry-Schema",
-                    "insertDate": "[datetime]"
-                },
-                {
-                    "id": 6,
-                    "status": 1,
-                    "type": 5,
-                    "name": "Fusio-Seed",
-                    "description": "Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.",
-                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Seed",
-                    "insertDate": "[datetime]"
-                },
-                {
-                    "id": 5,
-                    "status": 1,
-                    "type": 4,
-                    "name": "Fusio-Database",
-                    "description": "Designs database table structures including columns, types, and constraints.",
-                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
-                    "insertDate": "[datetime]"
-                },
-                {
-                    "id": 4,
-                    "status": 1,
-                    "type": 3,
-                    "name": "Fusio-Schema",
-                    "description": "Designs JSON schemas to define and validate request\/response data structures.",
-                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
-                    "insertDate": "[datetime]"
-                },
-                {
-                    "id": 3,
-                    "status": 1,
-                    "type": 2,
-                    "name": "Fusio-Action",
-                    "description": "Develops custom business logic and backend code for your API operations.",
-                    "insertDate": "[datetime]"
-                },
-                {
-                    "id": 2,
-                    "status": 1,
-                    "type": 1,
-                    "name": "Fusio-Architect",
-                    "description": "Builds complete API operations by coordinating schemas, database tables, and business logic.",
-                    "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
-                    "insertDate": "[datetime]"
-                },
-                {
-                    "id": 1,
-                    "status": 1,
-                    "type": 0,
-                    "name": "Fusio-General",
-                    "description": "Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.",
-                    "insertDate": "[datetime]"
-                }
-            ]
+            "kind": "[kind]",
+            "id": 7,
+            "status": 1,
+            "connection": 8,
+            "public": true,
+            "type": 0,
+            "name": "agent-test",
+            "description": "An agent test",
+            "outgoing": "schema:\/\/Entry-Schema",
+            "insertDate": "[datetime]"
+        },
+        {
+            "kind": "[kind]",
+            "id": 6,
+            "status": 1,
+            "public": false,
+            "type": 5,
+            "name": "Fusio-Seed",
+            "description": "Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.",
+            "outgoing": "php+class:\/\/Fusio.Model.Agent.Seed",
+            "insertDate": "[datetime]"
+        },
+        {
+            "kind": "[kind]",
+            "id": 5,
+            "status": 1,
+            "public": false,
+            "type": 4,
+            "name": "Fusio-Database",
+            "description": "Designs database table structures including columns, types, and constraints.",
+            "outgoing": "php+class:\/\/Fusio.Model.Agent.Database",
+            "insertDate": "[datetime]"
+        },
+        {
+            "kind": "[kind]",
+            "id": 4,
+            "status": 1,
+            "public": false,
+            "type": 3,
+            "name": "Fusio-Schema",
+            "description": "Designs JSON schemas to define and validate request\/response data structures.",
+            "outgoing": "php+class:\/\/Fusio.Model.Agent.Schema",
+            "insertDate": "[datetime]"
+        },
+        {
+            "kind": "[kind]",
+            "id": 3,
+            "status": 1,
+            "public": false,
+            "type": 2,
+            "name": "Fusio-Action",
+            "description": "Develops custom business logic and backend code for your API operations.",
+            "insertDate": "[datetime]"
+        },
+        {
+            "kind": "[kind]",
+            "id": 2,
+            "status": 1,
+            "public": false,
+            "type": 1,
+            "name": "Fusio-Architect",
+            "description": "Builds complete API operations by coordinating schemas, database tables, and business logic.",
+            "outgoing": "php+class:\/\/Fusio.Model.Agent.Blueprint",
+            "insertDate": "[datetime]"
+        },
+        {
+            "kind": "[kind]",
+            "id": 1,
+            "status": 1,
+            "public": false,
+            "type": 0,
+            "name": "Fusio-General",
+            "description": "Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.",
+            "insertDate": "[datetime]"
         }
-        JSON;
+    ]
+}
+JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
@@ -250,9 +285,12 @@ JSON;
             'introduction' => 'Your an helpful agent which returns only useful information',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Agent successfully created",
     "id": "8"

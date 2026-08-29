@@ -34,15 +34,9 @@ use Fusio\Model\Backend\TriggerUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private TriggerUpdate $trigger;
-    private TriggerRow $existing;
-
-    public function __construct(TriggerUpdate $trigger, TriggerRow $existing, UserContext $context)
+    public function __construct(private readonly TriggerUpdate $trigger, private readonly TriggerRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->trigger  = $trigger;
-        $this->existing = $existing;
     }
 
     public function getTrigger(): TriggerUpdate

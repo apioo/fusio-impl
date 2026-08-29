@@ -84,8 +84,9 @@ class NewInstallation
         $bag->addConfig('mail_pw_reset_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have requested to reset your password.' . "\n" . 'To set a new password please visit the following link:' . "\n" . '{apps_url}/developer/password/confirm/{token}' . "\n\n" . 'Please ignore this email if you have not requested a password reset.', 'Body of the password reset mail', tenantId: $tenantId);
         $bag->addConfig('mail_points_subject', Table\Config::FORM_STRING, 'Fusio points threshold reached', 'Subject of the points threshold mail', tenantId: $tenantId);
         $bag->addConfig('mail_points_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'your account has reached the configured threshold of {points} points.' . "\n" . 'If your account reaches 0 points your are not longer able to invoke specific endpoints.' . "\n" . 'To prevent this please go to the developer portal to purchase new points:' . "\n" . '{apps_url}/developer', 'Body of the points threshold mail', tenantId: $tenantId);
-        $bag->addConfig('recaptcha_key', Table\Config::FORM_STRING, '', 'ReCaptcha Key', tenantId: $tenantId);
-        $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha Secret', tenantId: $tenantId);
+        $bag->addConfig('captcha_type', Table\Config::FORM_STRING, 'fusio', 'Captcha Type, must be one of: friendly, hcaptcha, recaptcha or fusio', tenantId: $tenantId);
+        $bag->addConfig('captcha_key', Table\Config::FORM_STRING, '', 'Captcha Key', tenantId: $tenantId);
+        $bag->addConfig('captcha_secret', Table\Config::FORM_STRING, '', 'Captcha Secret', tenantId: $tenantId);
         $bag->addConfig('payment_stripe_secret', Table\Config::FORM_STRING, '', 'The stripe webhook secret which is needed to verify a webhook request', tenantId: $tenantId);
         $bag->addConfig('payment_stripe_portal_configuration', Table\Config::FORM_STRING, '', 'The stripe portal configuration id', tenantId: $tenantId);
         $bag->addConfig('payment_currency', Table\Config::FORM_STRING, '', 'The three-character ISO-4217 currency code which is used to process payments', tenantId: $tenantId);
@@ -134,7 +135,7 @@ class NewInstallation
         $bag->addPage('Authorization', 'authorization', self::readPage('authorization.html'), tenantId: $tenantId);
         $bag->addPage('Support', 'support', self::readPage('support.html'), tenantId: $tenantId);
         $bag->addPage('SDK', 'sdk', self::readPage('sdk.html'), tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_GENERAL, 'Fusio-General', 'Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.', self::readAgent('general.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_GENERAL, false, 'Fusio-General', 'Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.', self::readAgent('general.md'), [
             'backend_operation_getAll',
             'backend_operation_get',
             'backend_action_getAll',
@@ -166,8 +167,8 @@ class NewInstallation
             'backend_log_getAllErrors',
             'backend_log_getError',
         ], null, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_ARCHITECT, 'Fusio-Architect', 'Builds complete API operations by coordinating schemas, database tables, and business logic.', self::readAgent('architect.md'), [], Model\Agent\Blueprint::class, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_ACTION, 'Fusio-Action', 'Develops custom business logic and backend code for your API operations.', self::readAgent('action.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_ARCHITECT, false, 'Fusio-Architect', 'Builds complete API operations by coordinating schemas, database tables, and business logic.', self::readAgent('architect.md'), [], Model\Agent\Blueprint::class, tenantId: $tenantId);
+        $bag->addAgent('default', null, Table\Agent::TYPE_ACTION, false, 'Fusio-Action', 'Develops custom business logic and backend code for your API operations.', self::readAgent('action.md'), [
             'backend_connection_getAll',
             'backend_connection_get',
             'backend_connection_database_getTables',
@@ -177,13 +178,13 @@ class NewInstallation
             'backend_connection_http_execute',
             'backend_connection_sdk_get',
         ], null, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_SCHEMA, 'Fusio-Schema', 'Designs JSON schemas to define and validate request/response data structures.', self::readAgent('schema.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_SCHEMA, false, 'Fusio-Schema', 'Designs JSON schemas to define and validate request/response data structures.', self::readAgent('schema.md'), [
         ], Model\Agent\Schema::class, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_DATABASE, 'Fusio-Database', 'Designs database table structures including columns, types, and constraints.', self::readAgent('database.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_DATABASE, false, 'Fusio-Database', 'Designs database table structures including columns, types, and constraints.', self::readAgent('database.md'), [
             'backend_connection_database_getTables',
             'backend_connection_database_getTable',
         ], Model\Agent\Database::class, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_SEED, 'Fusio-Seed', 'Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.', self::readAgent('seed.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_SEED, false, 'Fusio-Seed', 'Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.', self::readAgent('seed.md'), [
             'backend_connection_database_getTables',
             'backend_connection_database_getTable',
         ], Model\Agent\Seed::class, tenantId: $tenantId);
@@ -195,6 +196,9 @@ class NewInstallation
         return $bag;
     }
 
+    /**
+     * @return array<string, array<string, Operation>>
+     */
     private static function getOperations(): array
     {
         return [
@@ -1978,6 +1982,25 @@ class NewInstallation
                     throws: [999 => Model\Common\Message::class],
                     description: 'Publish the specification',
                 ),
+                'specification.getChangelog' => new Operation(
+                    action: Backend\Action\Specification\GetChangelog::class,
+                    httpMethod: 'GET',
+                    httpPath: '/specification/changelog',
+                    httpCode: 200,
+                    outgoing: Model\Backend\SpecificationChangelog::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns the changelog between your current specification and the last tag',
+                ),
+                'specification.tag' => new Operation(
+                    action: Backend\Action\Specification\Tag::class,
+                    httpMethod: 'POST',
+                    httpPath: '/specification/tag',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    incoming: Passthru::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Creates a new tag of your specification',
+                ),
                 'tenant.setup' => new Operation(
                     action: Backend\Action\Tenant\Setup::class,
                     httpMethod: 'PUT',
@@ -2337,6 +2360,45 @@ class NewInstallation
                 ),
             ],
             'consumer' => [
+                'agent.getAll' => new Operation(
+                    action: Consumer\Action\Agent\GetAll::class,
+                    httpMethod: 'GET',
+                    httpPath: '/agent',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\AgentCollection::class,
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a paginated list of agents',
+                ),
+                'agent.get' => new Operation(
+                    action: Consumer\Action\Agent\Get::class,
+                    httpMethod: 'GET',
+                    httpPath: '/agent/$agent_id<[0-9]+|^~>',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\Agent::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific agent',
+                ),
+                'agent.message.getAll' => new Operation(
+                    action: Consumer\Action\Agent\Message\GetAll::class,
+                    httpMethod: 'GET',
+                    httpPath: '/agent/$agent_id<[0-9]+|^~>/message',
+                    httpCode: 200,
+                    outgoing: Model\Consumer\AgentMessageCollection::class,
+                    parameters: ['chat_id' => PropertyTypeFactory::getString()],
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a paginated list of agent messages',
+                ),
+                'agent.message.submit' => new Operation(
+                    action: Consumer\Action\Agent\Message\Submit::class,
+                    httpMethod: 'POST',
+                    httpPath: '/agent/$agent_id<[0-9]+|^~>/message',
+                    httpCode: 201,
+                    outgoing: Model\Agent\Output::class,
+                    incoming: Model\Agent\Input::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Submits a new agent message',
+                ),
                 'app.getAll' => new Operation(
                     action: Consumer\Action\App\GetAll::class,
                     httpMethod: 'GET',
@@ -2877,6 +2939,16 @@ class NewInstallation
                     throws: [999 => Model\Common\Message::class],
                     public: true,
                     description: 'Payment webhook endpoint after successful purchase of a plan',
+                ),
+                'captcha.challenge' => new Operation(
+                    action: System\Action\Captcha\Challenge::class,
+                    httpMethod: 'GET',
+                    httpPath: '/captcha/challenge',
+                    httpCode: 200,
+                    outgoing: Model\System\CaptchaChallenge::class,
+                    throws: [999 => Model\Common\Message::class],
+                    public: true,
+                    description: 'Endpoint to generate a captcha challenge',
                 ),
             ],
             'authorization' => [

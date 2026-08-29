@@ -33,13 +33,9 @@ use Fusio\Model\Backend\BundleCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private BundleCreate $bundle;
-
-    public function __construct(BundleCreate $bundle, UserContext $context)
+    public function __construct(private readonly BundleCreate $bundle, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->bundle = $bundle;
     }
 
     public function getCategory(): BundleCreate

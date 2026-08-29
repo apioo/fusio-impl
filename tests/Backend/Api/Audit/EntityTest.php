@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Audit;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * EntityTest
@@ -39,9 +40,11 @@ class EntityTest extends DbTestCase
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "id": 1,
     "app": {
         "id": 1,
@@ -60,7 +63,7 @@ class EntityTest extends DbTestCase
     "content": {
         "foo": "bar"
     },
-    "date": "2015-06-25T22:49:09Z"
+    "date": "[datetime]"
 }
 JSON;
 

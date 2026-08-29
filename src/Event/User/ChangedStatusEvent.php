@@ -32,17 +32,9 @@ use Fusio\Impl\Event\EventAbstract;
  */
 class ChangedStatusEvent extends EventAbstract
 {
-    private int $userId;
-    private int $oldStatus;
-    private int $newStatus;
-
-    public function __construct(int $userId, int $oldStatus, int $newStatus, UserContext $context)
+    public function __construct(private readonly int $userId, private readonly int $oldStatus, private readonly int $newStatus, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->userId = $userId;
-        $this->oldStatus = $oldStatus;
-        $this->newStatus = $newStatus;
     }
 
     public function getUserId(): int

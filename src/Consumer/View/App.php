@@ -24,6 +24,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
@@ -40,7 +41,7 @@ use PSX\Sql\ViewAbstract;
  */
 class App extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -55,10 +56,12 @@ class App extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\AppCollection::class)),
             'totalResults' => $this->getTable(Table\App::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => 16,
             'entry' => $builder->doCollection([$this->getTable(Table\App::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\App::class)),
                 'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
                 'userId' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
                 'status' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
@@ -73,7 +76,7 @@ class App extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $appId, ContextInterface $context)
+    public function getEntity(int $appId, ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AppTable::COLUMN_ID, $appId);
@@ -84,6 +87,7 @@ class App extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\App::class), 'findOneBy'], [$condition], [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\App::class)),
             'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
             'userId' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
             'status' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
@@ -108,7 +112,7 @@ class App extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntityByAppKey(?string $tenantId, string $appKey, ?string $scope)
+    public function getEntityByAppKey(?string $tenantId, string $appKey, ?string $scope): mixed
     {
         $app = $this->getTable(Table\App::class)->findOneByTenantAndAppKey($tenantId, $appKey);
         if (!$app instanceof Table\Generated\AppRow || $app->getStatus() !== Table\App::STATUS_ACTIVE) {

@@ -26,6 +26,8 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
+use Fusio\Model\Common\Message;
 
 /**
  * DeleteToken
@@ -48,6 +50,7 @@ readonly class DeleteToken implements ActionInterface
         );
 
         return [
+            'kind' => KindBuilder::build(Message::class),
             'success' => true,
             'message' => 'Removed token successful',
         ];

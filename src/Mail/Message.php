@@ -27,10 +27,17 @@ namespace Fusio\Impl\Mail;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Message
+readonly class Message
 {
-    public function __construct(private readonly string $from, private readonly array $to, private readonly string $subject, private readonly string $body)
-    {
+    /**
+     * @param list<string> $to
+     */
+    public function __construct(
+        private string $from,
+        private array $to,
+        private string $subject,
+        private string $body
+    ) {
     }
 
     public function getFrom(): string
@@ -38,6 +45,9 @@ class Message
         return $this->from;
     }
 
+    /**
+     * @return list<string>
+     */
     public function getTo(): array
     {
         return $this->to;

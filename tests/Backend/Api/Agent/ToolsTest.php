@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Agent;
 
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * ToolsTest
@@ -39,9 +40,12 @@ class ToolsTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "tools": [
         {
             "name": "authorization_getWhoami",
@@ -684,8 +688,16 @@ class ToolsTest extends DbTestCase
             "description": "Returns the TypeHub specification"
         },
         {
+            "name": "backend_specification_getChangelog",
+            "description": "Returns the changelog between your current specification and the last tag"
+        },
+        {
             "name": "backend_specification_publish",
             "description": "Publish the specification"
+        },
+        {
+            "name": "backend_specification_tag",
+            "description": "Creates a new tag of your specification"
         },
         {
             "name": "backend_statistic_getActivitiesPerUser",
@@ -944,6 +956,22 @@ class ToolsTest extends DbTestCase
             "description": "Updates user data for the authenticated user"
         },
         {
+            "name": "consumer_agent_get",
+            "description": "Returns a specific agent"
+        },
+        {
+            "name": "consumer_agent_getAll",
+            "description": "Returns a paginated list of agents"
+        },
+        {
+            "name": "consumer_agent_message_getAll",
+            "description": "Returns a paginated list of agent messages"
+        },
+        {
+            "name": "consumer_agent_message_submit",
+            "description": "Submits a new agent message"
+        },
+        {
             "name": "consumer_app_create",
             "description": "Creates a new app for the authenticated user"
         },
@@ -1090,6 +1118,10 @@ class ToolsTest extends DbTestCase
         {
             "name": "meta_getAbout",
             "description": "Returns meta information and links about the current installed Fusio version"
+        },
+        {
+            "name": "system_captcha_challenge",
+            "description": "Endpoint to generate a captcha challenge"
         },
         {
             "name": "system_connection_callback",

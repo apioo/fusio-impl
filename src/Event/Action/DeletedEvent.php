@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\ActionRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private ActionRow $existing;
-
-    public function __construct(ActionRow $existing, UserContext $context)
+    public function __construct(private readonly ActionRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): ActionRow

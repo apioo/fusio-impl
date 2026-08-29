@@ -25,6 +25,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Sdk;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
+use Fusio\Model\Backend\SdkResponse;
 
 /**
  * GetAll
@@ -42,6 +44,7 @@ readonly class GetAll implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return [
+            'kind' => KindBuilder::build(SdkResponse::class),
             'types' => $this->sdkService->getTypes(),
         ];
     }

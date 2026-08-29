@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\CategoryRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private CategoryRow $existing;
-
-    public function __construct(CategoryRow $existing, UserContext $context)
+    public function __construct(private readonly CategoryRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): CategoryRow

@@ -34,6 +34,33 @@ use Fusio\Impl\Backend\Action\Connection\Database\TableAbstract;
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
+ *
+ * @phpstan-type DatabaseColumn array{
+ *     name: string,
+ *     type: string,
+ *     length: ?int,
+ *     notNull: bool,
+ *     autoIncrement: bool,
+ *     precision: int,
+ *     scale: int,
+ *     unsigned: bool,
+ *     fixed: bool,
+ *     default: mixed,
+ *     comment: ?string,
+ * }
+ *
+ * @phpstan-type DatabaseIndex array{
+ *     name: string,
+ *     unique: bool,
+ *     columns: list<string>,
+ * }
+ *
+ * @phpstan-type DatabaseForeignKey array{
+ *     name: string,
+ *     foreignTable: string,
+ *     localColumnNames: list<string>,
+ *     foreignColumnNames: list<string>,
+ * }
  */
 readonly class Get extends TableAbstract
 {
@@ -45,6 +72,14 @@ readonly class Get extends TableAbstract
         return $this->serializeTable($table);
     }
 
+    /**
+     * @return array{
+     *     name: string,
+     *     columns: list<DatabaseColumn>,
+     *     indexes: list<DatabaseIndex>,
+     *     foreignKeys: list<DatabaseForeignKey>,
+     * }
+     */
     private function serializeTable(Table $table): array
     {
         $return = [
@@ -67,6 +102,9 @@ readonly class Get extends TableAbstract
         return $return;
     }
 
+    /**
+     * @return list<DatabaseColumn>
+     */
     private function serializeColumns(Table $table): array
     {
         $result = [];
@@ -89,6 +127,9 @@ readonly class Get extends TableAbstract
         return $result;
     }
 
+    /**
+     * @return list<DatabaseIndex>
+     */
     private function serializeIndexes(Table $table): array
     {
         $result = [];
@@ -108,6 +149,9 @@ readonly class Get extends TableAbstract
         return $result;
     }
 
+    /**
+     * @return list<DatabaseForeignKey>
+     */
     private function serializeForeignKeys(Table $table): array
     {
         $result = [];

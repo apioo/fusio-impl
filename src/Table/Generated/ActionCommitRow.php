@@ -5,101 +5,77 @@ namespace Fusio\Impl\Table\Generated;
 class ActionCommitRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
-    
     private ?int $actionId = null;
-    
     private ?int $userId = null;
-    
     private ?string $prevHash = null;
-    
     private ?string $commitHash = null;
-    
     private ?string $configHash = null;
-    
     private ?string $config = null;
-    
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
-    
     public function setId(int $id): void
     {
         $this->id = $id;
     }
-    
     public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    
     public function setActionId(int $actionId): void
     {
         $this->actionId = $actionId;
     }
-    
     public function getActionId(): int
     {
         return $this->actionId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "action_id" was provided');
     }
-    
     public function setUserId(int $userId): void
     {
         $this->userId = $userId;
     }
-    
     public function getUserId(): int
     {
         return $this->userId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "user_id" was provided');
     }
-    
     public function setPrevHash(string $prevHash): void
     {
         $this->prevHash = $prevHash;
     }
-    
     public function getPrevHash(): string
     {
         return $this->prevHash ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "prev_hash" was provided');
     }
-    
     public function setCommitHash(string $commitHash): void
     {
         $this->commitHash = $commitHash;
     }
-    
     public function getCommitHash(): string
     {
         return $this->commitHash ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "commit_hash" was provided');
     }
-    
     public function setConfigHash(string $configHash): void
     {
         $this->configHash = $configHash;
     }
-    
     public function getConfigHash(): string
     {
         return $this->configHash ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "config_hash" was provided');
     }
-    
     public function setConfig(string $config): void
     {
         $this->config = $config;
     }
-    
     public function getConfig(): string
     {
         return $this->config ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "config" was provided');
     }
-    
     public function setInsertDate(\PSX\DateTime\LocalDateTime $insertDate): void
     {
         $this->insertDate = $insertDate;
     }
-    
     public function getInsertDate(): \PSX\DateTime\LocalDateTime
     {
         return $this->insertDate ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "insert_date" was provided');
     }
-    
     public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -114,12 +90,13 @@ class ActionCommitRow implements \JsonSerializable, \PSX\Record\RecordableInterf
         $record->put('insert_date', $this->insertDate);
         return $record;
     }
-    
     public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    
+    /**
+     * @param array<string, mixed>|\ArrayAccess<string, mixed> $data
+     */
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();

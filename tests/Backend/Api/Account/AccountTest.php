@@ -42,8 +42,9 @@ class AccountTest extends DbTestCase
         $body = (string) $response->getBody();
         $body = Normalizer::normalize($body);
 
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
+    "kind": "[kind]",
     "id": 4,
     "roleId": 2,
     "status": 1,
@@ -92,6 +93,7 @@ class AccountTest extends DbTestCase
         "backend.webhook",
         "consumer",
         "consumer.account",
+        "consumer.agent",
         "consumer.app",
         "consumer.event",
         "consumer.form",
@@ -140,9 +142,12 @@ JSON;
             'email' => 'foo@bar.com',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Account successful changed",
     "id": "4"

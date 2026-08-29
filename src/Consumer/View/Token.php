@@ -23,7 +23,9 @@ namespace Fusio\Impl\Consumer\View;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\App\Token\TokenQueryFilter;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
@@ -38,7 +40,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Token extends ViewAbstract
 {
-    public function getCollection(TokenQueryFilter $filter, ContextInterface $context)
+    public function getCollection(TokenQueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -54,10 +56,12 @@ class Token extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\TokenCollection::class)),
             'totalResults' => $this->getTable(Table\Token::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => 16,
             'entry' => $builder->doCollection([$this->getTable(Table\Token::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\Token::class)),
                 'id' => Table\Generated\TokenTable::COLUMN_ID,
                 'status' => Table\Generated\TokenTable::COLUMN_STATUS,
                 'name' => Table\Generated\TokenTable::COLUMN_NAME,
@@ -71,7 +75,7 @@ class Token extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $tokenId, ContextInterface $context)
+    public function getEntity(int $tokenId, ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\TokenTable::COLUMN_ID, $tokenId);
@@ -83,6 +87,7 @@ class Token extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Token::class), 'findOneBy'], [$condition], [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\Token::class)),
             'id' => Table\Generated\TokenTable::COLUMN_ID,
             'status' => Table\Generated\TokenTable::COLUMN_STATUS,
             'name' => Table\Generated\TokenTable::COLUMN_NAME,

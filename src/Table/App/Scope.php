@@ -41,6 +41,10 @@ class Scope extends Generated\AppScopeTable
         $this->connection->executeQuery($sql, ['app_id' => $appId]);
     }
 
+    /**
+     * @param list<string> $scopes
+     * @return list<array{id: int, name: string, description: string}>
+     */
     public function getValidScopes(?string $tenantId, int $appId, array $scopes): array
     {
         $result = $this->getAvailableScopes($tenantId, $appId, true);
@@ -55,6 +59,9 @@ class Scope extends Generated\AppScopeTable
         return $data;
     }
 
+    /**
+     * @return list<array{id: int, name: string, description: string}>
+     */
     public function getAvailableScopes(?string $tenantId, int $appId, bool $includePlanScopes = false): array
     {
         $assignedScopes = $this->getScopesForApp($tenantId, $appId);
@@ -80,6 +87,9 @@ class Scope extends Generated\AppScopeTable
         return array_values($scopes);
     }
 
+    /**
+     * @return list<array{id: int, name: string, description: string}>
+     */
     private function getScopesForApp(?string $tenantId, int $appId): array
     {
         $condition = Condition::withAnd();
@@ -102,6 +112,9 @@ class Scope extends Generated\AppScopeTable
         return $this->connection->fetchAllAssociative($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 
+    /**
+     * @return list<array{id: int, name: string, description: string}>
+     */
     private function getScopesForPlan(?string $tenantId, int $appId): array
     {
         $userId = $this->getTable(Table\App::class)->getUserId($tenantId, $appId);

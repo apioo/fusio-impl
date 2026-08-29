@@ -73,6 +73,9 @@ class Cronjob extends Generated\CronjobTable
         return $this->findOneBy($condition);
     }
 
+    /**
+     * @return list<CronjobRow>
+     */
     public function findByTenantAndStatus(?string $tenantId, int $status): array
     {
         $condition = Condition::withAnd();

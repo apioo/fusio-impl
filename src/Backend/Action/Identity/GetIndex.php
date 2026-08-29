@@ -25,6 +25,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Provider\IdentityProvider;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
+use Fusio\Model\Backend\IdentityIndex;
 
 /**
  * GetIndex
@@ -42,6 +44,7 @@ readonly class GetIndex implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return [
+            'kind' => KindBuilder::build(IdentityIndex::class),
             'providers' => $this->identityProvider->getClasses()
         ];
     }

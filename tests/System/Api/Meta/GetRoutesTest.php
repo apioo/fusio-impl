@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\System\Api\Meta;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * GetRoutesTest
@@ -37,9 +38,12 @@ class GetRoutesTest extends DbTestCase
             'User-Agent' => 'Fusio TestCase',
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "routes": {
         "\/": {
             "GET": "meta.getAbout"

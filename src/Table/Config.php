@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Table;
 
-use Fusio\Impl\Table\Generated\CategoryRow;
 use Fusio\Impl\Table\Generated\ConfigRow;
 use PSX\Sql\Condition;
 
@@ -74,6 +73,9 @@ class Config extends Generated\ConfigTable
         return $this->findOneBy($condition);
     }
 
+    /**
+     * @return array{id: int, value: ?string, type: int}|false
+     */
     public function getValue(?string $tenantId, string $name): array|false
     {
         $condition = Condition::withAnd();

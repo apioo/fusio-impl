@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Audit;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -39,19 +40,22 @@ class CollectionTest extends DbTestCase
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 1,
             "event": "app.update",
             "ip": "127.0.0.1",
             "message": "Created schema foo",
-            "date": "2015-06-25T22:49:09Z"
+            "date": "[datetime]"
         }
     ]
 }
@@ -69,19 +73,22 @@ JSON;
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 1,
             "event": "app.update",
             "ip": "127.0.0.1",
             "message": "Created schema foo",
-            "date": "2015-06-25T22:49:09Z"
+            "date": "[datetime]"
         }
     ]
 }
@@ -99,19 +106,22 @@ JSON;
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 1,
             "event": "app.update",
             "ip": "127.0.0.1",
             "message": "Created schema foo",
-            "date": "2015-06-25T22:49:09Z"
+            "date": "[datetime]"
         }
     ]
 }

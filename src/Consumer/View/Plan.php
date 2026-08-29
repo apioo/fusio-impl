@@ -22,7 +22,9 @@ namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
@@ -37,7 +39,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Plan extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -51,10 +53,12 @@ class Plan extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\PlanCollection::class)),
             'totalResults' => $this->getTable(Table\Plan::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Plan::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\Plan::class)),
                 'id' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
                 'name' => Table\Generated\PlanTable::COLUMN_NAME,
                 'description' => Table\Generated\PlanTable::COLUMN_DESCRIPTION,
@@ -70,7 +74,7 @@ class Plan extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $planId, ContextInterface $context)
+    public function getEntity(int $planId, ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\PlanTable::COLUMN_ID, $planId);
@@ -80,6 +84,7 @@ class Plan extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Plan::class), 'findOneBy'], [$condition], [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\Plan::class)),
             'id' => $builder->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
             'name' => Table\Generated\PlanTable::COLUMN_NAME,
             'description' => Table\Generated\PlanTable::COLUMN_DESCRIPTION,

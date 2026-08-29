@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Token;
 
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -39,14 +40,17 @@ class CollectionTest extends DbTestCase
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 7,
             "status": 1,
             "name": "Foo-App\/Expired",
@@ -54,7 +58,7 @@ class CollectionTest extends DbTestCase
                 "bar"
             ],
             "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
+            "date": "[datetime]"
         }
     ]
 }
@@ -72,14 +76,17 @@ JSON;
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 7,
             "status": 1,
             "name": "Foo-App\/Expired",
@@ -87,7 +94,7 @@ JSON;
                 "bar"
             ],
             "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
+            "date": "[datetime]"
         }
     ]
 }
@@ -105,14 +112,17 @@ JSON;
         ]);
 
         $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
 
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 7,
             "status": 1,
             "name": "Foo-App\/Expired",
@@ -120,7 +130,7 @@ JSON;
                 "bar"
             ],
             "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
+            "date": "[datetime]"
         }
     ]
 }

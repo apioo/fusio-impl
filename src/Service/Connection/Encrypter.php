@@ -32,7 +32,7 @@ use PSX\OpenSsl\OpenSsl;
  */
 class Encrypter
 {
-    public static function encrypt(mixed $config, string $secretKey)
+    public static function encrypt(mixed $config, string $secretKey): ?string
     {
         if (empty($config)) {
             return null;
@@ -52,6 +52,9 @@ class Encrypter
         return base64_encode($iv) . '.' . base64_encode($data);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public static function decrypt(mixed $data, string $secretKey): array
     {
         if (empty($data)) {
@@ -71,7 +74,7 @@ class Encrypter
 
         $method = self::getMethodForKey($secretKey);
         $config = OpenSsl::decrypt(base64_decode($data), $method, $secretKey, OPENSSL_RAW_DATA, base64_decode($iv));
-        $config = Parser::decode($config, true);
+        $config = Parser::decodeAsArray($config);
 
         return $config;
     }

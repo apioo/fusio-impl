@@ -71,7 +71,7 @@ class PayerTest extends TestCase
             ->getMock();
 
         $configService->expects($this->once())
-            ->method('getValue')
+            ->method('getInt')
             ->withAnyParameters()
             ->willReturn($threshold);
 
@@ -136,16 +136,6 @@ class PayerTest extends TestCase
             [0, 98, 1, false],
             [0, 97, 1, false],
             [0, 96, 1, false],
-
-            [null, 104, 1, false],
-            [null, 103, 1, false],
-            [null, 102, 1, false],
-            [null, 101, 1, false],
-            [null, 100, 1, false],
-            [null, 99, 1, false],
-            [null, 98, 1, false],
-            [null, 97, 1, false],
-            [null, 96, 1, false],
         ];
     }
 }

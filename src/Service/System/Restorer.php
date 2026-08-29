@@ -40,6 +40,9 @@ class Restorer
     private const STATUS_COLUMN = 3;
     private const ACTIVE_STATUS = 4;
 
+    /**
+     * @var array<string, array{string, string, string, string, int}>
+     */
     private array $config;
 
     public function __construct(private readonly Connection $connection, private readonly FrameworkConfig $frameworkConfig)
@@ -47,11 +50,22 @@ class Restorer
         $this->config = $this->buildConfig();
     }
 
+    /**
+     * @return list<string>
+     */
     public function getTypes(): array
     {
         return array_keys($this->config);
     }
 
+    /**
+     * @return array{
+     *     totalResults: int,
+     *     startIndex: int,
+     *     itemsPerPage: int,
+     *     entry: list<array{id: int, status: int, name: string}>,
+     * }
+     */
     public function getDataForType(string $type, int $startIndex, int $count): array
     {
         if (!isset($this->config[$type])) {
@@ -129,6 +143,9 @@ class Restorer
         ]);
     }
 
+    /**
+     * @param array{string, string, string, string, int} $config
+     */
     private function getTotalResults(array $config, Condition $condition): int
     {
         $queryBuilder = $this->connection->createQueryBuilder()
@@ -140,6 +157,10 @@ class Restorer
         return (int) $this->connection->fetchOne($queryBuilder->getSQL(), $queryBuilder->getParameters());
     }
 
+    /**
+     * @param array{string, string, string, string, int} $config
+     * @return list<array{id: int, status: int, name: string}>
+     */
     private function getEntries(array $config, Condition $condition, int $startIndex, int $count): array
     {
         $queryBuilder = $this->connection->createQueryBuilder()
@@ -154,6 +175,9 @@ class Restorer
         return $this->connection->fetchAllAssociative($query, $queryBuilder->getParameters());
     }
 
+    /**
+     * @return array<string, array{string, string, string, string, int}>
+     */
     private function buildConfig(): array
     {
         return [

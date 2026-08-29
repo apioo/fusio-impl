@@ -18,23 +18,31 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Service\User\Captcha;
+namespace Fusio\Impl\Table\Schema;
+
+use Fusio\Impl\Table\Generated;
 
 /**
- * MockCaptcha
+ * Tag
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class MockCaptcha implements CaptchaInterface
+class Tag extends Generated\SchemaTagTable
 {
-    public function __construct(private bool $result = true)
+    public function findHashByVersion(string $version, int $schemaId): ?string
     {
-    }
+        $query = 'SELECT cmt.commit_hash
+                    FROM fusio_schema_tag tag
+              INNER JOIN fusio_schema_commit cmt
+                      ON tag.commit_id = cmt.id
+                   WHERE tag.version = :version
+                     AND cmt.schema_id = :schema_id';
 
-    public function verify(?string $captcha, string $secret, string $ip): bool
-    {
-        return $this->result;
+        return $this->connection->fetchOne($query, [
+            'version' => $version,
+            'schema_id' => $schemaId
+        ]);
     }
 }

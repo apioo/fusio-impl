@@ -84,7 +84,7 @@ readonly class Validator
         if ($user instanceof UserCreate) {
             $password = $user->getPassword();
             if ($password !== null) {
-                $this->assertPassword($password, $this->configService->getValue('user_pw_length'));
+                $this->assertPassword($password, $this->configService->getInt('user_pw_length'));
             } else {
                 if ($existing === null) {
                     throw new StatusCode\BadRequestException('User password must not be empty');
@@ -119,13 +119,13 @@ readonly class Validator
         }
     }
 
-    public function assertPassword($password, $minLength = null, $minAlpha = null, $minNumeric = null, $minSpecial = null): void
+    public function assertPassword(?string $password, ?int $minLength = null, ?int $minAlpha = null, ?int $minNumeric = null, ?int $minSpecial = null): void
     {
         if (empty($password)) {
             throw new StatusCode\BadRequestException('Password must not be empty');
         }
 
-        $minLength  = $minLength ?? $this->configService->getValue('user_pw_length');
+        $minLength  = $minLength ?? $this->configService->getInt('user_pw_length');
         $minAlpha   = $minAlpha ?? 0;
         $minNumeric = $minNumeric ?? 0;
         $minSpecial = $minSpecial ?? 0;

@@ -55,6 +55,7 @@ class EntityTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "id": 2,
     "roleId": 3,
     "planId": 1,
@@ -68,6 +69,7 @@ class EntityTest extends DbTestCase
     "scopes": [
         "consumer",
         "consumer.account",
+        "consumer.agent",
         "consumer.app",
         "consumer.event",
         "consumer.form",
@@ -176,9 +178,12 @@ JSON;
             'metadata' => $metadata,
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "User successfully updated",
     "id": "2"
@@ -215,7 +220,7 @@ JSON;
 
         $this->assertEquals(1, count($scopes));
         $this->assertEquals(2, $scopes[0]['user_id']);
-        $this->assertEquals(60, $scopes[0]['scope_id']);
+        $this->assertEquals(61, $scopes[0]['scope_id']);
     }
 
     public function testDelete(): void
@@ -225,9 +230,12 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "User successfully deleted",
     "id": "2"

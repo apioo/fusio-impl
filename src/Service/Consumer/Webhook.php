@@ -109,7 +109,7 @@ class Webhook
     private function assertMaxWebhookCount(UserContext $context): void
     {
         $count = $this->webhookTable->getCountForUser($context->getTenantId(), $context->getUserId());
-        if ($count > $this->configService->getValue('consumer_max_webhooks')) {
+        if ($count > $this->configService->getInt('consumer_max_webhooks')) {
             throw new StatusCode\BadRequestException('Maximal amount of tokens reached. Please delete another token in order to generate a new one');
         }
     }

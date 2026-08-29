@@ -23,7 +23,9 @@ namespace Fusio\Impl\Consumer\View;
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Log\LogQueryFilter;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
@@ -38,7 +40,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Log extends ViewAbstract
 {
-    public function getCollection(LogQueryFilter $filter, ContextInterface $context)
+    public function getCollection(LogQueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -53,10 +55,12 @@ class Log extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\LogCollection::class)),
             'totalResults' => $this->getTable(Table\Log::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\Log::class)),
                 'id' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
                 'appId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
                 'ip' => Table\Generated\LogTable::COLUMN_IP,
@@ -70,7 +74,7 @@ class Log extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $logId, ContextInterface $context)
+    public function getEntity(int $logId, ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\LogTable::COLUMN_ID, $logId);
@@ -81,6 +85,7 @@ class Log extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Log::class), 'findOneBy'], [$condition], [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\Log::class)),
             'id' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
             'appId' => $builder->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
             'ip' => Table\Generated\LogTable::COLUMN_IP,

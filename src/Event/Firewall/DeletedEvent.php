@@ -33,13 +33,9 @@ use Fusio\Impl\Table\Generated\FirewallRow;
  */
 class DeletedEvent extends EventAbstract
 {
-    private FirewallRow $existing;
-
-    public function __construct(FirewallRow $existing, UserContext $context)
+    public function __construct(private readonly FirewallRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->existing = $existing;
     }
 
     public function getExisting(): FirewallRow

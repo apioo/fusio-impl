@@ -26,6 +26,8 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
+use Fusio\Model\Common\Message;
 
 /**
  * Refresh
@@ -45,6 +47,7 @@ readonly class Refresh implements ActionInterface
         $this->testService->refresh($this->contextFactory->newActionContext($context));
 
         return [
+            'kind' => KindBuilder::build(Message::class),
             'success' => true,
             'message' => 'Tests successfully refreshed',
         ];

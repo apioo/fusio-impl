@@ -5,89 +5,68 @@ namespace Fusio\Impl\Table\Generated;
 class FormRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
-    
     private ?int $operationId = null;
-    
     private ?string $tenantId = null;
-    
     private ?int $status = null;
-    
     private ?string $name = null;
-    
     private ?string $uiSchema = null;
-    
     private ?string $metadata = null;
-    
     public function setId(int $id): void
     {
         $this->id = $id;
     }
-    
     public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    
     public function setOperationId(int $operationId): void
     {
         $this->operationId = $operationId;
     }
-    
     public function getOperationId(): int
     {
         return $this->operationId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "operation_id" was provided');
     }
-    
     public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
-    
     public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
-    
     public function setStatus(int $status): void
     {
         $this->status = $status;
     }
-    
     public function getStatus(): int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
     }
-    
     public function setName(string $name): void
     {
         $this->name = $name;
     }
-    
     public function getName(): string
     {
         return $this->name ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "name" was provided');
     }
-    
     public function setUiSchema(string $uiSchema): void
     {
         $this->uiSchema = $uiSchema;
     }
-    
     public function getUiSchema(): string
     {
         return $this->uiSchema ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "ui_schema" was provided');
     }
-    
     public function setMetadata(?string $metadata): void
     {
         $this->metadata = $metadata;
     }
-    
     public function getMetadata(): ?string
     {
         return $this->metadata;
     }
-    
     public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -101,12 +80,13 @@ class FormRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('metadata', $this->metadata);
         return $record;
     }
-    
     public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    
+    /**
+     * @param array<string, mixed>|\ArrayAccess<string, mixed> $data
+     */
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();

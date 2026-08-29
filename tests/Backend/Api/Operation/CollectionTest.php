@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Operation;
 
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 use PSX\Api\OperationInterface;
 use PSX\Json\Parser;
 
@@ -41,15 +42,19 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 15,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 285,
+            "kind": "[kind]",
+            "id": 292,
             "status": 1,
             "active": true,
             "public": false,
@@ -61,7 +66,8 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 284,
+            "kind": "[kind]",
+            "id": 291,
             "status": 1,
             "active": true,
             "public": false,
@@ -73,7 +79,8 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 283,
+            "kind": "[kind]",
+            "id": 290,
             "status": 1,
             "active": true,
             "public": false,
@@ -85,7 +92,8 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 282,
+            "kind": "[kind]",
+            "id": 289,
             "status": 1,
             "active": true,
             "public": false,
@@ -97,7 +105,8 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 281,
+            "kind": "[kind]",
+            "id": 288,
             "status": 1,
             "active": true,
             "public": false,
@@ -109,7 +118,8 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 280,
+            "kind": "[kind]",
+            "id": 287,
             "status": 1,
             "active": true,
             "public": false,
@@ -121,7 +131,8 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 279,
+            "kind": "[kind]",
+            "id": 286,
             "status": 1,
             "active": true,
             "public": false,
@@ -133,7 +144,8 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 278,
+            "kind": "[kind]",
+            "id": 285,
             "status": 1,
             "active": true,
             "public": false,
@@ -145,7 +157,8 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 277,
+            "kind": "[kind]",
+            "id": 284,
             "status": 1,
             "active": true,
             "public": false,
@@ -157,7 +170,8 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 276,
+            "kind": "[kind]",
+            "id": 283,
             "status": 1,
             "active": true,
             "public": false,
@@ -169,7 +183,8 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 275,
+            "kind": "[kind]",
+            "id": 282,
             "status": 1,
             "active": true,
             "public": false,
@@ -181,7 +196,8 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 274,
+            "kind": "[kind]",
+            "id": 281,
             "status": 1,
             "active": true,
             "public": false,
@@ -193,7 +209,8 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/PHP-Local@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
         },
         {
-            "id": 273,
+            "kind": "[kind]",
+            "id": 280,
             "status": 1,
             "active": true,
             "public": false,
@@ -205,7 +222,8 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Sql-Insert"
         },
         {
-            "id": 272,
+            "kind": "[kind]",
+            "id": 279,
             "status": 1,
             "active": true,
             "public": true,
@@ -217,6 +235,7 @@ class CollectionTest extends DbTestCase
             "action": "action:\/\/Sql-Select-All"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "active": true,
@@ -243,15 +262,19 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 279,
+            "kind": "[kind]",
+            "id": 286,
             "status": 1,
             "active": true,
             "public": false,
@@ -263,7 +286,8 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 278,
+            "kind": "[kind]",
+            "id": 285,
             "status": 1,
             "active": true,
             "public": false,
@@ -275,7 +299,8 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 277,
+            "kind": "[kind]",
+            "id": 284,
             "status": 1,
             "active": true,
             "public": false,
@@ -287,7 +312,8 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 276,
+            "kind": "[kind]",
+            "id": 283,
             "status": 1,
             "active": true,
             "public": false,
@@ -299,7 +325,8 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 275,
+            "kind": "[kind]",
+            "id": 282,
             "status": 1,
             "active": true,
             "public": false,
@@ -325,15 +352,19 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 272,
+            "kind": "[kind]",
+            "id": 279,
             "status": 1,
             "active": true,
             "public": true,
@@ -359,15 +390,19 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 15,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 285,
+            "kind": "[kind]",
+            "id": 292,
             "status": 1,
             "active": true,
             "public": false,
@@ -379,7 +414,8 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 284,
+            "kind": "[kind]",
+            "id": 291,
             "status": 1,
             "active": true,
             "public": false,
@@ -391,7 +427,8 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 283,
+            "kind": "[kind]",
+            "id": 290,
             "status": 1,
             "active": true,
             "public": false,
@@ -403,7 +440,8 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 282,
+            "kind": "[kind]",
+            "id": 289,
             "status": 1,
             "active": true,
             "public": false,
@@ -415,7 +453,8 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 281,
+            "kind": "[kind]",
+            "id": 288,
             "status": 1,
             "active": true,
             "public": false,
@@ -427,7 +466,8 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 280,
+            "kind": "[kind]",
+            "id": 287,
             "status": 1,
             "active": true,
             "public": false,
@@ -439,7 +479,8 @@ JSON;
             "action": "action:\/\/MIME-Action"
         },
         {
-            "id": 279,
+            "kind": "[kind]",
+            "id": 286,
             "status": 1,
             "active": true,
             "public": false,
@@ -451,7 +492,8 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 278,
+            "kind": "[kind]",
+            "id": 285,
             "status": 1,
             "active": true,
             "public": false,
@@ -463,7 +505,8 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 277,
+            "kind": "[kind]",
+            "id": 284,
             "status": 1,
             "active": true,
             "public": false,
@@ -475,7 +518,8 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 276,
+            "kind": "[kind]",
+            "id": 283,
             "status": 1,
             "active": true,
             "public": false,
@@ -487,7 +531,8 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 275,
+            "kind": "[kind]",
+            "id": 282,
             "status": 1,
             "active": true,
             "public": false,
@@ -499,7 +544,8 @@ JSON;
             "action": "action:\/\/Inspect-Action"
         },
         {
-            "id": 274,
+            "kind": "[kind]",
+            "id": 281,
             "status": 1,
             "active": true,
             "public": false,
@@ -511,7 +557,8 @@ JSON;
             "action": "action:\/\/PHP-Local@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
         },
         {
-            "id": 273,
+            "kind": "[kind]",
+            "id": 280,
             "status": 1,
             "active": true,
             "public": false,
@@ -523,7 +570,8 @@ JSON;
             "action": "action:\/\/Sql-Insert"
         },
         {
-            "id": 272,
+            "kind": "[kind]",
+            "id": 279,
             "status": 1,
             "active": true,
             "public": true,
@@ -535,6 +583,7 @@ JSON;
             "action": "action:\/\/Sql-Select-All"
         },
         {
+            "kind": "[kind]",
             "id": 1,
             "status": 1,
             "active": true,
@@ -587,12 +636,15 @@ JSON;
             'metadata' => $metadata,
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Operation successfully created",
-    "id": "286"
+    "id": "293"
 }
 JSON;
 
@@ -642,7 +694,7 @@ JSON;
         $this->assertEquals(201, $response->getStatusCode(), $body);
         $this->assertSame(true, $data->success);
         $this->assertSame('Operation successfully created', $data->message);
-        $this->assertContains($data->id, ['286', '287']); // postgres does not reset the auto increment so we need to check both
+        $this->assertContains($data->id, ['293', '294']); // postgres does not reset the auto increment so we need to check both
 
         // check database
         Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'test.bar', 'GET', '/foo/bar', 200, ['foo', 'baz'], $metadata);
@@ -1160,10 +1212,10 @@ JSON;
             throw new \RuntimeException('Provided operation ' . $id . ' does not exist');
         }
 
-        $this->assertEquals('schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788', $row['incoming']);
-        $this->assertEquals('schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788', $row['outgoing']);
-        $this->assertJsonStringEqualsJsonString(json_encode([500 => 'schema://Entry-Schema@7d28d0f99f1d839a054cf080b37556d77166d788']), $row['throws']);
-        $this->assertEquals('action://Sql-Insert@d9b98d4f5d951d59632e7dfdc0c5737a25936358', $row['action']);
+        $this->assertEquals('schema://Entry-Schema@8d6f521f9219b9f9f1f346a72ae3a24d22cde8d6', $row['incoming']);
+        $this->assertEquals('schema://Entry-Schema@8d6f521f9219b9f9f1f346a72ae3a24d22cde8d6', $row['outgoing']);
+        $this->assertJsonStringEqualsJsonString(json_encode([500 => 'schema://Entry-Schema@8d6f521f9219b9f9f1f346a72ae3a24d22cde8d6']), $row['throws']);
+        $this->assertEquals('action://Sql-Insert@a742ff6a7e6733dbee21784ba1a749c001725988', $row['action']);
 
         // move schema back to experimental
         $response = $this->sendRequest('/backend/operation/' . $id, 'PUT', [

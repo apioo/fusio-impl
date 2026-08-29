@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Scope;
 
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * CollectionTest
@@ -39,25 +40,31 @@ class CollectionTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 61,
+            "kind": "[kind]",
+            "id": 62,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
-            "id": 60,
+            "kind": "[kind]",
+            "id": 61,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 59,
+            "kind": "[kind]",
+            "id": 60,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -65,6 +72,7 @@ class CollectionTest extends DbTestCase
             }
         },
         {
+            "kind": "[kind]",
             "id": 5,
             "name": "default",
             "description": ""
@@ -84,15 +92,19 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 59,
+            "kind": "[kind]",
+            "id": 60,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -114,25 +126,31 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 61,
+            "kind": "[kind]",
+            "id": 62,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
-            "id": 60,
+            "kind": "[kind]",
+            "id": 61,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 59,
+            "kind": "[kind]",
+            "id": 60,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -140,6 +158,7 @@ JSON;
             }
         },
         {
+            "kind": "[kind]",
             "id": 5,
             "name": "default",
             "description": ""
@@ -209,11 +228,11 @@ JSON;
 
         $this->assertEquals([[
             'scope_id' => $scopeId,
-            'operation_id' => 275,
+            'operation_id' => 282,
             'allow' => 1,
         ], [
             'scope_id' => $scopeId,
-            'operation_id' => 272,
+            'operation_id' => 279,
             'allow' => 1,
         ]], $operations);
     }

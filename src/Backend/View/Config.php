@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Record\RecordInterface;
 use PSX\Sql\OrderBy;
@@ -37,7 +39,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Config extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -50,10 +52,12 @@ class Config extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\ConfigCollection::class)),
             'totalResults' => $this->getTable(Table\Config::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Config::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Config::class)),
                 'id' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
                 'type' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
                 'name' => Table\Generated\ConfigTable::COLUMN_NAME,
@@ -67,11 +71,12 @@ class Config extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id, ContextInterface $context)
+    public function getEntity(string $id, ContextInterface $context): mixed
     {
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Config::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Config::class)),
             'id' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
             'type' => $builder->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
             'name' => Table\Generated\ConfigTable::COLUMN_NAME,

@@ -34,15 +34,9 @@ use Fusio\Model\Backend\RoleUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private RoleUpdate $role;
-    private RoleRow $existing;
-
-    public function __construct(RoleUpdate $role, RoleRow $existing, UserContext $context)
+    public function __construct(private readonly RoleUpdate $role, private readonly RoleRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->role     = $role;
-        $this->existing = $existing;
     }
 
     public function getRole(): RoleUpdate

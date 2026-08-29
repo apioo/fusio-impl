@@ -34,15 +34,9 @@ use Fusio\Model\Backend\ActionUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private ActionUpdate $action;
-    private ActionRow $existing;
-
-    public function __construct(ActionUpdate $action, ActionRow $existing, UserContext $context)
+    public function __construct(private readonly ActionUpdate $action, private readonly ActionRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->action   = $action;
-        $this->existing = $existing;
     }
 
     public function getAction(): ActionUpdate

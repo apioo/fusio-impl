@@ -26,6 +26,8 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\App;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
+use Fusio\Model\Common\Message;
 
 /**
  * Delete
@@ -48,6 +50,7 @@ readonly class Delete implements ActionInterface
         );
 
         return [
+            'kind' => KindBuilder::build(Message::class),
             'success' => true,
             'message' => 'App successfully deleted',
             'id' => '' . $id,

@@ -34,15 +34,9 @@ use Fusio\Model\Backend\AgentUpdate;
  */
 class UpdatedEvent extends EventAbstract
 {
-    private AgentUpdate $agent;
-    private AgentRow $existing;
-
-    public function __construct(AgentUpdate $agent, AgentRow $existing, UserContext $context)
+    public function __construct(private readonly AgentUpdate $agent, private readonly AgentRow $existing, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->agent = $agent;
-        $this->existing = $existing;
     }
 
     public function getAgent(): AgentUpdate

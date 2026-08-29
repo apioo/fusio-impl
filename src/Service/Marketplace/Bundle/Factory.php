@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\Marketplace\Bundle;
 use Fusio\Impl\Service\Marketplace\FactoryInterface;
 use Fusio\Impl\Service\Marketplace\InstallerInterface;
 use Fusio\Impl\Service\Marketplace\RepositoryInterface;
+use Fusio\Marketplace\MarketplaceBundle;
 
 /**
  * Factory
@@ -30,6 +31,8 @@ use Fusio\Impl\Service\Marketplace\RepositoryInterface;
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
+ *
+ * @implements FactoryInterface<MarketplaceBundle>
  */
 readonly class Factory implements FactoryInterface
 {

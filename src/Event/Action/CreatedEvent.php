@@ -33,13 +33,9 @@ use Fusio\Model\Backend\ActionCreate;
  */
 class CreatedEvent extends EventAbstract
 {
-    private ActionCreate $action;
-
-    public function __construct(ActionCreate $action, UserContext $context)
+    public function __construct(private readonly ActionCreate $action, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->action = $action;
     }
 
     public function getAction(): ActionCreate

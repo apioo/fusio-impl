@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Identity;
 use Fusio\Impl\Provider\Identity\Github;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * EntityTest
@@ -49,9 +50,12 @@ class EntityTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "id": 2,
     "roleId": 3,
     "appId": 2,
@@ -70,7 +74,7 @@ class EntityTest extends DbTestCase
         "email_property": "email"
     },
     "allowCreate": true,
-    "insertDate": "2023-07-22T13:56:00Z"
+    "insertDate": "[datetime]"
 }
 JSON;
 
@@ -85,9 +89,12 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "id": 2,
     "roleId": 3,
     "appId": 2,
@@ -106,7 +113,7 @@ JSON;
         "email_property": "email"
     },
     "allowCreate": true,
-    "insertDate": "2023-07-22T13:56:00Z"
+    "insertDate": "[datetime]"
 }
 JSON;
 
@@ -162,9 +169,12 @@ JSON;
             ]
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Identity successfully updated",
     "id": "2"
@@ -210,9 +220,12 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Identity successfully deleted",
     "id": "2"

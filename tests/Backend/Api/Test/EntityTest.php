@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Test;
 use Fusio\Impl\Table\Generated\TestTable;
 use Fusio\Impl\Table\Test;
 use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * EntityTest
@@ -40,9 +41,12 @@ class EntityTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "id": 1,
     "status": 1,
     "operationName": "test.listFoo",
@@ -111,9 +115,12 @@ JSON;
             ],
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Test successfully updated",
     "id": "1"

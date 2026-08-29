@@ -5,125 +5,95 @@ namespace Fusio\Impl\Table\Generated;
 class PlanRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
-    
     private ?string $tenantId = null;
-    
     private ?int $status = null;
-    
     private ?string $name = null;
-    
     private ?string $description = null;
-    
     private ?int $price = null;
-    
     private ?int $points = null;
-    
     private ?int $periodType = null;
-    
     private ?string $externalId = null;
-    
     private ?string $metadata = null;
-    
     public function setId(int $id): void
     {
         $this->id = $id;
     }
-    
     public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    
     public function setTenantId(?string $tenantId): void
     {
         $this->tenantId = $tenantId;
     }
-    
     public function getTenantId(): ?string
     {
         return $this->tenantId;
     }
-    
     public function setStatus(int $status): void
     {
         $this->status = $status;
     }
-    
     public function getStatus(): int
     {
         return $this->status ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "status" was provided');
     }
-    
     public function setName(string $name): void
     {
         $this->name = $name;
     }
-    
     public function getName(): string
     {
         return $this->name ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "name" was provided');
     }
-    
     public function setDescription(string $description): void
     {
         $this->description = $description;
     }
-    
     public function getDescription(): string
     {
         return $this->description ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "description" was provided');
     }
-    
     public function setPrice(int $price): void
     {
         $this->price = $price;
     }
-    
     public function getPrice(): int
     {
         return $this->price ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "price" was provided');
     }
-    
     public function setPoints(int $points): void
     {
         $this->points = $points;
     }
-    
     public function getPoints(): int
     {
         return $this->points ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "points" was provided');
     }
-    
     public function setPeriodType(?int $periodType): void
     {
         $this->periodType = $periodType;
     }
-    
     public function getPeriodType(): ?int
     {
         return $this->periodType;
     }
-    
     public function setExternalId(?string $externalId): void
     {
         $this->externalId = $externalId;
     }
-    
     public function getExternalId(): ?string
     {
         return $this->externalId;
     }
-    
     public function setMetadata(?string $metadata): void
     {
         $this->metadata = $metadata;
     }
-    
     public function getMetadata(): ?string
     {
         return $this->metadata;
     }
-    
     public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -140,12 +110,13 @@ class PlanRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('metadata', $this->metadata);
         return $record;
     }
-    
     public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    
+    /**
+     * @param array<string, mixed>|\ArrayAccess<string, mixed> $data
+     */
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();

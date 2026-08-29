@@ -5,65 +5,50 @@ namespace Fusio\Impl\Table\Generated;
 class IdentityRequestRow implements \JsonSerializable, \PSX\Record\RecordableInterface
 {
     private ?int $id = null;
-    
     private ?int $identityId = null;
-    
     private ?string $state = null;
-    
     private ?string $redirectUri = null;
-    
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
-    
     public function setId(int $id): void
     {
         $this->id = $id;
     }
-    
     public function getId(): int
     {
         return $this->id ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "id" was provided');
     }
-    
     public function setIdentityId(int $identityId): void
     {
         $this->identityId = $identityId;
     }
-    
     public function getIdentityId(): int
     {
         return $this->identityId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "identity_id" was provided');
     }
-    
     public function setState(string $state): void
     {
         $this->state = $state;
     }
-    
     public function getState(): string
     {
         return $this->state ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "state" was provided');
     }
-    
     public function setRedirectUri(?string $redirectUri): void
     {
         $this->redirectUri = $redirectUri;
     }
-    
     public function getRedirectUri(): ?string
     {
         return $this->redirectUri;
     }
-    
     public function setInsertDate(\PSX\DateTime\LocalDateTime $insertDate): void
     {
         $this->insertDate = $insertDate;
     }
-    
     public function getInsertDate(): \PSX\DateTime\LocalDateTime
     {
         return $this->insertDate ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "insert_date" was provided');
     }
-    
     public function toRecord(): \PSX\Record\RecordInterface
     {
         /** @var \PSX\Record\Record<mixed> $record */
@@ -75,12 +60,13 @@ class IdentityRequestRow implements \JsonSerializable, \PSX\Record\RecordableInt
         $record->put('insert_date', $this->insertDate);
         return $record;
     }
-    
     public function jsonSerialize(): object
     {
         return (object) $this->toRecord()->getAll();
     }
-    
+    /**
+     * @param array<string, mixed>|\ArrayAccess<string, mixed> $data
+     */
     public static function from(array|\ArrayAccess $data): self
     {
         $row = new self();

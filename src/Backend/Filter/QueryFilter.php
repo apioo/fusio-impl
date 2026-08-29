@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Backend\Filter;
 
 use Fusio\Engine\RequestInterface;
+use PSX\Sql\ColumnInterface;
 use PSX\Sql\Condition;
 use PSX\Sql\Filter\Builder;
 use PSX\Sql\OrderBy;
@@ -94,6 +95,9 @@ class QueryFilter
         return $this->sortOrder ?? $default;
     }
 
+    /**
+     * @param array<string, ColumnInterface|string> $columnMapping
+     */
     public function getCondition(TableInterface $table, array $columnMapping, ?string $alias = null): Condition
     {
         if (isset($columnMapping[self::COLUMN_SEARCH]) && !empty($this->search)) {
@@ -114,6 +118,9 @@ class QueryFilter
         return new static(...static::getConstructorArguments($request));
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected static function getConstructorArguments(RequestInterface $request): array
     {
         return [

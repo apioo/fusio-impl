@@ -26,7 +26,9 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Plan;
 use Fusio\Impl\Service\System\ContextFactory;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
 use Fusio\Model\Backend\PlanCreate;
+use Fusio\Model\Common\Message;
 use PSX\Http\Environment\HttpResponse;
 
 /**
@@ -54,6 +56,7 @@ readonly class Create implements ActionInterface
         );
 
         return new HttpResponse(201, [], [
+            'kind' => KindBuilder::build(Message::class),
             'success' => true,
             'message' => 'Plan successfully created',
             'id' => '' . $id,

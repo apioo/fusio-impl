@@ -30,13 +30,10 @@ use PSX\Api\Scanner\FilterInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class CategoryFilter implements FilterInterface
+readonly class CategoryFilter implements FilterInterface
 {
-    private int $id;
-
-    public function __construct(int $id)
+    public function __construct(private int $id)
     {
-        $this->id = $id;
     }
 
     public function match(OperationInterface $operation): bool

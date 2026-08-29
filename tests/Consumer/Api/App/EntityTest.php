@@ -51,6 +51,7 @@ class EntityTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "id": 3,
     "userId": 2,
     "status": 1,
@@ -136,9 +137,12 @@ JSON;
             'scopes' => ['foo', 'bar']
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "App successfully updated",
     "id": "3"
@@ -169,6 +173,7 @@ JSON;
         $this->assertEquals([
             'consumer',
             'consumer.account',
+            'consumer.agent',
             'consumer.app',
             'consumer.event',
             'consumer.form',
@@ -194,9 +199,12 @@ JSON;
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "App successfully deleted",
     "id": "3"

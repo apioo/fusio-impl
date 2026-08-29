@@ -62,9 +62,12 @@ readonly class Agent
             $row->setConnectionId($agent->getConnection());
             $row->setStatus(Table\Agent::STATUS_ACTIVE);
             $row->setType($agent->getType() ?? Table\Agent::TYPE_GENERAL);
+            $row->setPublic($agent->getPublic() ? 1 : 0);
             $row->setName($agent->getName());
             $row->setDescription($agent->getDescription());
             $row->setIntroduction($agent->getIntroduction());
+            $row->setTemperature((int) ($agent->getTemperature() * 100));
+            $row->setCosts($agent->getCosts());
             $row->setTools($agent->getTools() !== null ? Parser::encode($agent->getTools()) : null);
             $row->setOutgoing($agent->getOutgoing());
             $row->setInsertDate(LocalDateTime::now());
@@ -101,9 +104,12 @@ readonly class Agent
 
         $existing->setConnectionId($agent->getConnection() ?? $existing->getConnectionId());
         $existing->setType($agent->getType() ?? $existing->getType());
+        $existing->setPublic($agent->getPublic() !== null ? ($agent->getPublic() ? 1 : 0) : $existing->getPublic());
         $existing->setName($agent->getName() ?? $existing->getName());
         $existing->setDescription($agent->getDescription() ?? $existing->getDescription());
         $existing->setIntroduction($agent->getIntroduction() ?? $existing->getIntroduction());
+        $existing->setTemperature($agent->getTemperature() !== null ? ((int) ($agent->getTemperature() * 100)) : $existing->getTemperature());
+        $existing->setCosts($agent->getCosts() ?? $existing->getCosts());
         $existing->setTools($agent->getTools() !== null ? Parser::encode($agent->getTools()) : $existing->getTools());
         $existing->setOutgoing($agent->getOutgoing() ?? $existing->getOutgoing());
         $existing->setMetadata($agent->getMetadata() !== null ? Parser::encode($agent->getMetadata()) : $existing->getMetadata());

@@ -39,6 +39,21 @@ readonly class OAuthAuthorizationServer
     {
     }
 
+    /**
+     * @return array{
+     *     issuer: string,
+     *     authorization_endpoint: string,
+     *     token_endpoint: string,
+     *     token_endpoint_auth_methods_supported: list<string>,
+     *     token_endpoint_auth_signing_alg_values_supported: list<string>,
+     *     userinfo_endpoint: string,
+     *     scopes_supported: list<string>,
+     *     response_types_supported: list<string>,
+     *     response_modes_supported: list<string>,
+     *     grant_types_supported: list<string>,
+     *     service_documentation: string,
+     * }
+     */
     public function get(): array
     {
         return [
@@ -56,6 +71,9 @@ readonly class OAuthAuthorizationServer
         ];
     }
 
+    /**
+     * @return list<string>
+     */
     private function getScopes(): array
     {
         $condition = Condition::withAnd();

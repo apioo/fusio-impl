@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
+use Fusio\Impl\Service\Captcha;
 use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\User\Register;
@@ -49,11 +50,16 @@ class ActivateTest extends DbTestCase
 
     public function testPost(): void
     {
+        $captchaService = Environment::getService(Captcha::class);
+        $challenge = $captchaService->challenge();
+        $captcha = $captchaService->solve($challenge);
+
         $register = new UserRegister();
         $register->setName('baz');
         $register->setEmail('baz@localhost.com');
         $register->setPassword('test1234!');
-        
+        $register->setCaptcha($captcha);
+
         $context = Environment::getService(ContextFactory::class)->newAnonymousContext();
         $userId = Environment::getService(Register::class)->register($register, $context);
 

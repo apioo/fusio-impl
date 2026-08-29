@@ -20,7 +20,9 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
+use Fusio\Impl\Service\Captcha;
 use Fusio\Impl\Tests\DbTestCase;
+use PSX\Framework\Test\Environment;
 
 /**
  * PasswordResetTest
@@ -44,10 +46,15 @@ class PasswordResetTest extends DbTestCase
 
     public function testPost(): void
     {
+        $captchaService = Environment::getService(Captcha::class);
+        $challenge = $captchaService->challenge();
+        $captcha = $captchaService->solve($challenge);
+
         $response = $this->sendRequest('/consumer/password_reset', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
         ], json_encode([
             'email' => 'consumer@localhost.com',
+            'captcha' => $captcha,
         ]));
 
         $actual = (string) $response->getBody();
@@ -67,10 +74,15 @@ JSON;
 
     public function testPostInvalidEmail(): void
     {
+        $captchaService = Environment::getService(Captcha::class);
+        $challenge = $captchaService->challenge();
+        $captcha = $captchaService->solve($challenge);
+
         $response = $this->sendRequest('/consumer/password_reset', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
         ], json_encode([
             'email' => 'baz',
+            'captcha' => $captcha,
         ]));
 
         $body = (string) $response->getBody();
@@ -82,10 +94,15 @@ JSON;
 
     public function testPostNoEmail(): void
     {
+        $captchaService = Environment::getService(Captcha::class);
+        $challenge = $captchaService->challenge();
+        $captcha = $captchaService->solve($challenge);
+
         $response = $this->sendRequest('/consumer/password_reset', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
         ], json_encode([
-            'foo' => 'bar'
+            'foo' => 'bar',
+            'captcha' => $captcha,
         ]));
 
         $body = (string) $response->getBody();

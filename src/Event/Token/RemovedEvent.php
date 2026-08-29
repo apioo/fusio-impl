@@ -32,13 +32,9 @@ use Fusio\Impl\Event\EventAbstract;
  */
 class RemovedEvent extends EventAbstract
 {
-    private int $tokenId;
-
-    public function __construct(int $tokenId, UserContext $context)
+    public function __construct(private readonly int $tokenId, UserContext $context)
     {
         parent::__construct($context);
-
-        $this->tokenId = $tokenId;
     }
 
     public function getTokenId(): int

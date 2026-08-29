@@ -44,11 +44,13 @@ class CollectionTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 1,
             "appId": 3,
             "ip": "127.0.0.1",

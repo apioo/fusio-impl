@@ -27,8 +27,10 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Category;
 use Fusio\Impl\Service\System\ContextFactory;
 use Fusio\Impl\Service\Taxonomy;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
 use Fusio\Model\Backend\CategoryUpdate;
 use Fusio\Model\Backend\TaxonomyUpdate;
+use Fusio\Model\Common\Message;
 
 /**
  * Update
@@ -56,6 +58,7 @@ readonly class Update implements ActionInterface
         );
 
         return [
+            'kind' => KindBuilder::build(Message::class),
             'success' => true,
             'message' => 'Taxonomy successfully updated',
             'id' => '' . $id,

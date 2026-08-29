@@ -81,6 +81,9 @@ class Insomnia implements ProviderInterface
         return $data;
     }
 
+    /**
+     * @param array<string, mixed> $env
+     */
     private function buildOperation(stdClass $resource, array $env, SetupInterface $setup, string $index): void
     {
         $name = $resource->name ?? null;
@@ -135,6 +138,9 @@ class Insomnia implements ProviderInterface
         $setup->addOperation($operation);
     }
 
+    /**
+     * @param list<string> $parts
+     */
     private function buildName(array $parts, string $separator = '.'): string
     {
         $parts = array_map(function($parts) use ($separator) {
@@ -176,6 +182,10 @@ class Insomnia implements ProviderInterface
         };
     }
 
+    /**
+     * @param list<stdClass> $resources
+     * @return array<string, string>
+     */
     private function getEnvironmentVariables(array $resources): array
     {
         $env = [];
@@ -210,7 +220,10 @@ class Insomnia implements ProviderInterface
         return $result;
     }
 
-    private function substituteVars(array $env, $content)
+    /**
+     * @param array<string, mixed> $env
+     */
+    private function substituteVars(array $env, string $content): string
     {
         foreach ($env as $key => $value) {
             $content = str_replace('{{ ' . $key . ' }}', $value, $content);

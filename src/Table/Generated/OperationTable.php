@@ -8,57 +8,34 @@ namespace Fusio\Impl\Table\Generated;
 class OperationTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_operation';
-    
     public const COLUMN_ID = 'id';
-    
     public const COLUMN_CATEGORY_ID = 'category_id';
-    
     public const COLUMN_TAXONOMY_ID = 'taxonomy_id';
-    
     public const COLUMN_TENANT_ID = 'tenant_id';
-    
     public const COLUMN_STATUS = 'status';
-    
     public const COLUMN_ACTIVE = 'active';
-    
     public const COLUMN_PUBLIC = 'public';
-    
     public const COLUMN_STABILITY = 'stability';
-    
     public const COLUMN_DESCRIPTION = 'description';
-    
     public const COLUMN_HTTP_METHOD = 'http_method';
-    
     public const COLUMN_HTTP_PATH = 'http_path';
-    
     public const COLUMN_HTTP_CODE = 'http_code';
-    
     public const COLUMN_NAME = 'name';
-    
     public const COLUMN_PARAMETERS = 'parameters';
-    
     public const COLUMN_INCOMING = 'incoming';
-    
     public const COLUMN_OUTGOING = 'outgoing';
-    
     public const COLUMN_THROWS = 'throws';
-    
     public const COLUMN_ACTION = 'action';
-    
     public const COLUMN_COSTS = 'costs';
-    
     public const COLUMN_METADATA = 'metadata';
-    
     public function getName(): string
     {
         return self::NAME;
     }
-    
     public function getColumns(): array
     {
         return [self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_TAXONOMY_ID => 0x4020000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_STATUS => 0x20000a, self::COLUMN_ACTIVE => 0x20000a, self::COLUMN_PUBLIC => 0x20000a, self::COLUMN_STABILITY => 0x20000a, self::COLUMN_DESCRIPTION => 0x40a001f4, self::COLUMN_HTTP_METHOD => 0xa00010, self::COLUMN_HTTP_PATH => 0xa000ff, self::COLUMN_HTTP_CODE => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_PARAMETERS => 0x40b00000, self::COLUMN_INCOMING => 0x40a000ff, self::COLUMN_OUTGOING => 0xa000ff, self::COLUMN_THROWS => 0x40b00000, self::COLUMN_ACTION => 0xa000ff, self::COLUMN_COSTS => 0x4020000a, self::COLUMN_METADATA => 0x40b00000];
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -67,7 +44,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -76,7 +52,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -84,7 +59,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -94,7 +68,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $id);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -105,7 +78,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -115,7 +87,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -125,7 +96,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -135,7 +105,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('id', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -146,7 +115,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('category_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -156,7 +124,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('category_id', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -166,7 +133,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('category_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -176,7 +142,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('category_id', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -187,7 +152,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('taxonomy_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -197,7 +161,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('taxonomy_id', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -207,7 +170,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('taxonomy_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -217,7 +179,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('taxonomy_id', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -228,7 +189,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -238,7 +198,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -248,7 +207,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -258,7 +216,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('tenant_id', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -269,7 +226,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('status', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -279,7 +235,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('status', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -289,7 +244,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('status', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -299,7 +253,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('status', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -310,7 +263,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('active', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -320,7 +272,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('active', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -330,7 +281,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('active', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -340,7 +290,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('active', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -351,7 +300,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('public', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -361,7 +309,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('public', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -371,7 +318,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('public', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -381,7 +327,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('public', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -392,7 +337,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('stability', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -402,7 +346,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('stability', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -412,7 +355,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('stability', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -422,7 +364,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('stability', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -433,7 +374,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('description', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -443,7 +383,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('description', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -453,7 +392,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('description', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -463,7 +401,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('description', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -474,7 +411,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('http_method', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -484,7 +420,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('http_method', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -494,7 +429,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('http_method', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -504,7 +438,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('http_method', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -515,7 +448,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('http_path', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -525,7 +457,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('http_path', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -535,7 +466,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('http_path', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -545,7 +475,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('http_path', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -556,7 +485,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('http_code', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -566,7 +494,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('http_code', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -576,7 +503,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('http_code', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -586,7 +512,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('http_code', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -597,7 +522,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('name', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -607,7 +531,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('name', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -617,7 +540,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('name', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -627,7 +549,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('name', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -638,7 +559,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('parameters', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -648,7 +568,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('parameters', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -658,7 +577,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('parameters', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -668,7 +586,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('parameters', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -679,7 +596,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('incoming', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -689,7 +605,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('incoming', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -699,7 +614,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('incoming', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -709,7 +623,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('incoming', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -720,7 +633,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('outgoing', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -730,7 +642,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('outgoing', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -740,7 +651,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('outgoing', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -750,7 +660,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('outgoing', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -761,7 +670,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('throws', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -771,7 +679,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('throws', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -781,7 +688,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('throws', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -791,7 +697,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('throws', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -802,7 +707,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('action', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -812,7 +716,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('action', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -822,7 +725,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('action', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -832,7 +734,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('action', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -843,7 +744,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('costs', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -853,7 +753,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('costs', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -863,7 +762,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('costs', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -873,7 +771,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->equals('costs', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @return array<\Fusio\Impl\Table\Generated\OperationRow>
      * @throws \PSX\Sql\Exception\QueryException
@@ -884,7 +781,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('metadata', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
@@ -894,7 +790,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('metadata', $value);
         return $this->doFindOneBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -904,7 +799,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('metadata', $value);
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -914,7 +808,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
         $condition->like('metadata', $value);
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -922,7 +815,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doCreate($record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -930,7 +822,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdate($record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -938,7 +829,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doUpdateBy($condition, $record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -946,7 +836,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDelete($record->toRecord());
     }
-    
     /**
      * @throws \PSX\Sql\Exception\ManipulationException
      */
@@ -954,7 +843,6 @@ class OperationTable extends \PSX\Sql\TableAbstract
     {
         return $this->doDeleteBy($condition);
     }
-    
     /**
      * @param array<string, mixed> $row
      */

@@ -41,17 +41,19 @@ class CollectionTest extends DbTestCase
         ]);
 
         $body = (string) $response->getBody();
-        $body = Normalizer::normalizeDateTime($body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 16,
     "startIndex": 0,
     "itemsPerPage": 10,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 1,
-            "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
+            "chatId": "[uuid]",
             "role": "user",
             "item": {
                 "type": "text",
@@ -75,17 +77,19 @@ JSON;
         ]);
 
         $body = (string) $response->getBody();
-        $body = Normalizer::normalizeDateTime($body);
+        $body = Normalizer::normalize($body);
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 10,
     "entry": [
         {
+            "kind": "[kind]",
             "id": 1,
-            "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
+            "chatId": "[uuid]",
             "role": "user",
             "item": {
                 "type": "text",
@@ -94,8 +98,9 @@ JSON;
             "insertDate": "[datetime]"
         },
         {
+            "kind": "[kind]",
             "id": 2,
-            "chatId": "41fd19b2-2dc0-46d9-b904-85c0d0b61a77",
+            "chatId": "[uuid]",
             "role": "assistant",
             "item": {
                 "type": "text",

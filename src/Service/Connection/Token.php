@@ -177,6 +177,9 @@ readonly class Token
         $this->persistConfig($connection, $config, $context);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     private function persistConfig(Model\ConnectionInterface $connection, array $config, UserContext $context): void
     {
         $row = $this->connectionTable->findOneByTenantAndId($context->getTenantId(), null, $connection->getId()) ?? throw new StatusCode\NotFoundException('Could not find connection');
@@ -210,6 +213,9 @@ readonly class Token
         return $implementation;
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     private function request(string $tokenUrl, array $body): AccessToken
     {
         $headers = [

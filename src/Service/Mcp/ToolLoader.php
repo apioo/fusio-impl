@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\Mcp;
 
 use Fusio\Impl\Service\Agent\InputSchemaBuilder;
+use Fusio\Impl\Service\Agent\OutputSchemaBuilder;
 use Fusio\Impl\Service\Agent\ToolName;
 use Fusio\Impl\Service\JsonRPC\RPCInvoker;
 use Fusio\Impl\Service\System\FrameworkConfig;
@@ -45,6 +46,7 @@ readonly class ToolLoader
         private RPCInvoker $invoker,
         private Table\Operation $operationTable,
         private InputSchemaBuilder $inputSchemaBuilder,
+        private OutputSchemaBuilder $outputSchemaBuilder,
         private FrameworkConfig $frameworkConfig,
     ) {
     }
@@ -63,6 +65,8 @@ readonly class ToolLoader
                 continue;
             }
 
+            $outputSchema = $this->outputSchemaBuilder->build($operation);
+
             $readOnlyHint = null;
             $destructiveHint = null;
             $idempotentHint = null;
@@ -79,10 +83,12 @@ readonly class ToolLoader
             $annotations = new ToolAnnotations($operation->getName(), $readOnlyHint, $destructiveHint, $idempotentHint);
 
             $tool = new Tool(
-                ToolName::toToolName($operation->getName()),
-                $inputSchema,
-                $operation->getDescription(),
-                $annotations,
+                name: ToolName::toToolName($operation->getName()),
+                title: $operation->getName(),
+                inputSchema: $inputSchema,
+                description: $operation->getDescription(),
+                annotations: $annotations,
+                outputSchema: count($outputSchema) > 0 ? $outputSchema : null,
             );
 
             $registry->registerTool($tool, function (array $arguments) use ($operation) {

@@ -30,18 +30,25 @@ use Fusio\Marketplace\MarketplaceObject;
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
+ *
+ * @template T of MarketplaceObject
  */
 interface InstallerInterface
 {
     /**
+     * @param T $object
      * @throws MarketplaceException
      */
     public function install(MarketplaceObject $object, UserContext $context): void;
 
     /**
+     * @param T $object
      * @throws MarketplaceException
      */
     public function upgrade(MarketplaceObject $object, UserContext $context): void;
 
+    /**
+     * @param T $object
+     */
     public function isInstalled(MarketplaceObject $object, UserContext $context): bool;
 }

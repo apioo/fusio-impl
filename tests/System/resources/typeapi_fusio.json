@@ -6855,6 +6855,36 @@
         "specification"
       ]
     },
+    "backend.specification.getChangelog": {
+      "path": "/backend/specification/changelog",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_SpecificationChangelog"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns the changelog between your current specification and the last tag",
+      "stability": 2,
+      "security": [
+        "backend.specification"
+      ],
+      "authorization": true,
+      "tags": [
+        "specification"
+      ]
+    },
     "backend.specification.publish": {
       "path": "/backend/specification",
       "method": "POST",
@@ -6884,6 +6914,44 @@
         }
       ],
       "description": "Publish the specification",
+      "stability": 2,
+      "security": [
+        "backend.specification"
+      ],
+      "authorization": true,
+      "tags": [
+        "specification"
+      ]
+    },
+    "backend.specification.tag": {
+      "path": "/backend/specification/tag",
+      "method": "POST",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Passthru"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Creates a new tag of your specification",
       "stability": 2,
       "security": [
         "backend.specification"
@@ -10767,6 +10835,179 @@
         "account"
       ]
     },
+    "consumer.agent.get": {
+      "path": "/consumer/agent/$agent_id<[0-9]+|^~>",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Consumer_Agent"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a specific agent",
+      "stability": 2,
+      "security": [
+        "consumer.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "consumer.agent.getAll": {
+      "path": "/consumer/agent",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Consumer_AgentCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of agents",
+      "stability": 2,
+      "security": [
+        "consumer.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "consumer.agent.message.getAll": {
+      "path": "/consumer/agent/$agent_id<[0-9]+|^~>/message",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Consumer_AgentMessageCollection"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "chat_id": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of agent messages",
+      "stability": 2,
+      "security": [
+        "consumer.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "consumer.agent.message.submit": {
+      "path": "/consumer/agent/$agent_id<[0-9]+|^~>/message",
+      "method": "POST",
+      "return": {
+        "code": 201,
+        "schema": {
+          "type": "reference",
+          "target": "Agent_Output"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Agent_Input"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Submits a new agent message",
+      "stability": 2,
+      "security": [
+        "consumer.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
     "consumer.app.create": {
       "path": "/consumer/app",
       "method": "POST",
@@ -12255,6 +12496,32 @@
         "webhook"
       ]
     },
+    "system.captcha.challenge": {
+      "path": "/system/captcha/challenge",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "System_CaptchaChallenge"
+        }
+      },
+      "arguments": [],
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Endpoint to generate a captcha challenge",
+      "stability": 2,
+      "security": [],
+      "authorization": false,
+      "tags": []
+    },
     "system.connection.callback": {
       "path": "/system/connection/:name/callback",
       "method": "GET",
@@ -12477,6 +12744,7 @@
           "type": "string"
         },
         "item": {
+          "description": "The payload item sent to the agent",
           "type": "reference",
           "target": "Agent_Item"
         }
@@ -12595,12 +12863,15 @@
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the function call execution context",
           "type": "string"
         },
         "name": {
+          "description": "The name of the targeted tool or function to execute",
           "type": "string"
         },
         "arguments": {
+          "description": "JSON string of arguments passed into the function call",
           "type": "string"
         }
       }
@@ -12614,12 +12885,14 @@
           "type": "string"
         },
         "item": {
+          "description": "The response payload item produced by the agent",
           "type": "reference",
           "target": "Agent_Item"
         }
       }
     },
     "Backend_AccountChangePassword": {
+      "description": "Payload required to update the current user's password",
       "type": "struct",
       "properties": {
         "oldPassword": {
@@ -12640,6 +12913,10 @@
       "description": "This object represents the business logic which can be executed either through an operation or cronjob",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -12687,6 +12964,10 @@
       "description": "An action commit which represents a change in the action configuration",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -12706,6 +12987,7 @@
           "target": "Backend_ActionConfig"
         },
         "insertDate": {
+          "description": "Timestamp when the commit was created",
           "type": "string",
           "format": "date-time"
         }
@@ -12730,6 +13012,7 @@
       }
     },
     "Backend_ActionCreate": {
+      "description": "Payload for creating a new action entity",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -12774,6 +13057,10 @@
       "description": "Represents an action execution response",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "statusCode": {
           "description": "HTTP status code i.e. 200, 400, etc.",
           "type": "integer"
@@ -12808,7 +13095,12 @@
       "description": "Contains all possible classes which can be used at an action as class",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "actions": {
+          "description": "List of available action class entries",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -12832,6 +13124,7 @@
       }
     },
     "Backend_ActionUpdate": {
+      "description": "Payload for updating an existing action entity",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -12842,6 +13135,10 @@
       "description": "This object represents an agent",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -12854,6 +13151,10 @@
           "description": "The agent type",
           "type": "integer"
         },
+        "public": {
+          "description": "Indicates whether the agent is public",
+          "type": "boolean"
+        },
         "name": {
           "description": "Name of the agent",
           "type": "string"
@@ -12865,6 +13166,14 @@
         "introduction": {
           "description": "Introduction message",
           "type": "string"
+        },
+        "temperature": {
+          "description": "The used temperature default is 1.0",
+          "type": "number"
+        },
+        "costs": {
+          "description": "Costs per token",
+          "type": "integer"
         },
         "tools": {
           "description": "Tools available to this agent",
@@ -12882,6 +13191,7 @@
           "type": "string"
         },
         "insertDate": {
+          "description": "Timestamp when the agent was created",
           "type": "string",
           "format": "date-time"
         },
@@ -12904,6 +13214,7 @@
       }
     },
     "Backend_AgentCreate": {
+      "description": "Payload for creating a new AI agent",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -12914,6 +13225,10 @@
       "description": "This object represents an agent message",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -12932,6 +13247,7 @@
           "target": "Agent_Item"
         },
         "insertDate": {
+          "description": "Timestamp when the agent message was created",
           "type": "string",
           "format": "date-time"
         }
@@ -12966,7 +13282,12 @@
       "description": "Represents a collection of available tools",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "tools": {
+          "description": "List of available tools for agent invocation",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -12976,6 +13297,7 @@
       }
     },
     "Backend_AgentUpdate": {
+      "description": "Payload for updating an existing AI agent",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -12986,11 +13308,16 @@
       "description": "This object represents an app to access the API on-behalf of a user",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
         },
         "userId": {
+          "description": "Unique identifier of the owning user",
           "type": "integer"
         },
         "status": {
@@ -13056,6 +13383,7 @@
       }
     },
     "Backend_AppCreate": {
+      "description": "Payload for creating a new consumer application",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13063,6 +13391,7 @@
       }
     },
     "Backend_AppUpdate": {
+      "description": "Payload for updating an existing consumer application",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13073,15 +13402,21 @@
       "description": "This object represents an audit which is created every time something was changed at the system",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
         },
         "app": {
+          "description": "Application context associated with this audit event",
           "type": "reference",
           "target": "Backend_App"
         },
         "user": {
+          "description": "User context associated with this audit event",
           "type": "reference",
           "target": "Backend_User"
         },
@@ -13132,6 +13467,7 @@
       "type": "struct",
       "properties": {
         "export": {
+          "description": "Base64 or JSON string containing the exported system configuration payload",
           "type": "string"
         }
       }
@@ -13141,6 +13477,7 @@
       "type": "struct",
       "properties": {
         "import": {
+          "description": "JSON string containing the system configuration payload to import",
           "type": "string"
         }
       }
@@ -13150,12 +13487,15 @@
       "type": "struct",
       "properties": {
         "success": {
+          "description": "Indicates whether the backup import operation completed successfully",
           "type": "boolean"
         },
         "message": {
+          "description": "Human-readable status or summary message detailing the import result",
           "type": "string"
         },
         "logs": {
+          "description": "Execution logs generated during the backup restoration process",
           "type": "array",
           "schema": {
             "type": "string"
@@ -13167,6 +13507,10 @@
       "description": "This object represents a bundle which contains action, schema, event, cronjob and trigger configurations from you local instance",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -13214,12 +13558,14 @@
       }
     },
     "Backend_BundleConfig": {
+      "description": "Configuration settings and resource specs exported within the bundle",
       "type": "map",
       "schema": {
         "type": "any"
       }
     },
     "Backend_BundleCreate": {
+      "description": "Payload for creating a new configuration bundle",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13227,6 +13573,7 @@
       }
     },
     "Backend_BundleUpdate": {
+      "description": "Payload for updating an existing configuration bundle",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13237,6 +13584,10 @@
       "description": "This object represents a category. Every user is assigned to a category and can only view objects which are also assigned to the same category, through this it is possible to build separate areas for external developers",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -13259,6 +13610,7 @@
       }
     },
     "Backend_CategoryCreate": {
+      "description": "Payload for creating a new category",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13266,6 +13618,7 @@
       }
     },
     "Backend_CategoryUpdate": {
+      "description": "Payload for updating an existing category",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13276,6 +13629,10 @@
       "description": "This object represents a system configuration",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -13310,6 +13667,7 @@
       }
     },
     "Backend_ConfigUpdate": {
+      "description": "Payload for updating a system configuration entry",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13320,6 +13678,10 @@
       "description": "This object represents a connection to an external system like i.e. a database, message-queue or client-sdk",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -13367,6 +13729,7 @@
       }
     },
     "Backend_ConnectionCreate": {
+      "description": "Payload for creating a new connection",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13377,7 +13740,12 @@
       "description": "Contains all possible classes which can be used at an connection as class",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "connections": {
+          "description": "List of available connection class entries",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -13405,11 +13773,13 @@
       "type": "struct",
       "properties": {
         "redirectUri": {
+          "description": "Target URI to redirect the user for OAuth2 authentication",
           "type": "string"
         }
       }
     },
     "Backend_ConnectionUpdate": {
+      "description": "Payload for updating an existing connection",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13420,6 +13790,10 @@
       "description": "This object represents a cronjob which can invoke an action at a specific interval",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -13472,6 +13846,7 @@
       }
     },
     "Backend_CronjobCreate": {
+      "description": "Payload for creating a new cronjob",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13483,20 +13858,25 @@
       "type": "struct",
       "properties": {
         "message": {
+          "description": "Error message detailing the cause of failure",
           "type": "string"
         },
         "trace": {
+          "description": "Stack trace of the error exception",
           "type": "string"
         },
         "file": {
+          "description": "File path where the execution error occurred",
           "type": "string"
         },
         "line": {
+          "description": "Line number where the execution error occurred",
           "type": "integer"
         }
       }
     },
     "Backend_CronjobUpdate": {
+      "description": "Payload for updating an existing cronjob",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13507,39 +13887,52 @@
       "description": "Represents an object containing all widget data for the dashboard",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "errorsPerOperation": {
+          "description": "Chart showing errors logged per operation over time",
           "type": "reference",
           "target": "Backend_StatisticChart"
         },
         "incomingRequests": {
+          "description": "Chart showing total incoming HTTP requests over time",
           "type": "reference",
           "target": "Backend_StatisticChart"
         },
         "incomingTransactions": {
+          "description": "Chart showing total executed transactions over time",
           "type": "reference",
           "target": "Backend_StatisticChart"
         },
         "mostUsedOperations": {
+          "description": "Chart displaying the most frequently invoked API operations",
           "type": "reference",
           "target": "Backend_StatisticChart"
         },
         "timePerOperation": {
+          "description": "Chart depicting average execution time per operation",
           "type": "reference",
           "target": "Backend_StatisticChart"
         },
         "testCoverage": {
+          "description": "Chart showing automated test execution and coverage metrics",
           "type": "reference",
           "target": "Backend_StatisticChart"
         },
         "mostUsedActivities": {
+          "description": "Chart showing the most active user activity types",
           "type": "reference",
           "target": "Backend_StatisticChart"
         },
         "activitiesPerUser": {
+          "description": "Chart breaking down user activity frequencies",
           "type": "reference",
           "target": "Backend_StatisticChart"
         },
         "userRegistrations": {
+          "description": "Chart tracking user registrations over time",
           "type": "reference",
           "target": "Backend_StatisticChart"
         }
@@ -13602,6 +13995,7 @@
       }
     },
     "Backend_DatabaseTableCollection": {
+      "description": "A paginated collection of database table objects",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13714,6 +14108,10 @@
       "description": "This object represents an event which can be triggered by an action",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -13723,9 +14121,11 @@
           "type": "string"
         },
         "description": {
+          "description": "Short description explaining the purpose of this event",
           "type": "string"
         },
         "schema": {
+          "description": "Name of the schema defining the event payload structure",
           "type": "string"
         },
         "metadata": {
@@ -13747,6 +14147,7 @@
       }
     },
     "Backend_EventCreate": {
+      "description": "Payload for creating a new event entity",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13754,6 +14155,7 @@
       }
     },
     "Backend_EventUpdate": {
+      "description": "Payload for updating an existing event entity",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13802,6 +14204,10 @@
       "description": "This object represents a firewall rule which blocks specific IP addresses",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -13842,6 +14248,7 @@
       }
     },
     "Backend_FirewallCreate": {
+      "description": "Payload for creating a new firewall rule",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13849,6 +14256,7 @@
       }
     },
     "Backend_FirewallUpdate": {
+      "description": "Payload for updating an existing firewall rule",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13859,6 +14267,10 @@
       "description": "This object represents a form which helps to dynamically generate a form at a frontend app",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -13898,6 +14310,7 @@
       }
     },
     "Backend_FormCreate": {
+      "description": "Payload for creating a new form definition",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13905,6 +14318,7 @@
       }
     },
     "Backend_FormUpdate": {
+      "description": "Payload for updating an existing form definition",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -13930,6 +14344,7 @@
       "type": "struct",
       "properties": {
         "providers": {
+          "description": "List of available generator provider entries",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -13939,30 +14354,37 @@
       }
     },
     "Backend_GeneratorProvider": {
+      "description": "Configuration object used to invoke a schema/operation generator",
       "type": "struct",
       "properties": {
         "path": {
+          "description": "Base HTTP path to mount generated operations",
           "type": "string"
         },
         "scopes": {
+          "description": "Scopes to assign to generated operations",
           "type": "array",
           "schema": {
             "type": "string"
           }
         },
         "public": {
+          "description": "Indicates whether generated operations are publicly accessible",
           "type": "boolean"
         },
         "config": {
+          "description": "Generator specific configuration key-value pairs",
           "type": "reference",
           "target": "Backend_GeneratorProviderConfig"
         }
       }
     },
     "Backend_GeneratorProviderChangelog": {
+      "description": "Represents a preview changelog of entities created or updated by a generator run",
       "type": "struct",
       "properties": {
         "schemas": {
+          "description": "List of schemas affected or generated",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -13970,6 +14392,7 @@
           }
         },
         "actions": {
+          "description": "List of actions affected or generated",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -13977,6 +14400,7 @@
           }
         },
         "operations": {
+          "description": "List of operations affected or generated",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -13986,6 +14410,7 @@
       }
     },
     "Backend_GeneratorProviderConfig": {
+      "description": "Arbitrary configuration map for the generator provider",
       "type": "map",
       "schema": {
         "type": "any"
@@ -14041,6 +14466,10 @@
       "description": "This object represents an identity which allows to authenticate with a remote identity provider",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -14066,10 +14495,12 @@
           "type": "string"
         },
         "config": {
+          "description": "Contains identity provider specific configuration values",
           "type": "reference",
           "target": "Backend_IdentityConfig"
         },
         "allowCreate": {
+          "description": "Indicates whether a new local user account should be created if it does not exist yet",
           "type": "boolean"
         }
       }
@@ -14086,12 +14517,14 @@
       }
     },
     "Backend_IdentityConfig": {
+      "description": "Identity provider configuration containing key-value parameters",
       "type": "map",
       "schema": {
         "type": "any"
       }
     },
     "Backend_IdentityCreate": {
+      "description": "Payload for creating a new identity provider entity",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14102,7 +14535,12 @@
       "description": "Contains all possible classes which can be used at an identity as class",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "providers": {
+          "description": "List of available identity provider class entries",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -14126,6 +14564,7 @@
       }
     },
     "Backend_IdentityUpdate": {
+      "description": "Payload for updating an existing identity provider entity",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14136,6 +14575,10 @@
       "description": "This object represents a log entry. Every HTTP requests to the system generates such a log entry.",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -14191,28 +14634,39 @@
       }
     },
     "Backend_LogError": {
+      "description": "Represents an error logged during a specific HTTP request",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
         },
         "logId": {
+          "description": "Identifier of the associated parent log entry",
           "type": "integer"
         },
         "message": {
+          "description": "Error message detailing the failure context",
           "type": "string"
         },
         "trace": {
+          "description": "Stack trace associated with the error exception",
           "type": "string"
         },
         "file": {
+          "description": "File path where the error was thrown",
           "type": "string"
         },
         "line": {
+          "description": "Line number where the error was thrown",
           "type": "integer"
         },
         "insertDate": {
+          "description": "Timestamp when the log error was recorded",
           "type": "string",
           "format": "date-time"
         }
@@ -14233,6 +14687,10 @@
       "description": "This object represents an operation, an operation invokes an action in case a specific HTTP method and path was requested. It defines also schema information about the request and response payload",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -14325,6 +14783,7 @@
       }
     },
     "Backend_OperationCreate": {
+      "description": "Payload for creating a new operation entity",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14332,6 +14791,7 @@
       }
     },
     "Backend_OperationParameters": {
+      "description": "Map of path or query parameters accepted by the operation",
       "type": "map",
       "schema": {
         "type": "reference",
@@ -14339,29 +14799,36 @@
       }
     },
     "Backend_OperationSchema": {
+      "description": "Defines primitive type constraints for parameter schema definitions",
       "type": "struct",
       "properties": {
         "description": {
+          "description": "Description explaining the parameter purpose",
           "type": "string"
         },
         "type": {
+          "description": "Primitive type of the parameter i.e. string or integer",
           "type": "string"
         },
         "format": {
+          "description": "Type formatting detail i.e. date-time or int64",
           "type": "string"
         },
         "enum": {
+          "description": "Allowed enumerated string value constraints",
           "type": "string"
         }
       }
     },
     "Backend_OperationThrows": {
+      "description": "Map of HTTP error status codes to target schema names",
       "type": "map",
       "schema": {
         "type": "string"
       }
     },
     "Backend_OperationUpdate": {
+      "description": "Payload for updating an existing operation entity",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14372,6 +14839,10 @@
       "description": "This object represents a page at the developer portal",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -14411,6 +14882,7 @@
       }
     },
     "Backend_PageCreate": {
+      "description": "Payload for creating a new portal page",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14418,6 +14890,7 @@
       }
     },
     "Backend_PageUpdate": {
+      "description": "Payload for updating an existing portal page",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14428,6 +14901,10 @@
       "description": "This object represents a plan, a plan allows users to obtain points or in general subscribe to your app",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -14482,6 +14959,7 @@
       }
     },
     "Backend_PlanCreate": {
+      "description": "Payload for creating a new subscription or point plan",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14489,6 +14967,7 @@
       }
     },
     "Backend_PlanUpdate": {
+      "description": "Payload for updating an existing plan definition",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14499,6 +14978,10 @@
       "description": "This object represents a rate limitation, which allows to limit the requests which a user can send",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -14543,15 +15026,19 @@
           "type": "integer"
         },
         "operationId": {
+          "description": "Target operation ID for the rate allocation",
           "type": "integer"
         },
         "userId": {
+          "description": "Target user ID for the rate allocation",
           "type": "integer"
         },
         "planId": {
+          "description": "Target plan ID associated with this allocation",
           "type": "integer"
         },
         "appId": {
+          "description": "Target app ID associated with this allocation",
           "type": "integer"
         },
         "authenticated": {
@@ -14572,6 +15059,7 @@
       }
     },
     "Backend_RateCreate": {
+      "description": "Payload for creating a new rate limit policy",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14579,6 +15067,7 @@
       }
     },
     "Backend_RateUpdate": {
+      "description": "Payload for updating an existing rate limit policy",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14589,6 +15078,10 @@
       "description": "This object represents a role, every user is assigned to a role and all scopes of the role are automatically attached to the user",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -14622,6 +15115,7 @@
       }
     },
     "Backend_RoleCreate": {
+      "description": "Payload for creating a new user role entity",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14629,6 +15123,7 @@
       }
     },
     "Backend_RoleUpdate": {
+      "description": "Payload for updating an existing user role entity",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14639,6 +15134,10 @@
       "description": "This object represents a schema to describe a JSON payload",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -14678,6 +15177,10 @@
       "description": "A schema commit which represents a change in the schema source",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -14697,6 +15200,7 @@
           "target": "Backend_SchemaSource"
         },
         "insertDate": {
+          "description": "Timestamp when the schema commit was created",
           "type": "string",
           "format": "date-time"
         }
@@ -14714,6 +15218,7 @@
       }
     },
     "Backend_SchemaCreate": {
+      "description": "Payload for creating a new schema definition",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14728,9 +15233,11 @@
       }
     },
     "Backend_SchemaPreviewResponse": {
+      "description": "Response container for a generated schema code preview",
       "type": "struct",
       "properties": {
         "preview": {
+          "description": "The formatted source code preview generated from the schema",
           "type": "string"
         }
       }
@@ -14743,6 +15250,7 @@
       }
     },
     "Backend_SchemaUpdate": {
+      "description": "Payload for updating an existing schema definition",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14753,6 +15261,10 @@
       "description": "This object represents a scope. A scope is assigned to a user and is required to access operations",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -14781,9 +15293,11 @@
       }
     },
     "Backend_ScopeCategories": {
+      "description": "Container for grouping available scopes into logical categories",
       "type": "struct",
       "properties": {
         "categories": {
+          "description": "List of scope categories",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -14793,15 +15307,19 @@
       }
     },
     "Backend_ScopeCategory": {
+      "description": "Represents a functional grouping of scopes",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the scope category",
           "type": "integer"
         },
         "name": {
+          "description": "Name of the scope category",
           "type": "string"
         },
         "scopes": {
+          "description": "List of scopes assigned to this category",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -14811,15 +15329,19 @@
       }
     },
     "Backend_ScopeCategoryScope": {
+      "description": "Simplified scope representation within a category view",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the scope",
           "type": "integer"
         },
         "name": {
+          "description": "Unique name of the scope",
           "type": "string"
         },
         "description": {
+          "description": "Short description explaining the scope purpose",
           "type": "string"
         }
       }
@@ -14836,6 +15358,7 @@
       }
     },
     "Backend_ScopeCreate": {
+      "description": "Payload for creating a new scope entity",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14843,17 +15366,21 @@
       }
     },
     "Backend_ScopeOperation": {
+      "description": "Mapping defining access permissions for a specific operation within a scope",
       "type": "struct",
       "properties": {
         "operationId": {
+          "description": "Target operation ID mapped to the scope",
           "type": "integer"
         },
         "allow": {
+          "description": "Indicates whether access to the operation is explicitly granted",
           "type": "boolean"
         }
       }
     },
     "Backend_ScopeUpdate": {
+      "description": "Payload for updating an existing scope entity",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -14861,34 +15388,51 @@
       }
     },
     "Backend_SdkGenerate": {
+      "description": "Payload defining target format and configuration for triggering an SDK generation run",
       "type": "struct",
       "properties": {
         "format": {
+          "description": "Target language format or output type for the SDK build",
           "type": "string"
         },
         "config": {
+          "description": "Optional generator specific configuration options",
           "type": "string"
         }
       }
     },
     "Backend_SdkMessage": {
+      "description": "Response structure detailing the outcome of an SDK generation job",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "success": {
+          "description": "Indicates whether the SDK build was completed successfully",
           "type": "boolean"
         },
         "message": {
+          "description": "Informational status or diagnostic message regarding SDK generation",
           "type": "string"
         },
         "link": {
+          "description": "Download link to retrieve the generated SDK bundle",
           "type": "string"
         }
       }
     },
     "Backend_SdkResponse": {
+      "description": "Container listing target SDK languages or formats available for generator execution",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "types": {
+          "description": "Map of available SDK generator target identifiers to display names",
           "type": "reference",
           "target": "Backend_SdkTypes"
         }
@@ -14901,38 +15445,69 @@
         "type": "string"
       }
     },
+    "Backend_SpecificationChangelog": {
+      "description": "Represents structural changelog differences between specification versions",
+      "type": "struct",
+      "properties": {
+        "master": {
+          "description": "Specification content corresponding to the current master definition",
+          "type": "any"
+        },
+        "tag": {
+          "description": "Specification content corresponding to the target tagged version",
+          "type": "any"
+        },
+        "version": {
+          "description": "Version identifier for the tag release",
+          "type": "string"
+        },
+        "changelog": {
+          "description": "Formatted summary detailing API changes between master and tag",
+          "type": "string"
+        }
+      }
+    },
     "Backend_SpecificationGet": {
+      "description": "Container delivering the compiled API specification schema object",
       "type": "struct",
       "properties": {
         "spec": {
+          "description": "The raw API specification definition schema content",
           "type": "any"
         }
       }
     },
     "Backend_SpecificationPublish": {
+      "description": "Payload defining configuration parameters for publishing an API specification export",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Target specification format name to output",
           "type": "string"
         },
         "filterName": {
+          "description": "Optional category or entity filter applied to scope the exported specification",
           "type": "string"
         },
         "standalone": {
+          "description": "Indicates whether the specification output should be rendered as a standalone unit",
           "type": "boolean"
         }
       }
     },
     "Backend_StatisticChart": {
+      "description": "Represents dataset structures formatted for rendering statistic charts",
       "type": "struct",
       "properties": {
         "labels": {
+          "description": "X-axis labels or time units for the statistic chart",
           "type": "array",
           "schema": {
             "type": "string"
           }
         },
         "series": {
+          "description": "Data series elements displayed within the chart",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -14942,12 +15517,15 @@
       }
     },
     "Backend_StatisticChartSeries": {
+      "description": "A single data line or bar series for a statistic chart",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Name or key identifier for the data series",
           "type": "string"
         },
         "data": {
+          "description": "Numeric data points corresponding to chart labels",
           "type": "array",
           "schema": {
             "type": "number"
@@ -14956,16 +15534,20 @@
       }
     },
     "Backend_StatisticCount": {
+      "description": "Represents an aggregated count metric over a specific timeframe",
       "type": "struct",
       "properties": {
         "count": {
+          "description": "Total aggregated metric count",
           "type": "integer"
         },
         "from": {
+          "description": "Start timestamp of the metric aggregation period",
           "type": "string",
           "format": "date-time"
         },
         "to": {
+          "description": "End timestamp of the metric aggregation period",
           "type": "string",
           "format": "date-time"
         }
@@ -14975,6 +15557,10 @@
       "description": "This object represents a taxonomy. A taxonomy helps to internally organize operations, actions and other entities",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -15001,6 +15587,7 @@
       }
     },
     "Backend_TaxonomyCreate": {
+      "description": "Payload for creating a new taxonomy organization node",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15012,36 +15599,42 @@
       "type": "struct",
       "properties": {
         "operations": {
+          "description": "List of operation IDs to assign to the taxonomy",
           "type": "array",
           "schema": {
             "type": "integer"
           }
         },
         "actions": {
+          "description": "List of action IDs to assign to the taxonomy",
           "type": "array",
           "schema": {
             "type": "integer"
           }
         },
         "schemas": {
+          "description": "List of schema IDs to assign to the taxonomy",
           "type": "array",
           "schema": {
             "type": "integer"
           }
         },
         "events": {
+          "description": "List of event IDs to assign to the taxonomy",
           "type": "array",
           "schema": {
             "type": "integer"
           }
         },
         "cronjobs": {
+          "description": "List of cronjob IDs to assign to the taxonomy",
           "type": "array",
           "schema": {
             "type": "integer"
           }
         },
         "triggers": {
+          "description": "List of trigger IDs to assign to the taxonomy",
           "type": "array",
           "schema": {
             "type": "integer"
@@ -15050,6 +15643,7 @@
       }
     },
     "Backend_TaxonomyUpdate": {
+      "description": "Payload for updating an existing taxonomy node",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15060,6 +15654,10 @@
       "description": "This object represents a test. A test helps to verify that all operations work as expected",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -15069,15 +15667,19 @@
           "type": "integer"
         },
         "operationName": {
+          "description": "The target operation name being tested",
           "type": "string"
         },
         "message": {
+          "description": "The result or error message of the test run",
           "type": "string"
         },
         "response": {
+          "description": "The raw payload or output produced by the test execution",
           "type": "string"
         },
         "config": {
+          "description": "The payload configuration passed to the test execution",
           "type": "reference",
           "target": "Backend_TestConfig"
         }
@@ -15095,6 +15697,7 @@
       }
     },
     "Backend_TestConfig": {
+      "description": "Configuration parameters for executing a test run",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15105,6 +15708,10 @@
       "description": "This object represents a token, this an access token which was requested by a user",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -15114,22 +15721,27 @@
           "type": "integer"
         },
         "name": {
+          "description": "Name or friendly description for the token",
           "type": "string"
         },
         "scopes": {
+          "description": "List of access scopes granted to this token",
           "type": "array",
           "schema": {
             "type": "string"
           }
         },
         "ip": {
+          "description": "IP address from which the token was requested",
           "type": "string"
         },
         "expire": {
+          "description": "Expiration timestamp after which the token is invalid",
           "type": "string",
           "format": "date-time"
         },
         "date": {
+          "description": "Creation timestamp of the token",
           "type": "string",
           "format": "date-time"
         }
@@ -15150,34 +15762,46 @@
       "description": "This object represents a transaction. The system generates a transaction in case a payment was successfully executed",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
         },
         "userId": {
+          "description": "Unique identifier of the associated user",
           "type": "integer"
         },
         "planId": {
+          "description": "Unique identifier of the associated plan",
           "type": "integer"
         },
         "transactionId": {
+          "description": "External reference or gateway transaction identifier",
           "type": "string"
         },
         "amount": {
+          "description": "Monetary amount paid for the transaction",
           "type": "number"
         },
         "points": {
+          "description": "Number of credits or points credited by this transaction",
           "type": "number"
         },
         "periodStart": {
+          "description": "Start timestamp of the active billing period",
           "type": "string",
           "format": "date-time"
         },
         "periodEnd": {
+          "description": "End timestamp of the active billing period",
           "type": "string",
           "format": "date-time"
         },
         "insertDate": {
+          "description": "Creation timestamp of the transaction record",
           "type": "string",
           "format": "date-time"
         }
@@ -15195,6 +15819,7 @@
       }
     },
     "Backend_TrashData": {
+      "description": "This object represents a deleted item stored in the trash bin",
       "type": "struct",
       "properties": {
         "id": {
@@ -15206,6 +15831,7 @@
           "type": "integer"
         },
         "name": {
+          "description": "Display name or label of the deleted entity",
           "type": "string"
         }
       }
@@ -15222,17 +15848,21 @@
       }
     },
     "Backend_TrashRestore": {
+      "description": "Request payload to restore an item from the trash bin",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier of the deleted entity to restore",
           "type": "integer"
         }
       }
     },
     "Backend_TrashTypes": {
+      "description": "List of available entity types that can be restored from the trash",
       "type": "struct",
       "properties": {
         "types": {
+          "description": "Array of restorably deleted object type identifiers",
           "type": "array",
           "schema": {
             "type": "string"
@@ -15244,6 +15874,10 @@
       "description": "This object represents a trigger which can invoke an action on a custom event",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -15279,6 +15913,7 @@
       }
     },
     "Backend_TriggerCreate": {
+      "description": "Request payload to create a new trigger",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15286,6 +15921,7 @@
       }
     },
     "Backend_TriggerUpdate": {
+      "description": "Request payload to update an existing trigger",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15296,6 +15932,10 @@
       "description": "This object represents a user",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
@@ -15332,6 +15972,7 @@
           }
         },
         "apps": {
+          "description": "List of applications associated with or owned by the user",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -15362,6 +16003,7 @@
       }
     },
     "Backend_UserCreate": {
+      "description": "Request payload to register or create a new user account",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15369,11 +16011,13 @@
       },
       "properties": {
         "password": {
+          "description": "Plaintext password for the user account during creation",
           "type": "string"
         }
       }
     },
     "Backend_UserUpdate": {
+      "description": "Request payload to update existing user account information",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15384,23 +16028,32 @@
       "description": "This object represents a webhook, a webhook is called in case a specific event was triggered",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
           "description": "Unique identifier for the object",
           "type": "integer"
         },
         "eventId": {
+          "description": "Unique identifier of the event that triggers this webhook",
           "type": "integer"
         },
         "userId": {
+          "description": "Unique identifier of the user who owns this webhook",
           "type": "integer"
         },
         "name": {
+          "description": "Friendly name or identifier for the webhook configuration",
           "type": "string"
         },
         "endpoint": {
+          "description": "Target HTTP URL where payload notifications will be delivered",
           "type": "string"
         },
         "responses": {
+          "description": "Historical log of HTTP responses received from dispatch attempts",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -15421,6 +16074,7 @@
       }
     },
     "Backend_WebhookCreate": {
+      "description": "Request payload to create a new webhook subscription",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15428,30 +16082,38 @@
       }
     },
     "Backend_WebhookResponse": {
+      "description": "Log record representing an execution attempt and delivery response for a webhook target",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the webhook response log entry",
           "type": "integer"
         },
         "status": {
+          "description": "Internal status code of the webhook delivery attempt",
           "type": "integer"
         },
         "code": {
+          "description": "HTTP status code returned by the remote webhook endpoint",
           "type": "integer"
         },
         "attempts": {
+          "description": "Number of retry attempts executed for this webhook dispatch",
           "type": "integer"
         },
         "error": {
+          "description": "Error message details if the delivery attempt failed",
           "type": "string"
         },
         "executeDate": {
+          "description": "Timestamp when the webhook dispatch was attempted",
           "type": "string",
           "format": "date-time"
         }
       }
     },
     "Backend_WebhookUpdate": {
+      "description": "Request payload to update an existing webhook subscription",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15462,16 +16124,24 @@
       "description": "Base collection",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "totalResults": {
+          "description": "Total number of items available in the entire collection",
           "type": "integer"
         },
         "startIndex": {
+          "description": "Zero-based index of the first item contained in the current response",
           "type": "integer"
         },
         "itemsPerPage": {
+          "description": "Maximum number of items returned in a single response page",
           "type": "integer"
         },
         "entry": {
+          "description": "Array containing the actual paginated collection items",
           "type": "array",
           "schema": {
             "type": "generic",
@@ -15637,13 +16307,20 @@
       "description": "Common error message",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "success": {
+          "description": "Indicates whether the requested operation was successful",
           "type": "boolean"
         },
         "message": {
+          "description": "Human-readable message describing the outcome of the operation",
           "type": "string"
         },
         "id": {
+          "description": "Optional unique identifier of the resource associated with the operation",
           "type": "string"
         }
       }
@@ -15654,46 +16331,138 @@
         "type": "string"
       }
     },
-    "Consumer_App": {
+    "Consumer_Agent": {
+      "description": "This object represents an agent",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
-          "type": "integer"
-        },
-        "userId": {
-          "type": "integer"
-        },
-        "status": {
+          "description": "Unique identifier for the object",
           "type": "integer"
         },
         "name": {
+          "description": "Name of the agent",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the agent",
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_AgentCollection": {
+      "description": "Represents a collection of agent messages",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Consumer_Agent"
+        }
+      }
+    },
+    "Consumer_AgentMessage": {
+      "description": "This object represents an agent message",
+      "type": "struct",
+      "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "chatId": {
+          "description": "The assigned chat id which can be used to load the complete conversation",
+          "type": "string"
+        },
+        "role": {
+          "description": "The role of this message i.e. user, assistant or system",
+          "type": "string"
+        },
+        "item": {
+          "description": "The message item",
+          "type": "reference",
+          "target": "Agent_Item"
+        },
+        "insertDate": {
+          "description": "Timestamp when the message was created",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Consumer_AgentMessageCollection": {
+      "description": "Represents a collection of agent messages",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Consumer_AgentMessage"
+        }
+      }
+    },
+    "Consumer_App": {
+      "description": "Represents a consumer application registered by a user",
+      "type": "struct",
+      "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
+        "id": {
+          "description": "Unique identifier for the application",
+          "type": "integer"
+        },
+        "userId": {
+          "description": "Unique identifier of the owning user",
+          "type": "integer"
+        },
+        "status": {
+          "description": "Current operational status of the application",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Name of the application",
           "type": "string"
         },
         "url": {
+          "description": "Homepage or callback URL of the application",
           "type": "string"
         },
         "appKey": {
+          "description": "Client app key used for API authentication",
           "type": "string"
         },
         "appSecret": {
+          "description": "Client secret used for API authentication",
           "type": "string"
         },
         "date": {
+          "description": "Creation timestamp of the application",
           "type": "string"
         },
         "scopes": {
+          "description": "List of scopes assigned to this application",
           "type": "array",
           "schema": {
             "type": "string"
           }
         },
         "metadata": {
+          "description": "Custom key-value metadata associated with the application",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Consumer_AppCollection": {
+      "description": "Collection of consumer applications",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15704,15 +16473,19 @@
       }
     },
     "Consumer_AppCreate": {
+      "description": "Payload for creating a new consumer application",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Name of the application to create",
           "type": "string"
         },
         "url": {
+          "description": "Homepage or redirect URL for the application",
           "type": "string"
         },
         "scopes": {
+          "description": "List of scopes requested for the application",
           "type": "array",
           "schema": {
             "type": "string"
@@ -15721,15 +16494,19 @@
       }
     },
     "Consumer_AppUpdate": {
+      "description": "Payload for updating an existing consumer application",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Updated name for the application",
           "type": "string"
         },
         "url": {
+          "description": "Updated URL for the application",
           "type": "string"
         },
         "scopes": {
+          "description": "Updated list of scopes for the application",
           "type": "array",
           "schema": {
             "type": "string"
@@ -15738,15 +16515,19 @@
       }
     },
     "Consumer_AuthorizeMeta": {
+      "description": "Metadata for an OAuth authorization request screen",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Name of the application requesting authorization",
           "type": "string"
         },
         "url": {
+          "description": "Website or documentation URL of the requesting application",
           "type": "string"
         },
         "scopes": {
+          "description": "List of scopes requested for user consent",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -15756,67 +16537,90 @@
       }
     },
     "Consumer_AuthorizeRequest": {
+      "description": "Parameters sent to initiate an OAuth authorization decision",
       "type": "struct",
       "properties": {
         "responseType": {
+          "description": "OAuth 2.0 response type (e.g., code)",
           "type": "string"
         },
         "clientId": {
+          "description": "App key / client ID requesting authorization",
           "type": "string"
         },
         "redirectUri": {
+          "description": "Callback URI where the authorization response will be delivered",
           "type": "string"
         },
         "scope": {
+          "description": "Space-delimited list of requested scopes",
           "type": "string"
         },
         "state": {
+          "description": "Opaque value passed to maintain state between request and callback",
           "type": "string"
         },
         "allow": {
+          "description": "User decision to grant or deny access",
           "type": "boolean"
         }
       }
     },
     "Consumer_AuthorizeResponse": {
+      "description": "Result of an OAuth authorization decision",
       "type": "struct",
       "properties": {
         "type": {
+          "description": "Response classification or grant type",
           "type": "string"
         },
         "code": {
+          "description": "Authorization code issued upon user approval",
           "type": "string"
         },
         "error": {
+          "description": "Error code if the authorization request failed or was denied",
           "type": "string"
         },
         "state": {
+          "description": "State parameter echoed back from the original authorization request",
           "type": "string"
         },
         "redirectUri": {
+          "description": "Target callback URI for redirection",
           "type": "string"
         }
       }
     },
     "Consumer_Event": {
+      "description": "Represents an event trigger definition within the platform",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
+          "description": "Unique identifier for the event",
           "type": "integer"
         },
         "name": {
+          "description": "Name of the event",
           "type": "string"
         },
         "description": {
+          "description": "Detailed description of when and why this event fires",
           "type": "string"
         },
         "metadata": {
+          "description": "Custom metadata key-value mapping",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Consumer_EventCollection": {
+      "description": "Collection of event definitions",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15827,33 +16631,46 @@
       }
     },
     "Consumer_Form": {
+      "description": "Dynamic form configuration entity",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
+          "description": "Unique identifier for the form",
           "type": "integer"
         },
         "name": {
+          "description": "Name of the form",
           "type": "string"
         },
         "action": {
+          "description": "Target action path or route triggered on form submission",
           "type": "string"
         },
         "method": {
+          "description": "HTTP method used to submit the form (e.g., POST)",
           "type": "string"
         },
         "jsonSchema": {
+          "description": "JSON Schema validating form structure and data inputs",
           "type": "any"
         },
         "uiSchema": {
+          "description": "UI schema defining control layout and widget presentation options",
           "type": "any"
         },
         "metadata": {
+          "description": "Custom metadata key-value mapping",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Consumer_FormCollection": {
+      "description": "Collection of dynamic form definitions",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15864,22 +16681,31 @@
       }
     },
     "Consumer_Grant": {
+      "description": "Represents user authorization granted to a consumer application",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
+          "description": "Unique identifier for the grant record",
           "type": "integer"
         },
         "app": {
+          "description": "Application that received the user grant",
           "type": "reference",
           "target": "Consumer_App"
         },
         "createDate": {
+          "description": "Timestamp when the user granted access",
           "type": "string",
           "format": "date-time"
         }
       }
     },
     "Consumer_GrantCollection": {
+      "description": "Collection of user authorization grant records",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15890,23 +16716,33 @@
       }
     },
     "Consumer_Identity": {
+      "description": "Identity provider configuration for single sign-on",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
+          "description": "Unique identifier for the identity provider",
           "type": "integer"
         },
         "name": {
+          "description": "Display name of the identity provider (e.g., GitHub, Google)",
           "type": "string"
         },
         "icon": {
+          "description": "CSS icon class or visual asset URL representing the provider",
           "type": "string"
         },
         "redirect": {
+          "description": "Redirection endpoint to initiate the third-party authentication flow",
           "type": "string"
         }
       }
     },
     "Consumer_IdentityCollection": {
+      "description": "Collection of third-party identity providers",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15917,39 +16753,54 @@
       }
     },
     "Consumer_Log": {
+      "description": "Access log entry recording an incoming HTTP request",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
+          "description": "Unique identifier for the log entry",
           "type": "integer"
         },
         "appId": {
+          "description": "ID of the application that authorized the request",
           "type": "integer"
         },
         "ip": {
+          "description": "Originating IP address of the caller",
           "type": "string"
         },
         "userAgent": {
+          "description": "User-Agent header string from the client request",
           "type": "string"
         },
         "method": {
+          "description": "HTTP method of the executed request",
           "type": "string"
         },
         "path": {
+          "description": "URL path requested by the client",
           "type": "string"
         },
         "header": {
+          "description": "HTTP request headers recorded for debugging",
           "type": "string"
         },
         "body": {
+          "description": "HTTP request body payload recorded for debugging",
           "type": "string"
         },
         "date": {
+          "description": "Timestamp when the request occurred",
           "type": "string",
           "format": "date-time"
         }
       }
     },
     "Consumer_LogCollection": {
+      "description": "Collection of access log records",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15960,27 +16811,38 @@
       }
     },
     "Consumer_Page": {
+      "description": "Content page definition for developer portal documentation",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
+          "description": "Unique identifier for the content page",
           "type": "integer"
         },
         "title": {
+          "description": "Title of the page",
           "type": "string"
         },
         "slug": {
+          "description": "URL-friendly slug identifier for routing",
           "type": "string"
         },
         "content": {
+          "description": "Markdown or HTML body content of the page",
           "type": "string"
         },
         "metadata": {
+          "description": "Custom metadata key-value mapping",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Consumer_PageCollection": {
+      "description": "Collection of content page entries",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -15991,68 +16853,90 @@
       }
     },
     "Consumer_PaymentCheckoutRequest": {
+      "description": "Request payload to initiate a checkout flow for a plan",
       "type": "struct",
       "properties": {
         "planId": {
+          "description": "Target subscription plan ID to purchase",
           "type": "integer"
         },
         "returnUrl": {
+          "description": "URL where the user is redirected after successful payment completion",
           "type": "string"
         }
       }
     },
     "Consumer_PaymentCheckoutResponse": {
+      "description": "Response payload containing the payment provider checkout URI",
       "type": "struct",
       "properties": {
         "approvalUrl": {
+          "description": "URL to redirect the user to complete payment authorization",
           "type": "string"
         }
       }
     },
     "Consumer_PaymentPortalRequest": {
+      "description": "Request payload to launch the billing management portal",
       "type": "struct",
       "properties": {
         "returnUrl": {
+          "description": "URL to return to after managing subscription details",
           "type": "string"
         }
       }
     },
     "Consumer_PaymentPortalResponse": {
+      "description": "Response payload containing the customer portal portal link",
       "type": "struct",
       "properties": {
         "redirectUrl": {
+          "description": "URL to access the customer billing self-service portal",
           "type": "string"
         }
       }
     },
     "Consumer_Plan": {
+      "description": "Subscription or monetization plan for API consumers",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
+          "description": "Unique identifier for the plan",
           "type": "integer"
         },
         "name": {
+          "description": "Display name of the plan",
           "type": "string"
         },
         "description": {
+          "description": "Detailed description of plan features and limits",
           "type": "string"
         },
         "price": {
+          "description": "Cost of the plan per billing cycle",
           "type": "number"
         },
         "points": {
+          "description": "Quota points allocated per billing cycle",
           "type": "integer"
         },
         "period": {
+          "description": "Billing period interval classification code",
           "type": "integer"
         },
         "metadata": {
+          "description": "Custom metadata key-value mapping",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Consumer_PlanCollection": {
+      "description": "Collection of subscription plans",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -16063,27 +16947,42 @@
       }
     },
     "Consumer_Scope": {
+      "description": "Permission scope defining access rights to API endpoints",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
+          "description": "Unique identifier for the scope",
           "type": "integer"
         },
         "name": {
+          "description": "Name of the scope key",
           "type": "string"
         },
         "description": {
+          "description": "Detailed explanation of privileges granted by this scope",
           "type": "string"
         },
         "metadata": {
+          "description": "Custom metadata key-value mapping",
           "type": "reference",
           "target": "Common_Metadata"
         }
       }
     },
     "Consumer_ScopeCategories": {
+      "description": "Grouped list of scope categories for user authorization forms",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "categories": {
+          "description": "List of scope category definitions",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -16093,15 +16992,19 @@
       }
     },
     "Consumer_ScopeCategory": {
+      "description": "Category grouping related API scopes together",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the scope category",
           "type": "integer"
         },
         "name": {
+          "description": "Name of the category grouping",
           "type": "string"
         },
         "scopes": {
+          "description": "List of scopes assigned to this category",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -16111,20 +17014,25 @@
       }
     },
     "Consumer_ScopeCategoryScope": {
+      "description": "Scope entry within a specific category group",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the scope",
           "type": "integer"
         },
         "name": {
+          "description": "Name key of the scope",
           "type": "string"
         },
         "description": {
+          "description": "Description of access privileges",
           "type": "string"
         }
       }
     },
     "Consumer_ScopeCollection": {
+      "description": "Collection of API permission scopes",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -16135,57 +17043,76 @@
       }
     },
     "Consumer_Token": {
+      "description": "Personal access token entity generated for consumer access",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
+          "description": "Unique identifier for the token",
           "type": "integer"
         },
         "status": {
+          "description": "Status code indicating if the token is active or revoked",
           "type": "integer"
         },
         "name": {
+          "description": "User-assigned label or name for the token",
           "type": "string"
         },
         "scopes": {
+          "description": "List of scopes assigned to this token",
           "type": "array",
           "schema": {
             "type": "string"
           }
         },
         "ip": {
+          "description": "IP address restriction associated with the token",
           "type": "string"
         },
         "expire": {
+          "description": "Expiration date of the access token",
           "type": "string",
           "format": "date"
         },
         "date": {
+          "description": "Creation date of the token",
           "type": "string",
           "format": "date-time"
         }
       }
     },
     "Consumer_TokenAccessToken": {
+      "description": "OAuth 2.0 access token response object",
       "type": "struct",
       "properties": {
         "access_token": {
+          "description": "The bearer access token string",
           "type": "string"
         },
         "token_type": {
+          "description": "Type of token issued (typically Bearer)",
           "type": "string"
         },
         "expires_in": {
+          "description": "Lifetime in seconds of the access token",
           "type": "integer"
         },
         "refresh_token": {
+          "description": "Optional refresh token used to obtain new access tokens",
           "type": "string"
         },
         "scope": {
+          "description": "Space-separated list of scopes granted",
           "type": "string"
         }
       }
     },
     "Consumer_TokenCollection": {
+      "description": "Collection of personal access tokens",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -16196,75 +17123,98 @@
       }
     },
     "Consumer_TokenCreate": {
+      "description": "Payload for issuing a new personal access token",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Descriptive name for the token",
           "type": "string"
         },
         "scopes": {
+          "description": "List of requested scopes for the token",
           "type": "array",
           "schema": {
             "type": "string"
           }
         },
         "expire": {
+          "description": "Optional expiration date for the token",
           "type": "string",
           "format": "date"
         }
       }
     },
     "Consumer_TokenUpdate": {
+      "description": "Payload for updating an existing personal access token",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Updated name for the token",
           "type": "string"
         },
         "expire": {
+          "description": "Updated expiration date for the token",
           "type": "string",
           "format": "date"
         }
       }
     },
     "Consumer_Transaction": {
+      "description": "Billing transaction record for quota or subscription purchases",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
+          "description": "Unique identifier for the transaction record",
           "type": "integer"
         },
         "userId": {
+          "description": "ID of the user who executed the transaction",
           "type": "integer"
         },
         "planId": {
+          "description": "ID of the subscription plan purchased",
           "type": "integer"
         },
         "plan": {
+          "description": "Plan details associated with the transaction",
           "type": "reference",
           "target": "Consumer_Plan"
         },
         "transactionId": {
+          "description": "External payment processor transaction reference ID",
           "type": "string"
         },
         "amount": {
+          "description": "Monetary amount billed for the transaction",
           "type": "number"
         },
         "points": {
+          "description": "Number of points credited to the user account",
           "type": "number"
         },
         "periodStart": {
+          "description": "Start timestamp of the active billing period",
           "type": "string",
           "format": "date-time"
         },
         "periodEnd": {
+          "description": "End timestamp of the active billing period",
           "type": "string",
           "format": "date-time"
         },
         "insertDate": {
+          "description": "Timestamp when the transaction was recorded",
           "type": "string",
           "format": "date-time"
         }
       }
     },
     "Consumer_TransactionCollection": {
+      "description": "Collection of transaction records",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -16275,33 +17225,46 @@
       }
     },
     "Consumer_UserAccount": {
+      "description": "User profile and subscription status details",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
+          "description": "Unique identifier for the user account",
           "type": "integer"
         },
         "planId": {
+          "description": "ID of the user's currently active subscription plan",
           "type": "integer"
         },
         "status": {
+          "description": "Operational status code of the user account",
           "type": "integer"
         },
         "name": {
+          "description": "Full name of the user",
           "type": "string"
         },
         "email": {
+          "description": "Primary email address associated with the account",
           "type": "string"
         },
         "points": {
+          "description": "Current balance of available execution points/quota",
           "type": "integer"
         },
         "scopes": {
+          "description": "List of scopes assigned directly to the user",
           "type": "array",
           "schema": {
             "type": "string"
           }
         },
         "plans": {
+          "description": "List of active plan subscriptions for the user",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -16309,61 +17272,77 @@
           }
         },
         "metadata": {
+          "description": "Custom key-value metadata attached to the account",
           "type": "reference",
           "target": "Common_Metadata"
         },
         "date": {
+          "description": "Registration date of the user account",
           "type": "string",
           "format": "date-time"
         }
       }
     },
     "Consumer_UserActivate": {
+      "description": "Payload used to activate a user account via token",
       "type": "struct",
       "properties": {
         "token": {
+          "description": "Account activation verification token",
           "type": "string"
         }
       }
     },
     "Consumer_UserEmail": {
+      "description": "Payload used to initiate account recovery or email requests",
       "type": "struct",
       "properties": {
         "email": {
+          "description": "Target email address",
           "type": "string"
         },
         "captcha": {
+          "description": "CAPTCHA challenge response token",
           "type": "string"
         }
       }
     },
     "Consumer_UserJWT": {
+      "description": "JWT authentication response containing access credentials",
       "type": "struct",
       "properties": {
         "token": {
+          "description": "JSON Web Token string used for authentication",
           "type": "string"
         },
         "expires_in": {
+          "description": "Token validity duration in seconds",
           "type": "integer"
         },
         "refresh_token": {
+          "description": "Refresh token string used to obtain new access tokens",
           "type": "string"
         },
         "scope": {
+          "description": "Space-separated list of granted scopes",
           "type": "string"
         }
       }
     },
     "Consumer_UserLogin": {
+      "description": "Credentials payload for user login",
       "type": "struct",
       "properties": {
         "username": {
+          "description": "Username or email address for authentication",
           "type": "string"
         },
         "password": {
+          "description": "User password",
           "type": "string"
         },
         "scopes": {
+          "description": "Optional list of specific scopes requested for the login session",
           "type": "array",
           "schema": {
             "type": "string"
@@ -16372,80 +17351,107 @@
       }
     },
     "Consumer_UserPasswordReset": {
+      "description": "Payload for completing a password reset",
       "type": "struct",
       "properties": {
         "token": {
+          "description": "Password reset verification token",
           "type": "string"
         },
         "newPassword": {
+          "description": "New password to set for the account",
           "type": "string"
         }
       }
     },
     "Consumer_UserPlan": {
+      "description": "Active plan summary associated with a user",
       "type": "struct",
       "properties": {
         "id": {
+          "description": "Unique identifier for the assigned plan",
           "type": "integer"
         },
         "name": {
+          "description": "Name of the assigned plan",
           "type": "string"
         },
         "price": {
+          "description": "Price of the plan",
           "type": "integer"
         },
         "points": {
+          "description": "Points granted by the plan",
           "type": "integer"
         },
         "period": {
+          "description": "Billing period interval classification code",
           "type": "integer"
         }
       }
     },
     "Consumer_UserRefresh": {
+      "description": "Payload to request a refreshed authentication token",
       "type": "struct",
       "properties": {
         "refresh_token": {
+          "description": "Valid refresh token string",
           "type": "string"
         }
       }
     },
     "Consumer_UserRegister": {
+      "description": "Payload for registering a new user account",
       "type": "struct",
       "properties": {
         "name": {
+          "description": "Full name of the user registering",
           "type": "string"
         },
         "email": {
+          "description": "Email address for the new account",
           "type": "string"
         },
         "password": {
+          "description": "Desired account password",
           "type": "string"
         },
         "captcha": {
+          "description": "CAPTCHA challenge response token for anti-spam verification",
           "type": "string"
         }
       }
     },
     "Consumer_Webhook": {
+      "description": "Webhook endpoint subscription definition",
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "id": {
+          "description": "Unique identifier for the webhook",
           "type": "integer"
         },
         "status": {
+          "description": "Status code indicating whether the webhook subscription is active",
           "type": "integer"
         },
         "event": {
+          "description": "Target event name triggering this webhook",
           "type": "string"
         },
         "name": {
+          "description": "Descriptive label for the webhook registration",
           "type": "string"
         },
         "endpoint": {
+          "description": "Target HTTP endpoint URL to receive webhook event payloads",
           "type": "string"
         },
         "responses": {
+          "description": "List of recent delivery attempts and status responses",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -16455,6 +17461,7 @@
       }
     },
     "Consumer_WebhookCollection": {
+      "description": "Collection of webhook subscriptions",
       "type": "struct",
       "parent": {
         "type": "reference",
@@ -16465,46 +17472,59 @@
       }
     },
     "Consumer_WebhookCreate": {
+      "description": "Payload for registering a new webhook subscription",
       "type": "struct",
       "properties": {
         "event": {
+          "description": "Event name to subscribe to",
           "type": "string"
         },
         "name": {
+          "description": "Descriptive name for the webhook",
           "type": "string"
         },
         "endpoint": {
+          "description": "Destination HTTP URI for event delivery",
           "type": "string"
         }
       }
     },
     "Consumer_WebhookResponse": {
+      "description": "Recorded delivery log response for a webhook dispatch",
       "type": "struct",
       "properties": {
         "status": {
+          "description": "Internal status code of the webhook delivery process",
           "type": "integer"
         },
         "code": {
+          "description": "HTTP status code received from the destination endpoint",
           "type": "integer"
         },
         "attempts": {
+          "description": "Number of delivery retry attempts executed",
           "type": "string"
         },
         "executeDate": {
+          "description": "Timestamp when the webhook delivery attempt occurred",
           "type": "string"
         }
       }
     },
     "Consumer_WebhookUpdate": {
+      "description": "Payload for updating an existing webhook subscription",
       "type": "struct",
       "properties": {
         "event": {
+          "description": "Updated event name to subscribe to",
           "type": "string"
         },
         "name": {
+          "description": "Updated descriptive name for the webhook",
           "type": "string"
         },
         "endpoint": {
+          "description": "Updated target HTTP URI for event delivery",
           "type": "string"
         }
       }
@@ -16823,53 +17843,71 @@
     "System_About": {
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "apiVersion": {
+          "description": "The current version of the API",
           "type": "string"
         },
         "title": {
+          "description": "The title or name of the API project",
           "type": "string"
         },
         "description": {
+          "description": "A comprehensive description of the API and its capabilities",
           "type": "string"
         },
         "termsOfService": {
+          "description": "URL to the terms of service for using the API",
           "type": "string"
         },
         "contactName": {
+          "description": "The name of the primary contact person or organization for the API",
           "type": "string"
         },
         "contactUrl": {
+          "description": "URL to contact information or support site for the API",
           "type": "string"
         },
         "contactEmail": {
+          "description": "The email address to reach out to for API support",
           "type": "string"
         },
         "licenseName": {
+          "description": "The name of the license under which the API is exposed",
           "type": "string"
         },
         "licenseUrl": {
+          "description": "URL to the full text of the API license agreement",
           "type": "string"
         },
         "paymentCurrency": {
+          "description": "The primary ISO currency code used for API billing and payments",
           "type": "string"
         },
         "categories": {
+          "description": "List of categories or tags assigned to classify the API",
           "type": "array",
           "schema": {
             "type": "string"
           }
         },
         "scopes": {
+          "description": "List of global scopes available across the API",
           "type": "array",
           "schema": {
             "type": "string"
           }
         },
         "apps": {
+          "description": "Map of available application endpoints or integration links",
           "type": "reference",
           "target": "System_AboutApps"
         },
         "links": {
+          "description": "List of related hypermedia links providing contextual navigational paths",
           "type": "array",
           "schema": {
             "type": "reference",
@@ -16888,20 +17926,57 @@
       "type": "struct",
       "properties": {
         "rel": {
+          "description": "The relationship type defining the target URL's connection to the current context",
           "type": "string"
         },
         "href": {
+          "description": "The target URI for the linked resource",
           "type": "string"
+        }
+      }
+    },
+    "System_CaptchaChallenge": {
+      "type": "struct",
+      "properties": {
+        "algorithm": {
+          "description": "Cryptographic algorithm used to generate the proof-of-work/CAPTCHA challenge",
+          "type": "string"
+        },
+        "challenge": {
+          "description": "Unique challenge string to be solved or signed by the client",
+          "type": "string"
+        },
+        "maxnumber": {
+          "description": "Maximum integer bound used for the proof-of-work search space",
+          "type": "integer"
+        },
+        "salt": {
+          "description": "Random salt appended to the challenge string during verification",
+          "type": "string"
+        },
+        "signature": {
+          "description": "Server-generated signature validating the authenticity of the challenge",
+          "type": "string"
+        },
+        "expires": {
+          "description": "Unix timestamp indicating when the CAPTCHA challenge becomes invalid",
+          "type": "integer"
         }
       }
     },
     "System_HealthCheck": {
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "healthy": {
+          "description": "Indicates whether the specific service component is operational",
           "type": "boolean"
         },
         "error": {
+          "description": "Error details or message explaining why the check failed, if applicable",
           "type": "string"
         }
       }
@@ -16909,7 +17984,12 @@
     "System_Route": {
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "routes": {
+          "description": "Mapping of API endpoint paths to their supported HTTP methods and handlers",
           "type": "reference",
           "target": "System_RoutePath"
         }
@@ -16931,11 +18011,17 @@
     "System_Schema": {
       "type": "struct",
       "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
         "schema": {
+          "description": "TypeSchema definition object containing structural constraints",
           "type": "reference",
           "target": "System_SchemaTypeSchema"
         },
         "form": {
+          "description": "UI layout or form representation options mapped to the schema",
           "type": "reference",
           "target": "System_SchemaForm"
         }

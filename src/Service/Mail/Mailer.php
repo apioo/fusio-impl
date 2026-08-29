@@ -48,6 +48,9 @@ class Mailer implements MailerInterface
         $this->mailer = $mailer;
     }
 
+    /**
+     * @param list<string> $to
+     */
     public function send(string $subject, array $to, string $body): void
     {
         $dispatcher = $this->resolver->get(Resolver::TYPE_MAILER);

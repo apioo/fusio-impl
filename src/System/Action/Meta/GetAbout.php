@@ -27,6 +27,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Base;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 
@@ -50,22 +51,26 @@ readonly class GetAbout implements ActionInterface
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return array_filter([
+            'kind' => Service\TypeSystem\KindBuilder::build(Model\System\About::class),
             'apiVersion' => Base::getVersion(),
-            'title' => $this->configService->getValue('info_title') ?: 'Fusio',
-            'description' => $this->configService->getValue('info_description') ?: null,
-            'termsOfService' => $this->configService->getValue('info_tos') ?: null,
-            'contactName' => $this->configService->getValue('info_contact_name') ?: null,
-            'contactUrl' => $this->configService->getValue('info_contact_url') ?: null,
-            'contactEmail' => $this->configService->getValue('info_contact_email') ?: null,
-            'licenseName' => $this->configService->getValue('info_license_name') ?: null,
-            'licenseUrl' => $this->configService->getValue('info_license_url') ?: null,
-            'paymentCurrency' => $this->configService->getValue('payment_currency') ?: 'EUR',
+            'title' => $this->configService->getString('info_title') ?: 'Fusio',
+            'description' => $this->configService->getString('info_description') ?: null,
+            'termsOfService' => $this->configService->getString('info_tos') ?: null,
+            'contactName' => $this->configService->getString('info_contact_name') ?: null,
+            'contactUrl' => $this->configService->getString('info_contact_url') ?: null,
+            'contactEmail' => $this->configService->getString('info_contact_email') ?: null,
+            'licenseName' => $this->configService->getString('info_license_name') ?: null,
+            'licenseUrl' => $this->configService->getString('info_license_url') ?: null,
+            'paymentCurrency' => $this->configService->getString('payment_currency') ?: 'EUR',
             'categories' => $this->getCategories($context),
             'scopes' => $this->getScopes($context),
             'links' => $this->getLinks(),
         ]);
     }
 
+    /**
+     * @return list<string>
+     */
     private function getCategories(ContextInterface $context): array
     {
         $condition = Condition::withAnd();
@@ -81,6 +86,9 @@ readonly class GetAbout implements ActionInterface
         return $result;
     }
 
+    /**
+     * @return list<string>
+     */
     private function getScopes(ContextInterface $context): array
     {
         $defaultCategory = $this->categoryTable->findOneByTenantAndName($context->getTenantId(), 'default');
@@ -102,6 +110,9 @@ readonly class GetAbout implements ActionInterface
         return $result;
     }
 
+    /**
+     * @return list<array{rel: string, href: string}>
+     */
     private function getLinks(): array
     {
         return [[

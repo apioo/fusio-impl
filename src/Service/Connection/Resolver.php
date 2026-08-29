@@ -53,9 +53,9 @@ class Resolver
     public function get(string $type): mixed
     {
         if ($type === self::TYPE_MAILER) {
-            $name = $this->configService->getValue('system_mailer');
+            $name = $this->configService->getString('system_mailer');
         } elseif ($type === self::TYPE_DISPATCHER) {
-            $name = $this->configService->getValue('system_dispatcher');
+            $name = $this->configService->getString('system_dispatcher');
         } else {
             throw new \InvalidArgumentException('Provided type does not exist');
         }

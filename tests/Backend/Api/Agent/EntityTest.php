@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Agent;
 
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Tests\Normalizer;
 
 /**
  * EntityTest
@@ -48,21 +49,26 @@ class EntityTest extends DbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<JSON
 {
+    "kind": "[kind]",
     "id": {$this->id},
     "status": 1,
     "connection": 8,
+    "public": true,
     "type": 0,
     "name": "agent-test",
     "description": "An agent test",
     "introduction": "A test agent which always return \"Hello World\"",
+    "temperature": 1,
     "tools": [
         "test_listFoo"
     ],
     "outgoing": "schema:\/\/Entry-Schema",
-    "insertDate": "2026-02-22T13:06:00Z"
+    "insertDate": "[datetime]"
 }
 JSON;
 
@@ -110,9 +116,12 @@ JSON;
             'introduction' => 'foo',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Agent successfully updated",
     "id": "7"
@@ -145,9 +154,12 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ]);
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = Normalizer::normalize($body);
+
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "success": true,
     "message": "Agent successfully deleted",
     "id": "7"

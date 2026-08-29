@@ -22,7 +22,9 @@ namespace Fusio\Impl\Backend\View\Log;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Sql\Condition;
 use PSX\Sql\ViewAbstract;
@@ -36,7 +38,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Error extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -72,10 +74,12 @@ class Error extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\LogErrorCollection::class)),
             'totalResults' => $builder->doValue($countBuilder->getSQL(), $countBuilder->getParameters(), $builder->fieldInteger('cnt')),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\LogError::class)),
                 'id' => $builder->fieldInteger(Table\Generated\LogErrorTable::COLUMN_ID),
                 'logId' => $builder->fieldInteger(Table\Generated\LogErrorTable::COLUMN_LOG_ID),
                 'message' => Table\Generated\LogErrorTable::COLUMN_MESSAGE,
@@ -88,7 +92,7 @@ class Error extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id, ContextInterface $context)
+    public function getEntity(int $id, ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals('error.' . Table\Generated\LogErrorTable::COLUMN_ID, $id);
@@ -113,6 +117,7 @@ class Error extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\LogError::class)),
             'id' => $builder->fieldInteger(Table\Generated\LogErrorTable::COLUMN_ID),
             'logId' => $builder->fieldInteger(Table\Generated\LogErrorTable::COLUMN_LOG_ID),
             'message' => Table\Generated\LogErrorTable::COLUMN_MESSAGE,

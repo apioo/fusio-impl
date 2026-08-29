@@ -20,7 +20,9 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
+use Fusio\Impl\Service\Captcha;
 use Fusio\Impl\Tests\DbTestCase;
+use PSX\Framework\Test\Environment;
 
 /**
  * RegisterTest
@@ -44,12 +46,17 @@ class RegisterTest extends DbTestCase
 
     public function testPost(): void
     {
+        $captchaService = Environment::getService(Captcha::class);
+        $challenge = $captchaService->challenge();
+        $captcha = $captchaService->solve($challenge);
+
         $response = $this->sendRequest('/consumer/register', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
         ], json_encode([
             'name'     => 'baz',
             'email'    => 'baz@localhost.com',
             'password' => 'foobar!123',
+            'captcha'  => $captcha,
         ]));
 
         $body  = (string) $response->getBody();
@@ -79,12 +86,17 @@ class RegisterTest extends DbTestCase
 
     public function testPostInvalidEmail(): void
     {
+        $captchaService = Environment::getService(Captcha::class);
+        $challenge = $captchaService->challenge();
+        $captcha = $captchaService->solve($challenge);
+
         $response = $this->sendRequest('/consumer/register', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
         ], json_encode([
             'name'     => 'baz',
             'email'    => 'baz',
             'password' => 'foo!12',
+            'captcha'  => $captcha,
         ]));
 
         $body = (string) $response->getBody();
@@ -96,12 +108,17 @@ class RegisterTest extends DbTestCase
 
     public function testPostInvalidPasswordLength(): void
     {
+        $captchaService = Environment::getService(Captcha::class);
+        $challenge = $captchaService->challenge();
+        $captcha = $captchaService->solve($challenge);
+
         $response = $this->sendRequest('/consumer/register', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
         ], json_encode([
             'name'     => 'baz',
             'email'    => 'baz@bar.com',
             'password' => 'foo!12',
+            'captcha'  => $captcha,
         ]));
 
         $body = (string) $response->getBody();
@@ -113,12 +130,17 @@ class RegisterTest extends DbTestCase
 
     public function testPostInvalidPasswordCharacters(): void
     {
+        $captchaService = Environment::getService(Captcha::class);
+        $challenge = $captchaService->challenge();
+        $captcha = $captchaService->solve($challenge);
+
         $response = $this->sendRequest('/consumer/register', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
         ], json_encode([
             'name'     => 'baz',
             'email'    => 'baz@bar.com',
             'password' => 'foobar foobar',
+            'captcha'  => $captcha,
         ]));
 
         $body = (string) $response->getBody();

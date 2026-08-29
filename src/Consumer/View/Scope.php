@@ -22,7 +22,9 @@ namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\Condition;
@@ -38,7 +40,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Scope extends ViewAbstract
 {
-    public function getCollection(QueryFilter $filter, ContextInterface $context)
+    public function getCollection(QueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -79,10 +81,12 @@ class Scope extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\ScopeCollection::class)),
             'totalResults' => $builder->doValue($countBuilder->getSQL(), $countBuilder->getParameters(), $builder->fieldInteger('cnt')),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection($queryBuilder->getSQL(), $queryBuilder->getParameters(), [
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\Scope::class)),
                 'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
                 'name' => Table\Generated\ScopeTable::COLUMN_NAME,
                 'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
@@ -93,11 +97,12 @@ class Scope extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(string $id, ContextInterface $context)
+    public function getEntity(string $id, ContextInterface $context): mixed
     {
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Scope::class), 'findOneByIdentifier'], [$context->getTenantId(), $context->getUser()->getCategoryId(), $id], [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Consumer\Scope::class)),
             'id' => $builder->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
             'name' => Table\Generated\ScopeTable::COLUMN_NAME,
             'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
@@ -107,7 +112,7 @@ class Scope extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getCategories(ContextInterface $context)
+    public function getCategories(ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals('user_scope.' . Table\Generated\UserScopeTable::COLUMN_USER_ID, $context->getUser()->getId());

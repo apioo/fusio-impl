@@ -24,7 +24,9 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\Audit\AuditQueryFilter;
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
 use Fusio\Impl\Backend\Filter\QueryFilter;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model;
 use PSX\Nested\Builder;
 use PSX\Nested\Reference;
 use PSX\Sql\OrderBy;
@@ -39,7 +41,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Audit extends ViewAbstract
 {
-    public function getCollection(AuditQueryFilter $filter, ContextInterface $context)
+    public function getCollection(AuditQueryFilter $filter, ContextInterface $context): mixed
     {
         $startIndex = $filter->getStartIndex();
         $count = $filter->getCount();
@@ -52,10 +54,12 @@ class Audit extends ViewAbstract
         $builder = new Builder($this->connection);
 
         $definition = [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\AuditCollection::class)),
             'totalResults' => $this->getTable(Table\Audit::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $builder->doCollection([$this->getTable(Table\Audit::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Audit::class)),
                 'id' => $builder->fieldInteger(Table\Generated\AuditTable::COLUMN_ID),
                 'event' => Table\Generated\AuditTable::COLUMN_EVENT,
                 'ip' => Table\Generated\AuditTable::COLUMN_IP,
@@ -67,11 +71,12 @@ class Audit extends ViewAbstract
         return $builder->build($definition);
     }
 
-    public function getEntity(int $id, ContextInterface $context)
+    public function getEntity(int $id, ContextInterface $context): mixed
     {
         $builder = new Builder($this->connection);
 
         $definition = $builder->doEntity([$this->getTable(Table\Audit::class), 'findOneByIdentifier'], [$context->getTenantId(), $id], [
+            'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\Audit::class)),
             'id' => $builder->fieldInteger(Table\Generated\AuditTable::COLUMN_ID),
             'app' => $builder->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
                 'id' => $builder->fieldInteger(Table\Generated\AppTable::COLUMN_ID),

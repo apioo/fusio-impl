@@ -45,8 +45,14 @@ class EnvCommand extends Command
 {
     use TypeSafeTrait;
 
+    /**
+     * @var RepositoryInterface<MarketplaceApp>
+     */
     private RepositoryInterface $repository;
-    
+
+    /**
+     * @var InstallerInterface<MarketplaceApp>
+     */
     private InstallerInterface $installer;
 
     public function __construct(

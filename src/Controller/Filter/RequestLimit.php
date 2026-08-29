@@ -22,7 +22,6 @@ namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Service;
-use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;

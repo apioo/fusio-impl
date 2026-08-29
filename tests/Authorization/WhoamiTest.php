@@ -44,6 +44,7 @@ class WhoamiTest extends DbTestCase
 
         $expect = <<<'JSON'
 {
+    "kind": "[kind]",
     "id": 2,
     "roleId": 3,
     "planId": 1,
@@ -54,6 +55,7 @@ class WhoamiTest extends DbTestCase
     "scopes": [
         "consumer",
         "consumer.account",
+        "consumer.agent",
         "consumer.app",
         "consumer.event",
         "consumer.form",

@@ -26,6 +26,8 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\Filter;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Service\TypeSystem\KindBuilder;
+use Fusio\Model\Backend\Dashboard;
 use PSX\Sql\TableManagerInterface;
 
 /**
@@ -76,6 +78,7 @@ readonly class GetAll implements ActionInterface
         $auditFilter = Filter\Audit\AuditQueryFilter::from($request);
 
         return [
+            'kind' => KindBuilder::build(Dashboard::class),
             'errorsPerOperation' => $this->errorsPerOperation->getView($logFilter, $context),
             'incomingRequests' => $this->incomingRequests->getView($logFilter, $context),
             'incomingTransactions' => $this->incomingTransactions->getView($transactionFilter, $context),
