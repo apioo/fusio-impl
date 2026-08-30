@@ -161,7 +161,7 @@ readonly class Sender implements SenderInterface
                 ];
             }
 
-            $result = $agent->call($messages, $options);
+            $result = $agent->call($messages, $options)->getResult();
 
             if ($costs > 0) {
                 $tokenUsage = $result->getMetadata()->get('token_usage');
