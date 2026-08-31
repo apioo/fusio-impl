@@ -29,7 +29,6 @@ return RectorConfig::configure()
         RemoveUnusedVariableAssignRector::class,
         SafeDeclareStrictTypesRector::class,
         RepeatedOrEqualToInArrayRector::class,
-        DisallowedEmptyRuleFixerRector::class,
         CatchExceptionNameMatchingTypeRector::class,
         SimplifyQuoteEscapeRector::class,
         __DIR__ . '/src/Table/Generated/*',
