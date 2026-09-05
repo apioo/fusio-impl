@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Controller;
 
-use Fusio\Impl\Service\JsonRPC;
+use Fusio\Impl\Service\A2A;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use JsonException;
 use PSX\Api\Attribute\Incoming;
@@ -30,7 +30,6 @@ use PSX\Api\Attribute\Post;
 use PSX\Framework\Controller\ControllerAbstract;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
-use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 use PSX\Http\Stream\StringStream;
@@ -40,16 +39,16 @@ use PSX\Json\Rpc\Server;
 use PSX\Schema\ContentType;
 
 /**
- * JsonRPCController
+ * A2AController
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class JsonRPCController extends ControllerAbstract implements FilterInterface
+class A2AController extends ControllerAbstract
 {
     public function __construct(
-        private readonly JsonRPC $server,
+        private readonly A2A $server,
         private readonly FrameworkConfig $frameworkConfig,
     ) {
     }
@@ -64,13 +63,13 @@ class JsonRPCController extends ControllerAbstract implements FilterInterface
     }
 
     #[Post]
-    #[Path('/jsonrpc')]
+    #[Path('/a2a/v1')]
     #[Incoming(ContentType::JSON)]
     #[Outgoing(200, ContentType::JSON)]
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
-        if (!$this->frameworkConfig->isJsonRPCEnabled()) {
-            throw new StatusCode\ServiceUnavailableException('JsonRPC service is not enabled');
+        if (!$this->frameworkConfig->isA2AEnabled()) {
+            throw new StatusCode\ServiceUnavailableException('A2A service is not enabled');
         }
 
         $body = (string) $request->getBody();
