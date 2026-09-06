@@ -21,7 +21,7 @@ jobs:
           mysql -e "CREATE DATABASE fusio;" -uroot -proot
           mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'test1234';" -uroot -proot
       - name: Composer install
-        run: composer install --no-interaction --no-ansi --no-progress
+        run: composer install --no-interaction --no-ansi --no-progress --no-dev
       - name: Setup Fusio
         env:
           APP_CONNECTION: 'pdo-mysql://root:test1234@localhost/fusio'

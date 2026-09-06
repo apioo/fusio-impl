@@ -1,6 +1,6 @@
 <?php
 
-return [
+$adapters = [
     \Fusio\Adapter\Ai\Adapter::class,
     \Fusio\Adapter\Amqp\Adapter::class,
     \Fusio\Adapter\Beanstalk\Adapter::class,
@@ -18,5 +18,10 @@ return [
     \Fusio\Adapter\Stripe\Adapter::class,
     \Fusio\Adapter\Util\Adapter::class,
     \Fusio\Adapter\Worker\Adapter::class,
-    \Fusio\Impl\Tests\Adapter\TestAdapter::class,
 ];
+
+if (class_exists(\Fusio\Impl\Tests\Adapter\TestAdapter::class)) {
+    $adapters[] = \Fusio\Impl\Tests\Adapter\TestAdapter::class;
+}
+
+return $adapters;
