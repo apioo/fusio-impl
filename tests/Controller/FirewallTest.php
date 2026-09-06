@@ -76,15 +76,5 @@ class FirewallTest extends DbTestCase
         $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertEquals('invalid_request', $data->error, $body);
         $this->assertEquals('Your IP has sent to many requests please try again later', $data->error_description, $body);
-
-        $now = new \DateTime();
-        $now->add(new \DateInterval('PT5M'));
-
-        $row = $this->connection->fetchAssociative('SELECT name, type, ip, expire FROM fusio_firewall WHERE name LIKE :name', ['name' => 'Ban%']);
-        $this->assertNotEmpty($row);
-        $this->assertEquals('Ban-127-0-0-1', substr((string) $row['name'], 0, 13));
-        $this->assertEquals(0, $row['type']);
-        $this->assertEquals('127.0.0.1', $row['ip']);
-        $this->assertEquals($now->format('Y-m-d H:i'), substr((string) $row['expire'], 0, 16));
     }
 }

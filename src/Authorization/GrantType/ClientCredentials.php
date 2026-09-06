@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Authorization\GrantType;
 
+use DateInterval;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\Environment\IPResolver;
@@ -49,6 +50,7 @@ class ClientCredentials extends ClientCredentialsAbstract
         private Service\System\FrameworkConfig $frameworkConfig,
         private Service\Firewall $firewallService,
         private Table\App $appTable,
+        private Table\Firewall\Log $firewallLogTable,
         private IPResolver $ipResolver,
     ) {
     }
@@ -61,6 +63,11 @@ class ClientCredentials extends ClientCredentialsAbstract
             $this->firewallService->assertAllowed($ip, $this->frameworkConfig->getTenantId());
         } catch (ClientErrorException $e) {
             throw new InvalidRequestException($e->getMessage(), previous: $e);
+        }
+
+        $requestCount = $this->firewallLogTable->getResponseCodeCount($this->frameworkConfig->getTenantId(), $ip, new DateInterval('PT1M'));
+        if ($requestCount > 10) {
+            throw new InvalidRequestException('Your IP has sent to many requests please try again later');
         }
 
         try {
