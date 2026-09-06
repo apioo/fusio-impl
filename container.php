@@ -1,8 +1,10 @@
 <?php
 
+use Fusio\Impl\Adapter\AdapterFinder;
 use Fusio\Impl\Tests\Framework\Api\TypeHub\TestPublisher;
+use PSX\Framework\Dependency\ContainerBuilder;
 
-return \PSX\Framework\Dependency\ContainerBuilder::build(
+return ContainerBuilder::build(
     __DIR__,
     true,
     static function () {
@@ -17,7 +19,7 @@ return \PSX\Framework\Dependency\ContainerBuilder::build(
             $configs[] = __DIR__ . '/tests/test_container.php';
         }
 
-        $configs = array_merge($configs, \Fusio\Impl\Adapter\AdapterFinder::getFiles(__DIR__ . '/provider.php'));
+        $configs = array_merge($configs, AdapterFinder::getFiles(__DIR__ . '/provider.php'));
 
         return $configs;
     },
