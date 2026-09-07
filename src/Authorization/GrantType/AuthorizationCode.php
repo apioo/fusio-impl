@@ -65,12 +65,12 @@ class AuthorizationCode extends AuthorizationCodeAbstract
             throw new InvalidRequestException($e->getMessage(), previous: $e);
         }
 
-        $requestCount = $this->firewallLogTable->getResponseCodeCount($this->frameworkConfig->getTenantId(), $ip, new DateInterval('PT1M'));
-        if ($requestCount > 10) {
-            throw new InvalidRequestException('Your IP has sent to many requests please try again later');
-        }
-
         try {
+            $requestCount = $this->firewallLogTable->getResponseCodeCount($this->frameworkConfig->getTenantId(), $ip, new DateInterval('PT1M'));
+            if ($requestCount > 10) {
+                throw new InvalidRequestException('Your IP has sent to many requests please try again later');
+            }
+
             $code = $this->appCodeTable->getCodeByRequest(
                 $credentials->getClientId(),
                 $credentials->getClientSecret(),

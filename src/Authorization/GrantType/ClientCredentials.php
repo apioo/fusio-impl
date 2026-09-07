@@ -65,12 +65,12 @@ class ClientCredentials extends ClientCredentialsAbstract
             throw new InvalidRequestException($e->getMessage(), previous: $e);
         }
 
-        $requestCount = $this->firewallLogTable->getResponseCodeCount($this->frameworkConfig->getTenantId(), $ip, new DateInterval('PT1M'));
-        if ($requestCount > 10) {
-            throw new InvalidRequestException('Your IP has sent to many requests please try again later');
-        }
-
         try {
+            $requestCount = $this->firewallLogTable->getResponseCodeCount($this->frameworkConfig->getTenantId(), $ip, new DateInterval('PT1M'));
+            if ($requestCount > 10) {
+                throw new InvalidRequestException('Your IP has sent to many requests please try again later');
+            }
+
             // check whether the credentials contain an app key and secret
             $app = $this->appTable->findOneByAppKeyAndSecret($this->frameworkConfig->getTenantId(), $credentials->getClientId(), $credentials->getClientSecret());
             if (!empty($app)) {
