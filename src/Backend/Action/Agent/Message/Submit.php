@@ -25,6 +25,7 @@ use Fusio\Engine\Agent\SenderInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\Agent\Sender;
 use Fusio\Model\Agent\Input;
 use PSX\Http\Environment\HttpResponse;
 
@@ -47,12 +48,20 @@ readonly class Submit implements ActionInterface
 
         assert($body instanceof Input);
 
-        $output = $this->sender->send(
-            agentId: (int) $request->get('agent_id'),
-            input: $body,
-            context: $context,
-            refId: (int) $request->get('ref_id'),
-        );
+        if ($this->sender instanceof Sender) {
+            $output = $this->sender->send(
+                agentId: (int) $request->get('agent_id'),
+                input: $body,
+                context: $context,
+                refId: (int) $request->get('ref_id'),
+            );
+        } else {
+            $output = $this->sender->send(
+                agentId: (int) $request->get('agent_id'),
+                input: $body,
+                context: $context,
+            );
+        }
 
         return new HttpResponse(201, [], $output);
     }
