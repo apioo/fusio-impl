@@ -793,6 +793,12 @@
             "type": "string"
           }
         },
+        "ref_id": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
         "chat_id": {
           "in": "query",
           "schema": {
@@ -841,6 +847,12 @@
           "schema": {
             "type": "reference",
             "target": "Agent_Input"
+          }
+        },
+        "ref_id": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
           }
         }
       },
@@ -10938,6 +10950,12 @@
             "type": "string"
           }
         },
+        "ref_id": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
         "chat_id": {
           "in": "query",
           "schema": {
@@ -10986,6 +11004,12 @@
           "schema": {
             "type": "reference",
             "target": "Agent_Input"
+          }
+        },
+        "ref_id": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
           }
         }
       },
