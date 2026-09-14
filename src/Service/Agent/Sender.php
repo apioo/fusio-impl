@@ -79,7 +79,7 @@ readonly class Sender implements SenderInterface
     ) {
     }
 
-    public function send(int $agentId, Input $input, ContextInterface $context, bool $public = false): Output
+    public function send(int $agentId, Input $input, ContextInterface $context, bool $public = false, ?int $refId = null): Output
     {
         $row = $this->agentTable->findOneByTenantAndId($context->getTenantId(), $context->getUser()->getCategoryId(), $agentId);
         if (!$row instanceof Table\Generated\AgentRow) {
@@ -131,7 +131,7 @@ readonly class Sender implements SenderInterface
 
             $userMessages = $this->messageUnserializer->unserialize($item);
 
-            $chatId = $this->persistUserMessages($agentId, $context->getUser()->getId(), $chatId, $userMessages);
+            $chatId = $this->persistUserMessages($agentId, $context->getUser()->getId(), $refId, $chatId, $userMessages);
 
             $messages = $messages->merge($userMessages);
 
@@ -176,7 +176,7 @@ readonly class Sender implements SenderInterface
                 $item = $this->resultSerializer->serialize($result);
             }
 
-            $this->messageTable->addAssistantMessage($row->getId(), $context->getUser()->getId(), $chatId, $item);
+            $this->messageTable->addAssistantMessage($row->getId(), $context->getUser()->getId(), $refId, $chatId, $item);
 
             $this->agentTable->commit();
 
@@ -229,11 +229,11 @@ readonly class Sender implements SenderInterface
         return $messages;
     }
 
-    private function persistUserMessages(int $agentId, int $userId, ?string $chatId, MessageBag $userMessages): string
+    private function persistUserMessages(int $agentId, int $userId, ?int $refId, ?string $chatId, MessageBag $userMessages): string
     {
         foreach ($userMessages as $userMessage) {
             foreach ($this->messageSerializer->serialize($userMessage) as $content) {
-                $message = $this->messageTable->addUserMessage($agentId, $userId, $chatId, $content);
+                $message = $this->messageTable->addUserMessage($agentId, $userId, $refId, $chatId, $content);
 
                 if (empty($chatId)) {
                     $chatId = $message->getChatId();

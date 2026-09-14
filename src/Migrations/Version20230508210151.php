@@ -92,6 +92,7 @@ final class Version20230508210151 extends AbstractMigration
             $agentMessageTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $agentMessageTable->addColumn('agent_id', 'integer');
             $agentMessageTable->addColumn('user_id', 'integer');
+            $agentMessageTable->addColumn('ref_id', 'integer', ['notnull' => false, 'default' => null]);
             $agentMessageTable->addColumn('chat_id', 'string');
             $agentMessageTable->addColumn('child', 'integer');
             $agentMessageTable->addColumn('origin', 'integer');

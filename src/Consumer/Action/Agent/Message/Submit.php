@@ -49,10 +49,11 @@ readonly class Submit implements ActionInterface
 
         /** @phpstan-ignore arguments.count */
         $output = $this->sender->send(
-            (int) $request->get('agent_id'),
-            $body,
-            $context,
-            true
+            agentId: (int) $request->get('agent_id'),
+            input: $body,
+            context: $context,
+            public: true,
+            refId: (int) $request->get('ref_id'),
         );
 
         return new HttpResponse(201, [], $output);

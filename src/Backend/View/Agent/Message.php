@@ -39,11 +39,15 @@ use PSX\Sql\ViewAbstract;
  */
 class Message extends ViewAbstract
 {
-    public function getCollection(int $agentId, ?string $chatId, ContextInterface $context): mixed
+    public function getCollection(int $agentId, int $refId, ?string $chatId, ContextInterface $context): mixed
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AgentMessageColumn::AGENT_ID, $agentId);
         $condition->equals(Table\Generated\AgentMessageColumn::USER_ID, $context->getUser()->getId());
+
+        if (!empty($refId)) {
+            $condition->equals(Table\Generated\AgentMessageColumn::REF_ID, $refId);
+        }
 
         if (!empty($chatId)) {
             $condition->equals(Table\Generated\AgentMessageColumn::CHAT_ID, $chatId);

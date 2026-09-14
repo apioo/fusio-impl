@@ -48,9 +48,10 @@ readonly class Submit implements ActionInterface
         assert($body instanceof Input);
 
         $output = $this->sender->send(
-            (int) $request->get('agent_id'),
-            $body,
-            $context,
+            agentId: (int) $request->get('agent_id'),
+            input: $body,
+            context: $context,
+            refId: (int) $request->get('ref_id'),
         );
 
         return new HttpResponse(201, [], $output);
