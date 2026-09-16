@@ -19,7 +19,6 @@ use Fusio\Impl\Service\Action\Producer;
 use Fusio\Impl\Service\Agent;
 use Fusio\Impl\Service\Event\Dispatcher;
 use Fusio\Impl\Service\Tenant\LimiterInterface;
-use Fusio\Impl\Service\User\Captcha;
 use Fusio\Impl\Tenant\UnlimitedLimiter;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
@@ -121,9 +120,6 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(UnlimitedLimiter::class);
     $services->alias(LimiterInterface::class, UnlimitedLimiter::class);
-
-    $services->set(Captcha\ReCaptcha::class);
-    $services->alias(Captcha\CaptchaInterface::class, Captcha\ReCaptcha::class);
 
     $services->set(SDKgenConfig::class);
     $services->alias(Api\Repository\SDKgen\ConfigInterface::class, SDKgenConfig::class);
