@@ -331,6 +331,9 @@ readonly class Sender implements SenderInterface
         }
     }
 
+    /**
+     * @param array<string, mixed> $arguments
+     */
     private function renderIntroduction(string $introduction, string $action, Table\Generated\AgentRow $row, array $arguments, Input $input, ContextInterface $context): string
     {
         $agent = new Agent($row->getId(), $row->getName(), $row->getDescription());

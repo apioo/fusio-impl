@@ -39,6 +39,9 @@ readonly class Schema implements ActionInterface
     {
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): array
     {
         return [

@@ -41,6 +41,9 @@ readonly class Action implements ActionInterface
     {
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): array
     {
         return [
