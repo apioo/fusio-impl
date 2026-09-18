@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Installation;
 
+use DateTime;
 use Fusio\Adapter;
 use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\Backend;
@@ -237,7 +238,7 @@ class DataBag
             'class' => ClassName::serialize($class),
             'config' => $config,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
-            'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+            'date' => (new DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -250,7 +251,7 @@ class DataBag
             'commit_hash' => $commitHash,
             'config_hash' => sha1($config),
             'config' => $config,
-            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+            'insert_date' => (new DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -260,7 +261,7 @@ class DataBag
             'commit_id' => $this->getReference('fusio_action_commit', $commitHash, $tenantId),
             'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'version' => $version,
-            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+            'insert_date' => (new DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -268,7 +269,7 @@ class DataBag
      * @param list<string> $tools
      * @param array<string, mixed>|null $metadata
      */
-    public function addAgent(string $category, ?string $connection, int $type, bool $public, string $name, string $description, string $introduction, array $tools, ?string $outgoing, int $status = Table\Agent::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
+    public function addAgent(string $category, ?string $connection, int $type, bool $public, string $name, string $description, string $introduction, ?string $introductionAction, array $tools, ?string $outgoing, int $status = Table\Agent::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
     {
         if (!empty($outgoing)) {
             if (class_exists($outgoing)) {
@@ -278,6 +279,10 @@ class DataBag
             }
         } else {
             $outgoing = null;
+        }
+
+        if (!empty($introductionAction)) {
+            $introductionAction = 'php+class://' . ClassName::serialize($introductionAction);
         }
 
         $this->data['fusio_agent'][$name] = [
@@ -290,10 +295,11 @@ class DataBag
             'name' => $name,
             'description' => $description,
             'introduction' => $introduction,
+            'introduction_action' => $introductionAction,
             'tools' => Parser::encode($tools),
             'outgoing' => $outgoing,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
-            'insert_date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+            'insert_date' => (new DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -306,7 +312,7 @@ class DataBag
             'child' => $child,
             'origin' => $origin,
             'content' => Parser::encode(['type' => 'text', 'content' => $content]),
-            'insert_date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+            'insert_date' => (new DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -325,7 +331,7 @@ class DataBag
             'app_key' => $appKey,
             'app_secret' => $appSecret,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
-            'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+            'date' => (new DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -337,7 +343,7 @@ class DataBag
             'code' => $code,
             'redirect_uri' => '',
             'scope' => $scope,
-            'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+            'date' => (new DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -360,7 +366,7 @@ class DataBag
             'ip' => '127.0.0.1',
             'message' => $message,
             'content' => '{"foo": "bar"}',
-            'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+            'date' => (new DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -446,7 +452,7 @@ class DataBag
             'trace' => '[trace]',
             'file' => '[file]',
             'line' => 74,
-            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+            'insert_date' => (new DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -519,7 +525,7 @@ class DataBag
                 'email_property' => $emailProperty,
             ]),
             'allow_create' => true,
-            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+            'insert_date' => (new DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -529,7 +535,7 @@ class DataBag
             'identity_id' => $this->getReference('fusio_identity', $identity, $tenantId),
             'state' => $state,
             'redirect_uri' => 'http://127.0.0.1/my/app',
-            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+            'insert_date' => (new DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -552,8 +558,8 @@ class DataBag
             'status' => 2,
             'code' => 200,
             'attempts' => 1,
-            'execute_date' => (new \DateTime($executeDate ?? 'now'))->format('Y-m-d H:i:s'),
-            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+            'execute_date' => (new DateTime($executeDate ?? 'now'))->format('Y-m-d H:i:s'),
+            'insert_date' => (new DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -584,7 +590,7 @@ class DataBag
             'trace' => '[trace]',
             'file' => '[file]',
             'line' => 74,
-            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+            'insert_date' => (new DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -600,7 +606,7 @@ class DataBag
             'slug' => $slug,
             'content' => $content,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
-            'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+            'date' => (new DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -629,7 +635,7 @@ class DataBag
             'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'app_id' => $this->getReference('fusio_app', $app, $tenantId),
             'points' => $points,
-            'insert_date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+            'insert_date' => (new DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -653,8 +659,8 @@ class DataBag
             'refresh' => $refresh,
             'scope' => $scope,
             'ip' => '127.0.0.1',
-            'expire' => (new \DateTime($expire))->format('Y-m-d H:i:s'),
-            'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+            'expire' => (new DateTime($expire))->format('Y-m-d H:i:s'),
+            'date' => (new DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -667,9 +673,9 @@ class DataBag
             'transaction_id' => '[transaction_id]',
             'amount' => $amount,
             'points' => 1000,
-            'period_start' => (new \DateTime($periodStart))->format('Y-m-d H:i:s'),
-            'period_end' => (new \DateTime($periodEnd))->format('Y-m-d H:i:s'),
-            'insert_date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+            'period_start' => (new DateTime($periodStart))->format('Y-m-d H:i:s'),
+            'period_end' => (new DateTime($periodEnd))->format('Y-m-d H:i:s'),
+            'insert_date' => (new DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -772,7 +778,7 @@ class DataBag
             'commit_hash' => $commitHash,
             'source_hash' => sha1($source),
             'source' => $source,
-            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+            'insert_date' => (new DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -782,7 +788,7 @@ class DataBag
             'commit_id' => $this->getReference('fusio_schema_commit', $commitHash, $tenantId),
             'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'version' => $version,
-            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+            'insert_date' => (new DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -816,7 +822,7 @@ class DataBag
             'parent_id' => $parent !== null ? $this->getReference('fusio_taxonomy', $parent, $tenantId) : null,
             'status' => Table\Taxonomy::STATUS_ACTIVE,
             'name' => $taxonomy,
-            'insert_date' => (new \DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+            'insert_date' => (new DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -868,7 +874,7 @@ class DataBag
             'password' => $password,
             'points' => $points,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
-            'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+            'date' => (new DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -886,7 +892,7 @@ class DataBag
             'user_id' => $this->getReference('fusio_user', $user, $tenantId),
             'app_id' => $this->getReference('fusio_app', $app, $tenantId),
             'allow' => $allow,
-            'date' => (new \DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
+            'date' => (new DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }
 

@@ -55,19 +55,20 @@ class EntityTest extends DbTestCase
         $expect = <<<JSON
 {
     "kind": "[kind]",
-    "id": {$this->id},
+    "id": 7,
     "status": 1,
     "connection": 8,
     "public": true,
     "type": 0,
     "name": "agent-test",
     "description": "An agent test",
-    "introduction": "A test agent which always return \"Hello World\"",
+    "introduction": "A test agent which always return \"{{ message }}\"",
+    "introductionAction": "php+class://Fusio.Impl.Tests.Adapter.Test.IntroductionAction",
     "temperature": 1,
     "tools": [
         "test_listFoo"
     ],
-    "outgoing": "schema:\/\/Entry-Schema",
+    "outgoing": "schema://Entry-Schema",
     "insertDate": "[datetime]"
 }
 JSON;

@@ -111,6 +111,10 @@ class ListTest extends DbTestCase
             "class": "Fusio.Impl.Tests.Adapter.Test.InspectAction"
         },
         {
+            "name": "Introduction-Action",
+            "class": "Fusio.Impl.Tests.Adapter.Test.IntroductionAction"
+        },
+        {
             "name": "MIME-Action",
             "class": "Fusio.Impl.Tests.Adapter.Test.MimeAction"
         },
@@ -159,7 +163,7 @@ class ListTest extends DbTestCase
             "class": "Fusio.Adapter.Sql.Action.SqlUpdate"
         },
         {
-            "name": "Util-A\/B-Test",
+            "name": "Util-A/B-Test",
             "class": "Fusio.Adapter.Util.Action.UtilABTest"
         },
         {

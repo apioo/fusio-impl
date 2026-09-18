@@ -14,6 +14,7 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $name = null;
     private ?string $description = null;
     private ?string $introduction = null;
+    private ?string $introductionAction = null;
     private ?int $temperature = null;
     private ?int $costs = null;
     private ?string $tools = null;
@@ -100,6 +101,14 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->introduction ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "introduction" was provided');
     }
+    public function setIntroductionAction(?string $introductionAction): void
+    {
+        $this->introductionAction = $introductionAction;
+    }
+    public function getIntroductionAction(): ?string
+    {
+        return $this->introductionAction;
+    }
     public function setTemperature(int $temperature): void
     {
         $this->temperature = $temperature;
@@ -162,6 +171,7 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('name', $this->name);
         $record->put('description', $this->description);
         $record->put('introduction', $this->introduction);
+        $record->put('introduction_action', $this->introductionAction);
         $record->put('temperature', $this->temperature);
         $record->put('costs', $this->costs);
         $record->put('tools', $this->tools);
@@ -190,6 +200,7 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         $row->description = isset($data['description']) && is_string($data['description']) ? $data['description'] : null;
         $row->introduction = isset($data['introduction']) && is_string($data['introduction']) ? $data['introduction'] : null;
+        $row->introductionAction = isset($data['introduction_action']) && is_string($data['introduction_action']) ? $data['introduction_action'] : null;
         $row->temperature = isset($data['temperature']) && is_int($data['temperature']) ? $data['temperature'] : null;
         $row->costs = isset($data['costs']) && is_int($data['costs']) ? $data['costs'] : null;
         $row->tools = isset($data['tools']) && is_string($data['tools']) ? $data['tools'] : null;

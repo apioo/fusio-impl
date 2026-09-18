@@ -77,6 +77,7 @@ final class Version20230508210151 extends AbstractMigration
             $agentTable->addColumn('name', 'string');
             $agentTable->addColumn('description', 'string');
             $agentTable->addColumn('introduction', 'text');
+            $agentTable->addColumn('introduction_action', 'string', ['notnull' => false]);
             $agentTable->addColumn('temperature', 'integer', ['default' => 100]);
             $agentTable->addColumn('costs', 'integer', ['notnull' => false]);
             $agentTable->addColumn('tools', 'text', ['notnull' => false, 'default' => null]);

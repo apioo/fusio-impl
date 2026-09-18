@@ -23,9 +23,12 @@ namespace Fusio\Impl\Service\Agent;
 use Fusio\Engine\Agent\SenderInterface;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Model\Agent;
+use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
-use Fusio\Impl\Table;
+use Fusio\Engine\Request;
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use Fusio\Model\Agent\Input;
 use Fusio\Model\Agent\Item;
 use Fusio\Model\Agent\ItemObject;
@@ -49,6 +52,8 @@ use Symfony\AI\Platform\Message\Message;
 use Symfony\AI\Platform\Message\MessageBag;
 use Symfony\AI\Platform\TokenUsage\TokenUsageInterface;
 use Throwable;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 /**
  * Sender
@@ -62,7 +67,7 @@ readonly class Sender implements SenderInterface
     /**
      * Max number of messages which are attached to the context
      */
-    public const CONTEXT_MESSAGES_LENGTH = 10;
+    public const int CONTEXT_MESSAGES_LENGTH = 10;
 
     public function __construct(
         private Table\Agent $agentTable,
@@ -76,6 +81,7 @@ readonly class Sender implements SenderInterface
         private ObjectMapperInterface $objectMapper,
         private Repository\ConnectionInterface $connectionRepository,
         private Service\Plan\Payer $planPayerService,
+        private ProcessorInterface $processor,
     ) {
     }
 
@@ -122,11 +128,24 @@ readonly class Sender implements SenderInterface
         $this->agentTable->beginTransaction();
 
         try {
+            $introduction = $row->getIntroduction();
+
+            $action = $row->getIntroductionAction();
+            if (!empty($action)) {
+                $arguments = [
+                    'agentId' => $agentId,
+                    'refId' => $refId,
+                    'chatId' => $chatId,
+                ];
+
+                $introduction = $this->renderIntroduction($introduction, $action, $row, $arguments, $input, $context);
+            }
+
             $messages = new MessageBag();
-            $messages->add(Message::forSystem($row->getIntroduction()));
+            $messages->add(Message::forSystem($introduction));
 
             if (!empty($chatId)) {
-                $messages = $this->loadPreviousMessages($agentId, $context->getUser()->getId(), $chatId, $messages);
+                $messages = $this->loadPreviousMessages($agentId, $context->getUser()->getId(), $refId, $chatId, $messages);
             }
 
             $userMessages = $this->messageUnserializer->unserialize($item);
@@ -195,11 +214,16 @@ readonly class Sender implements SenderInterface
         }
     }
 
-    private function loadPreviousMessages(int $agentId, int $userId, string $chatId, MessageBag $messages): MessageBag
+    private function loadPreviousMessages(int $agentId, int $userId, ?int $refId, string $chatId, MessageBag $messages): MessageBag
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AgentMessageColumn::AGENT_ID, $agentId);
         $condition->equals(Table\Generated\AgentMessageColumn::USER_ID, $userId);
+
+        if (!empty($refId)) {
+            $condition->equals(Table\Generated\AgentMessageColumn::REF_ID, $refId);
+        }
+
         $condition->equals(Table\Generated\AgentMessageColumn::CHAT_ID, $chatId);
 
         $count = $this->messageTable->getCount($condition);
@@ -305,5 +329,19 @@ readonly class Sender implements SenderInterface
         } else {
             return Type::OPENAI;
         }
+    }
+
+    private function renderIntroduction(string $introduction, string $action, Table\Generated\AgentRow $row, array $arguments, Input $input, ContextInterface $context): string
+    {
+        $agent = new Agent($row->getId(), $row->getName(), $row->getDescription());
+        $request = new Request($arguments, $input, new Request\AgentRequestContext($agent));
+
+        $response = $this->processor->execute($action, $request, $context, false);
+        $introductionContext = $this->processor->extract($response);
+
+        $loader = new ArrayLoader(['introduction' => $introduction]);
+        $twig = new Environment($loader, ['autoescape' => false]);
+
+        return $twig->render('introduction', $introductionContext?->getAll() ?? []);
     }
 }

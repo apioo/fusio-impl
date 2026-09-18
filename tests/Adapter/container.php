@@ -3,6 +3,7 @@
 use Fusio\Engine\Adapter\ServiceBuilder;
 use Fusio\Impl\Tests\Adapter\Test\AgentConnection;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
+use Fusio\Impl\Tests\Adapter\Test\IntroductionAction;
 use Fusio\Impl\Tests\Adapter\Test\MimeAction;
 use Fusio\Impl\Tests\Adapter\Test\Paypal;
 use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
@@ -15,6 +16,7 @@ return static function (ContainerConfigurator $container): void {
     $services = ServiceBuilder::build($container);
     $services->set(AgentConnection::class);
     $services->set(InspectAction::class);
+    $services->set(IntroductionAction::class);
     $services->set(MimeAction::class);
     $services->set(Paypal::class);
     $services->set(PaypalConnection::class);

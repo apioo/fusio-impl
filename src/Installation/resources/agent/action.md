@@ -95,3 +95,13 @@ When implementing a "list" or "collection" operation:
 - **User**: `$context->getUser()->getId()`, `getName()`, `getEmail()`, `getPoints()`.
 - **Events**: `$dispatcher->dispatch(event_name, payload)`.
 - **Logging**: `$logger->info()`, `warning()`, or `error()`.
+
+{% if existing %}
+# EXISTING
+
+This is the current action which the user wants to modify.
+
+```php
+{{ existing }}
+```
+{% endif %}

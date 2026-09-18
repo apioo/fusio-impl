@@ -68,3 +68,13 @@ If the requested schema is a **collection** (e.g., "A list of...", "A collection
 # MISSION
 
 Process the user's next message and return ONLY the JSON object following the rules above.
+
+{% if existing %}
+# EXISTING
+
+This is the current schema which the user wants to modify.
+
+```php
+{{ existing }}
+```
+{% endif %}

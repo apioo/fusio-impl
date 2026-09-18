@@ -13191,6 +13191,10 @@
           "description": "Introduction message",
           "type": "string"
         },
+        "introductionAction": {
+          "description": "Introduction action",
+          "type": "string"
+        },
         "temperature": {
           "description": "The used temperature default is 1.0",
           "type": "number"

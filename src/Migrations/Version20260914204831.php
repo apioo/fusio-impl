@@ -23,6 +23,11 @@ final class Version20260914204831 extends AbstractMigration
         if (!$agentMessageTable->hasColumn('ref_id')) {
             $agentMessageTable->addColumn('ref_id', 'integer', ['notnull' => false, 'default' => null]);
         }
+
+        $agentTable = $schema->getTable('fusio_agent');
+        if (!$agentTable->hasColumn('introduction_action')) {
+            $agentTable->addColumn('introduction_action', 'string', ['notnull' => false]);
+        }
     }
 
     public function down(Schema $schema): void

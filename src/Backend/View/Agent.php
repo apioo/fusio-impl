@@ -88,6 +88,7 @@ class Agent extends ViewAbstract
             'name' => Table\Generated\AgentTable::COLUMN_NAME,
             'description' => Table\Generated\AgentTable::COLUMN_DESCRIPTION,
             'introduction' => Table\Generated\AgentTable::COLUMN_INTRODUCTION,
+            'introductionAction' => Table\Generated\AgentTable::COLUMN_INTRODUCTION_ACTION,
             'temperature' => $builder->fieldCallback(Table\Generated\AgentTable::COLUMN_TEMPERATURE, function (int $value) {
                 return round($value / 100, 2);
             }),
