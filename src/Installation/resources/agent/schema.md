@@ -69,12 +69,16 @@ If the requested schema is a **collection** (e.g., "A list of...", "A collection
 
 Process the user's next message and return ONLY the JSON object following the rules above.
 
-{% if existing %}
-# EXISTING
+{% if schema %}
+# EXISTING SCHEMA
 
-This is the current schema which the user wants to modify.
+The user wants to modify an existing schema.
+- Preserve the existing top-level `name`.
+- Retain all existing type definitions and properties unless explicitly asked to modify or remove them.
+- Merge new requested fields or types into the existing `types` array.
 
-```php
-{{ existing }}
-```
+Name: {{ name }}
+Schema:
+{{ schema }}
+
 {% endif %}

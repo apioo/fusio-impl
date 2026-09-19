@@ -46,25 +46,28 @@ readonly class Action implements ActionInterface
      */
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): array
     {
-        return [
-            'existing' => $this->getExisting(
-                (int) $request->get('refId'),
-                $context
-            ),
-        ];
-    }
-
-    private function getExisting(int $refId, ContextInterface $context): ?string
-    {
         if (empty($refId)) {
-            return null;
+            return [];
         }
 
         $row = $this->actionTable->findOneByTenantAndId($context->getTenantId(), $context->getUser()->getCategoryId(), $refId);
         if (!$row instanceof Table\Generated\ActionRow) {
-            return null;
+            return [];
         }
 
+        $code = $this->getCodeFromConfig($row);
+        if (empty($code)) {
+            return [];
+        }
+
+        return [
+            'name' => $row->getName(),
+            'code' => $code,
+        ];
+    }
+
+    private function getCodeFromConfig(Table\Generated\ActionRow $row): ?string
+    {
         $config = $row->getConfig();
         if (empty($config)) {
             return null;

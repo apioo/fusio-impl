@@ -44,25 +44,18 @@ readonly class Schema implements ActionInterface
      */
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): array
     {
-        return [
-            'existing' => $this->getExisting(
-                (int) $request->get('refId'),
-                $context
-            ),
-        ];
-    }
-
-    private function getExisting(int $refId, ContextInterface $context): ?string
-    {
         if (empty($refId)) {
-            return null;
+            return [];
         }
 
         $row = $this->schemaTable->findOneByTenantAndId($context->getTenantId(), $context->getUser()->getCategoryId(), $refId);
         if (!$row instanceof Table\Generated\SchemaRow) {
-            return null;
+            return [];
         }
 
-        return $row->getSource();
+        return [
+            'name' => $row->getName(),
+            'schema' => $row->getSource(),
+        ];
     }
 }
