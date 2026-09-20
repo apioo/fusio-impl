@@ -52,6 +52,7 @@ class CollectionTest extends DbTestCase
         {
             "id": 7,
             "status": 1,
+            "type": 0,
             "name": "agent-test",
             "description": "An agent test"
         }
@@ -80,6 +81,7 @@ JSON;
         {
             "id": 7,
             "status": 1,
+            "type": 0,
             "name": "agent-test",
             "description": "An agent test"
         }
@@ -110,6 +112,7 @@ JSON;
         {
             "id": 7,
             "status": 1,
+            "type": 0,
             "name": "agent-test",
             "description": "An agent test"
         }
