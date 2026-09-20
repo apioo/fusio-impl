@@ -16371,6 +16371,10 @@
           "description": "Unique identifier for the object",
           "type": "integer"
         },
+        "type": {
+          "description": "The agent type",
+          "type": "integer"
+        },
         "name": {
           "description": "Name of the agent",
           "type": "string"
