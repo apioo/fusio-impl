@@ -46,6 +46,8 @@ class Message extends ViewAbstract
 
         if (!empty($refId)) {
             $condition->equals(Table\Generated\AgentMessageColumn::REF_ID, $refId);
+        } else {
+            $condition->nil(Table\Generated\AgentMessageColumn::REF_ID);
         }
 
         if (!empty($chatId)) {
