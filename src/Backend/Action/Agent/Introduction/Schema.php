@@ -44,6 +44,7 @@ readonly class Schema implements ActionInterface
      */
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): array
     {
+        $refId = (int) $request->get('refId');
         if (empty($refId)) {
             return [];
         }
