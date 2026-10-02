@@ -81,6 +81,6 @@ readonly class Mailer
             $body = str_replace('{' . $key . '}', $value, $body);
         }
 
-        $this->mailer->send($subject, [$email], $body);
+        $this->mailer->send($subject, [$email], nl2br($body));
     }
 }
