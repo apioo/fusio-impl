@@ -153,6 +153,7 @@ class SetupCommand extends Command
         }
 
         $provider = new GeneratorProvider();
+        $provider->setScopes([$name]);
         $provider->setPath('/' . $name);
         $provider->setPublic(false);
         $provider->setConfig($config);
