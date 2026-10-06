@@ -80,9 +80,8 @@ class SetupCommand extends Command
             ->setName('grid:setup')
             ->setDescription('Builds a complete REST API based on an existing database connection')
             ->addArgument('name', InputArgument::OPTIONAL, 'Name of the connection')
-            ->addOption('driver', 'd', InputOption::VALUE_OPTIONAL, 'Database driver (pdo_mysql, pdo_pgsql, pdo_sqlite)')
+            ->addOption('driver', 'd', InputOption::VALUE_OPTIONAL, 'Database driver (pdo_mysql, pdo_pgsql)')
             ->addOption('host', 'H', InputOption::VALUE_OPTIONAL, 'Database host')
-            ->addOption('port', 'P', InputOption::VALUE_OPTIONAL, 'Database port')
             ->addOption('user', 'u', InputOption::VALUE_OPTIONAL, 'Database user')
             ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'Database password')
             ->addOption('dbname', 'D', InputOption::VALUE_OPTIONAL, 'Database name')
@@ -101,14 +100,13 @@ class SetupCommand extends Command
             $choices = [
                 'pdo_mysql' => 'MySQL / MariaDB',
                 'pdo_pgsql' => 'PostgreSQL',
-                'pdo_sqlite' => 'SQLite'
             ];
 
             $driver = $io->choice('Select database driver', $choices, 'pdo_mysql');
         }
 
         $host = $input->getOption('host');
-        if (empty($host) && $driver !== 'pdo_sqlite' && $input->isInteractive()) {
+        if (empty($host) && $input->isInteractive()) {
             $host = $io->askQuestion(new Question('Database host', '127.0.0.1'));
         }
 
@@ -118,12 +116,12 @@ class SetupCommand extends Command
         }
 
         $user = $input->getOption('user');
-        if (empty($user) && $driver !== 'pdo_sqlite' && $input->isInteractive()) {
+        if (empty($user) && $input->isInteractive()) {
             $user = $io->askQuestion(new Question('Database user'));
         }
 
         $password = $input->getOption('password');
-        if (empty($password) && $driver !== 'pdo_sqlite' && $input->isInteractive()) {
+        if (empty($password) && $input->isInteractive()) {
             $passQuestion = new Question('Database password');
             $passQuestion->setHidden(true);
 
@@ -131,7 +129,7 @@ class SetupCommand extends Command
         }
 
         $prefix = $input->getOption('prefix');
-        if ($input->isInteractive()) {
+        if (empty($prefix) && $input->isInteractive()) {
             $prefix = $io->askQuestion(new Question('Table prefix'));
         }
 
