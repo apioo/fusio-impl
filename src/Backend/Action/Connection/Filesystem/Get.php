@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Action\Connection\Filesystem;
 use Fusio\Adapter\File\Action\FileDirectoryGet;
 use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ExcludedInterface;
 use Fusio\Engine\Parameters;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -37,7 +38,7 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Get extends FileDirectoryGet
+class Get extends FileDirectoryGet implements ExcludedInterface
 {
     public function __construct(RuntimeInterface $runtime, private FrameworkConfig $frameworkConfig)
     {

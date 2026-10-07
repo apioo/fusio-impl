@@ -103,7 +103,7 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 2,
+    "totalResults": 1,
     "itemsPerPage": 16,
     "startIndex": 0,
     "entry": [
