@@ -74,8 +74,9 @@ readonly class Authorize
             if ($url instanceof Url) {
                 $appUrl = $app->getUrl();
                 if (!empty($appUrl)) {
-                    $appUrl = Url::parse($appUrl);
-                    if (!str_ends_with($url->getHost(), $appUrl->getHost())) {
+                    $host = $url->getHost();
+                    $appHost = Url::parse($appUrl)->getHost();
+                    if ($host !== $appHost && !str_ends_with($host, '.' . $appHost)) {
                         throw new InvalidRequestException('Redirect uri must have the same host as the app url');
                     }
                 } else {
