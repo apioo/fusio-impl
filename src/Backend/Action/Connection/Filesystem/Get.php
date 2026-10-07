@@ -20,14 +20,15 @@
 
 namespace Fusio\Impl\Backend\Action\Connection\Filesystem;
 
-use DateTimeInterface;
+use Fusio\Adapter\File\Action\FileDirectoryGet;
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Parameters;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\Request\HttpRequestContext;
 use Fusio\Engine\RequestInterface;
-use PSX\Http\Environment\HttpResponse;
-use PSX\Http\Exception\BadRequestException;
-use PSX\Http\Writer\Resource;
+use Fusio\Impl\Service\System\FrameworkConfig;
+use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * Get
@@ -36,45 +37,23 @@ use PSX\Http\Writer\Resource;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Get extends FileAbstract
+class Get extends FileDirectoryGet
 {
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function __construct(RuntimeInterface $runtime, private FrameworkConfig $frameworkConfig)
     {
-        $id = $request->get('file_id');
-        if (empty($id)) {
-            throw new BadRequestException('Provided no id');
+        parent::__construct($runtime);
+    }
+
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
+    {
+        if (!$this->frameworkConfig->isConnectionEnabled()) {
+            throw new StatusCode\ServiceUnavailableException('Filesystem is not enabled, please change the setting "fusio_connection" at the configuration.php to "true" in order to activate the filesystem');
         }
 
-        $connection = $this->getConnection($request);
-        $object = $this->findObjectById($connection, $id);
+        $configuration = new Parameters([
+            'connection' => $request->get('connection_id'),
+        ]);
 
-        $ifNoneMatch = null;
-        $ifModifiedSince = null;
-        $requestContext = $request->getContext();
-        if ($requestContext instanceof HttpRequestContext) {
-            $ifNoneMatch = $requestContext->getRequest()->getHeader('If-None-Match');
-            $ifModifiedSince = $requestContext->getRequest()->getHeader('If-Modified-Since');
-        }
-
-        $checksum = '"' . $connection->checksum($object->path()) . '"';
-        $lastModified = $this->getDateTimeFromTimeStamp($connection->lastModified($object->path()));
-
-        $headers = [
-            'Content-Type' => $connection->mimeType($object->path()),
-            'ETag' => $checksum,
-            'Last-Modified' => $lastModified->toDateTime()->format(DateTimeInterface::RFC7231),
-        ];
-
-        if (!empty($ifNoneMatch) && $ifNoneMatch === $checksum) {
-            return new HttpResponse(304, $headers, null);
-        }
-
-        if (!empty($ifModifiedSince) && $lastModified->getUnixTimestamp() < strtotime($ifModifiedSince)) {
-            return new HttpResponse(304, $headers, null);
-        }
-
-        $body = $connection->read($object->path());
-
-        return new HttpResponse(200, $headers, $body);
+        return parent::handle($request, $configuration, $context);
     }
 }

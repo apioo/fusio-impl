@@ -50,39 +50,44 @@ class CollectionTest extends DbTestCase
     "startIndex": 0,
     "entry": [
         {
-            "id": "385ee9e8-53fe-3082-8719-352b32044b13",
+            "id": "bd7dfa50-677d-3a48-92fa-0cee40732ff3",
             "name": "collection_schema.json",
             "contentType": "application\/json",
             "checksum": "[checksum]",
-            "lastModified": "[datetime]"
+            "lastModified": "[datetime]",
+            "size": 856
         },
         {
-            "id": "7564504c-bfbb-387b-9ab2-bd937fa1dab7",
+            "id": "38496a0b-a4d7-3f66-adc4-eb3be4578ab0",
             "name": "entry_form.json",
             "contentType": "application\/json",
             "checksum": "[checksum]",
-            "lastModified": "[datetime]"
+            "lastModified": "[datetime]",
+            "size": 178
         },
         {
-            "id": "79accfa8-013d-3d8d-8b5c-d7eba46910bf",
+            "id": "c8a46340-4f76-3abe-be33-853376ea26af",
             "name": "entry_schema.json",
             "contentType": "application\/json",
             "checksum": "[checksum]",
-            "lastModified": "[datetime]"
+            "lastModified": "[datetime]",
+            "size": 401
         },
         {
-            "id": "1314aaa1-23c4-3ef7-85a1-4ae9cf90ca87",
+            "id": "245e9edc-eecc-385d-9cf4-ee173f13817d",
             "name": "local-php-fix.php",
             "contentType": "text\/x-php",
             "checksum": "[checksum]",
-            "lastModified": "[datetime]"
+            "lastModified": "[datetime]",
+            "size": 418
         },
         {
-            "id": "62574473-a47d-387b-a6bc-bfba25f83771",
+            "id": "09e96122-91e0-3921-aaa3-547040e15666",
             "name": "local-php.php",
             "contentType": "text\/x-php",
             "checksum": "[checksum]",
-            "lastModified": "[datetime]"
+            "lastModified": "[datetime]",
+            "size": 418
         }
     ]
 }

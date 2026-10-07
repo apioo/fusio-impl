@@ -20,12 +20,15 @@
 
 namespace Fusio\Impl\Backend\Action\Connection\Filesystem;
 
+use Fusio\Adapter\File\Action\FileDirectoryGetAll;
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Parameters;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use League\Flysystem\FileAttributes;
-use League\Flysystem\FilesystemException;
-use League\Flysystem\StorageAttributes;
+use Fusio\Impl\Service\System\FrameworkConfig;
+use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * GetAll
@@ -34,56 +37,23 @@ use League\Flysystem\StorageAttributes;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class GetAll extends FileAbstract
+class GetAll extends FileDirectoryGetAll
 {
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function __construct(RuntimeInterface $runtime, private FrameworkConfig $frameworkConfig)
     {
-        $connection = $this->getConnection($request);
-        $startIndex = (int) $request->get('startIndex');
-        $count = (int) $request->get('count');
-        $limit = 1024;
+        parent::__construct($runtime);
+    }
 
-        $startIndex = max(0, $startIndex);
-        $count = $count >= 1 && $count <= $limit ? $count : 16;
-
-        $objects = $this->getObjects($connection);
-
-        $totalResults = count($objects);
-
-        usort($objects, static fn(StorageAttributes $a, StorageAttributes $b) => strcasecmp($a->path(), $b->path()));
-
-        $objects = array_slice($objects, $startIndex, $count);
-
-        $result = [];
-        foreach ($objects as $object) {
-            if ($object instanceof FileAttributes) {
-                try {
-                    $lastModified = $this->getDateTimeFromTimeStamp($connection->lastModified($object->path()));
-                } catch (FilesystemException) {
-                    $lastModified = null;
-                }
-
-                try {
-                    $contentType = $connection->mimeType($object->path());
-                } catch (FilesystemException) {
-                    $contentType = null;
-                }
-
-                $result[] = [
-                    'id' => $this->getObjectId($object),
-                    'name' => $object->path(),
-                    'contentType' => $contentType,
-                    'checksum' => $connection->checksum($object->path()),
-                    'lastModified' => $lastModified?->toString(),
-                ];
-            }
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
+    {
+        if (!$this->frameworkConfig->isConnectionEnabled()) {
+            throw new StatusCode\ServiceUnavailableException('Filesystem is not enabled, please change the setting "fusio_connection" at the configuration.php to "true" in order to activate the filesystem');
         }
 
-        return [
-            'totalResults' => $totalResults,
-            'itemsPerPage' => $count,
-            'startIndex' => $startIndex,
-            'entry' => $result,
-        ];
+        $configuration = new Parameters([
+            'connection' => $request->get('connection_id'),
+        ]);
+
+        return parent::handle($request, $configuration, $context);
     }
 }
