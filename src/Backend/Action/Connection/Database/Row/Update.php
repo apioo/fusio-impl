@@ -20,11 +20,15 @@
 
 namespace Fusio\Impl\Backend\Action\Connection\Database\Row;
 
+use Fusio\Adapter\Sql\Action\SqlUpdate;
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Parameters;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\Action\Connection\Database\TableAbstract;
-use Fusio\Model\Backend\DatabaseRow;
+use Fusio\Impl\Service\System\FrameworkConfig;
+use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * Update
@@ -33,28 +37,24 @@ use Fusio\Model\Backend\DatabaseRow;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Update extends TableAbstract
+class Update extends SqlUpdate
 {
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function __construct(RuntimeInterface $runtime, private FrameworkConfig $frameworkConfig)
     {
-        $this->assertConnectionEnabled();
+        parent::__construct($runtime);
+    }
 
-        $connection = $this->getConnection($request);
-        $table = $this->getTable($request, $connection->createSchemaManager());
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
+    {
+        if (!$this->frameworkConfig->isConnectionEnabled()) {
+            throw new StatusCode\ServiceUnavailableException('Database is not enabled, please change the setting "fusio_connection" at the configuration.php to "true" in order to activate the database');
+        }
 
-        $payload = $request->getPayload();
+        $configuration = new Parameters([
+            'connection' => $request->get('connection_id'),
+            'table' => $request->get('table_name'),
+        ]);
 
-        assert($payload instanceof DatabaseRow);
-
-        $id = (int) $request->get('id');
-        $primaryKeyColumn = $this->getPrimaryKeyColumn($table);
-
-        $connection->update($table->getName(), $this->getRow($payload, $table), [$primaryKeyColumn => $id]);
-
-        return [
-            'success' => true,
-            'message' => 'Row successfully updated',
-            'id' => '' . $id,
-        ];
+        return parent::handle($request, $configuration, $context);
     }
 }

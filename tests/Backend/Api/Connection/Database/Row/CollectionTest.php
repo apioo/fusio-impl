@@ -49,13 +49,13 @@ class CollectionTest extends DbTestCase
             "id": 2,
             "title": "bar",
             "content": "foo",
-            "date": "2015-02-27 19:59:15"
+            "date": "2015-02-27T19:59:15+00:00"
         },
         {
             "id": 1,
             "title": "foo",
             "content": "bar",
-            "date": "2015-02-27 19:59:15"
+            "date": "2015-02-27T19:59:15+00:00"
         }
     ]
 }
@@ -83,7 +83,7 @@ JSON;
             "id": 2,
             "title": "bar",
             "content": "foo",
-            "date": "2015-02-27 19:59:15"
+            "date": "2015-02-27T19:59:15+00:00"
         }
     ]
 }
@@ -111,7 +111,7 @@ JSON;
             "id": 2,
             "title": "bar",
             "content": "foo",
-            "date": "2015-02-27 19:59:15"
+            "date": "2015-02-27T19:59:15+00:00"
         }
     ]
 }
@@ -166,7 +166,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Row successfully created",
+    "message": "Entry successfully created",
     "id": "3"
 }
 JSON;

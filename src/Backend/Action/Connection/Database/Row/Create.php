@@ -20,12 +20,15 @@
 
 namespace Fusio\Impl\Backend\Action\Connection\Database\Row;
 
+use Fusio\Adapter\Sql\Action\SqlInsert;
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Parameters;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\Action\Connection\Database\TableAbstract;
-use Fusio\Model\Backend\DatabaseRow;
-use PSX\Http\Environment\HttpResponse;
+use Fusio\Impl\Service\System\FrameworkConfig;
+use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * Create
@@ -34,27 +37,24 @@ use PSX\Http\Environment\HttpResponse;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Create extends TableAbstract
+class Create extends SqlInsert
 {
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function __construct(RuntimeInterface $runtime, private FrameworkConfig $frameworkConfig)
     {
-        $this->assertConnectionEnabled();
+        parent::__construct($runtime);
+    }
 
-        $connection = $this->getConnection($request);
-        $table = $this->getTable($request, $connection->createSchemaManager());
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
+    {
+        if (!$this->frameworkConfig->isConnectionEnabled()) {
+            throw new StatusCode\ServiceUnavailableException('Database is not enabled, please change the setting "fusio_connection" at the configuration.php to "true" in order to activate the database');
+        }
 
-        $payload = $request->getPayload();
-
-        assert($payload instanceof DatabaseRow);
-
-        $connection->insert($table->getName(), $this->getRow($payload, $table));
-
-        $id = (int) $connection->lastInsertId();
-
-        return new HttpResponse(201, [], [
-            'success' => true,
-            'message' => 'Row successfully created',
-            'id' => '' . $id,
+        $configuration = new Parameters([
+            'connection' => $request->get('connection_id'),
+            'table' => $request->get('table_name'),
         ]);
+
+        return parent::handle($request, $configuration, $context);
     }
 }

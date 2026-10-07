@@ -44,7 +44,7 @@ class EntityTest extends DbTestCase
     "id": 1,
     "title": "foo",
     "content": "bar",
-    "date": "2015-02-27 19:59:15"
+    "date": "2015-02-27T19:59:15+00:00"
 }
 JSON;
 
@@ -64,7 +64,7 @@ JSON;
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
         $this->assertFalse($data->success);
-        $this->assertStringStartsWith('Row not found', $data->message);
+        $this->assertStringStartsWith('Entry not available', $data->message);
     }
 
     public function testPost(): void
@@ -96,7 +96,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Row successfully updated",
+    "message": "Entry successfully updated",
     "id": "1"
 }
 JSON;
@@ -130,7 +130,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Row successfully deleted",
+    "message": "Entry successfully deleted",
     "id": "1"
 }
 JSON;

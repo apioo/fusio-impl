@@ -20,11 +20,15 @@
 
 namespace Fusio\Impl\Backend\Action\Connection\Database\Row;
 
-use Doctrine\DBAL\Query\QueryBuilder;
+use Fusio\Adapter\Sql\Action\SqlSelectAll;
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Parameters;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\Action\Connection\Database\TableAbstract;
+use Fusio\Impl\Service\System\FrameworkConfig;
+use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * GetAll
@@ -33,115 +37,31 @@ use Fusio\Impl\Backend\Action\Connection\Database\TableAbstract;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class GetAll extends TableAbstract
+class GetAll extends SqlSelectAll
 {
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function __construct(RuntimeInterface $runtime, private FrameworkConfig $frameworkConfig)
     {
-        $connection = $this->getConnection($request);
-        $table = $this->getTable($request, $connection->createSchemaManager());
-
-        $allColumns = array_keys($table->getColumns());
-        $primaryKey = $this->getPrimaryKeyColumn($table);
-
-        $qb = $connection->createQueryBuilder();
-        $qb->select($this->getColumns($request, $allColumns));
-        $qb->from($table->getName());
-
-        $this->addFilter($request, $qb, $allColumns);
-        $this->addOrderBy($request, $qb, $primaryKey, $allColumns);
-        $this->addLimit($request, $qb);
-
-        $totalCount = (int) $connection->fetchOne('SELECT COUNT(*) FROM ' . $table->getName());
-        $result = $connection->fetchAllAssociative($qb->getSQL(), $qb->getParameters());
-
-        return [
-            'totalResults' => $totalCount,
-            'itemsPerPage' => $qb->getMaxResults(),
-            'startIndex' => $qb->getFirstResult(),
-            'entry' => $result,
-        ];
+        parent::__construct($runtime);
     }
 
-    /**
-     * @param list<string> $allColumns
-     * @return list<string>
-     */
-    private function getColumns(RequestInterface $request, array $allColumns): array
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
     {
-        $columns = $request->get('columns');
-        if (empty($columns)) {
-            return $allColumns;
+        if (!$this->frameworkConfig->isConnectionEnabled()) {
+            throw new StatusCode\ServiceUnavailableException('Database is not enabled, please change the setting "fusio_connection" at the configuration.php to "true" in order to activate the database');
         }
 
-        $selected = array_intersect(explode(',', $columns), $allColumns);
-        if ($selected === []) {
-            return $allColumns;
+        $columns = null;
+        $rawColumns = $request->get('columns');
+        if (!empty($rawColumns) && is_string($rawColumns)) {
+            $columns = array_filter(explode(',', $rawColumns));
         }
 
-        return $selected;
-    }
+        $configuration = new Parameters([
+            'connection' => $request->get('connection_id'),
+            'table' => $request->get('table_name'),
+            'columns' => $columns,
+        ]);
 
-    /**
-     * @param list<string> $allColumns
-     */
-    private function addFilter(RequestInterface $request, QueryBuilder $qb, array $allColumns): void
-    {
-        $filterBy = $request->get('filterBy');
-        $filterOp = $request->get('filterOp');
-        $filterValue = $request->get('filterValue');
-
-        if (!empty($filterBy) && !empty($filterOp) && !empty($filterValue) && in_array($filterBy, $allColumns)) {
-            switch ($filterOp) {
-                case 'contains':
-                    $qb->where($filterBy . ' LIKE :filter');
-                    $qb->setParameter('filter', '%' . $filterValue . '%');
-                    break;
-
-                case 'equals':
-                    $qb->where($filterBy . ' = :filter');
-                    $qb->setParameter('filter', $filterValue);
-                    break;
-
-                case 'startsWith':
-                    $qb->where($filterBy . ' LIKE :filter');
-                    $qb->setParameter('filter', $filterValue . '%');
-                    break;
-
-                case 'present':
-                    $qb->where($filterBy . ' IS NOT NULL');
-                    break;
-            }
-        }
-    }
-
-    /**
-     * @param list<string> $allColumns
-     */
-    private function addOrderBy(RequestInterface $request, QueryBuilder $qb, ?string $primaryKey, array $allColumns): void
-    {
-        $sortBy = $request->get('sortBy');
-        $sortOrder = $request->get('sortOrder');
-
-        if (!empty($sortBy) && !empty($sortOrder) && in_array($sortBy, $allColumns)) {
-            $sortOrder = strtoupper((string) $sortOrder);
-            $sortOrder = in_array($sortOrder, ['ASC', 'DESC'], true) ? $sortOrder : 'DESC';
-
-            $qb->orderBy($sortBy, $sortOrder);
-        } elseif (!empty($primaryKey)) {
-            $qb->orderBy($primaryKey, 'DESC');
-        }
-    }
-
-    private function addLimit(RequestInterface $request, QueryBuilder $qb): void
-    {
-        $startIndex = (int) $request->get('startIndex');
-        $count = (int) $request->get('count');
-        $limit = 1024;
-
-        $startIndex = max(0, $startIndex);
-        $count = $count >= 1 && $count <= $limit ? $count : 16;
-
-        $qb->setFirstResult($startIndex);
-        $qb->setMaxResults($count);
+        return parent::handle($request, $configuration, $context);
     }
 }

@@ -20,11 +20,15 @@
 
 namespace Fusio\Impl\Backend\Action\Connection\Database\Row;
 
+use Fusio\Adapter\Sql\Action\SqlSelectRow;
+use Fusio\Engine\Action\RuntimeInterface;
 use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Parameters;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\Action\Connection\Database\TableAbstract;
-use PSX\Http\Exception\NotFoundException;
+use Fusio\Impl\Service\System\FrameworkConfig;
+use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * Get
@@ -33,28 +37,31 @@ use PSX\Http\Exception\NotFoundException;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class Get extends TableAbstract
+class Get extends SqlSelectRow
 {
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function __construct(RuntimeInterface $runtime, private FrameworkConfig $frameworkConfig)
     {
-        $connection = $this->getConnection($request);
-        $table = $this->getTable($request, $connection->createSchemaManager());
+        parent::__construct($runtime);
+    }
 
-        $id = (int) $request->get('id');
-        $primaryKeyColumn = $this->getPrimaryKeyColumn($table);
-
-        $queryBuilder = $connection->createQueryBuilder()
-            ->select([
-                'my_table.*',
-            ])
-            ->from($table->getName(), 'my_table')
-            ->where('my_table.' . $primaryKeyColumn . ' = :id');
-
-        $row = $connection->fetchAssociative($queryBuilder->getSQL(), ['id' => $id]);
-        if (empty($row)) {
-            throw new NotFoundException('Row not found');
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
+    {
+        if (!$this->frameworkConfig->isConnectionEnabled()) {
+            throw new StatusCode\ServiceUnavailableException('Database is not enabled, please change the setting "fusio_connection" at the configuration.php to "true" in order to activate the database');
         }
 
-        return $row;
+        $columns = null;
+        $rawColumns = $request->get('columns');
+        if (!empty($rawColumns) && is_string($rawColumns)) {
+            $columns = array_filter(explode(',', $rawColumns));
+        }
+
+        $configuration = new Parameters([
+            'connection' => $request->get('connection_id'),
+            'table' => $request->get('table_name'),
+            'columns' => $columns,
+        ]);
+
+        return parent::handle($request, $configuration, $context);
     }
 }
