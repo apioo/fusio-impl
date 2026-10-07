@@ -55,7 +55,7 @@ class CollectionTest extends DbTestCase
             "contentType": "application\/json",
             "checksum": "[checksum]",
             "lastModified": "[datetime]",
-            "size": 856
+            "size": 812
         },
         {
             "id": "38496a0b-a4d7-3f66-adc4-eb3be4578ab0",
@@ -63,7 +63,7 @@ class CollectionTest extends DbTestCase
             "contentType": "application\/json",
             "checksum": "[checksum]",
             "lastModified": "[datetime]",
-            "size": 178
+            "size": 167
         },
         {
             "id": "c8a46340-4f76-3abe-be33-853376ea26af",
@@ -71,7 +71,7 @@ class CollectionTest extends DbTestCase
             "contentType": "application\/json",
             "checksum": "[checksum]",
             "lastModified": "[datetime]",
-            "size": 401
+            "size": 379
         },
         {
             "id": "245e9edc-eecc-385d-9cf4-ee173f13817d",
@@ -79,7 +79,7 @@ class CollectionTest extends DbTestCase
             "contentType": "text\/x-php",
             "checksum": "[checksum]",
             "lastModified": "[datetime]",
-            "size": 418
+            "size": 408
         },
         {
             "id": "09e96122-91e0-3921-aaa3-547040e15666",
@@ -87,7 +87,7 @@ class CollectionTest extends DbTestCase
             "contentType": "text\/x-php",
             "checksum": "[checksum]",
             "lastModified": "[datetime]",
-            "size": 418
+            "size": 408
         }
     ]
 }
