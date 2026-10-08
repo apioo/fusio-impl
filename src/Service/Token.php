@@ -66,6 +66,8 @@ readonly class Token
             throw new InvalidScopeException('No scopes provided');
         }
 
+        $scope = implode(',', $scopes);
+
         $now = new DateTime();
         $categoryId = $this->categoryTable->getCategoryIdByType($tenantId, $categoryType);
         $app = $appId !== null ? $this->getApp($tenantId, $appId) : null;
