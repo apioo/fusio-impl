@@ -588,7 +588,7 @@ final class Version20230508210151 extends AbstractMigration
             $tokenTable->addColumn('name', 'string', ['length' => 255, 'notnull' => false]);
             $tokenTable->addColumn('token', 'string', ['length' => 512]);
             $tokenTable->addColumn('refresh', 'string', ['length' => 255, 'notnull' => false]);
-            $tokenTable->addColumn('scope', 'string', ['length' => 1023]);
+            $tokenTable->addColumn('scope', 'text');
             $tokenTable->addColumn('ip', 'string', ['length' => 40]);
             $tokenTable->addColumn('expire', 'datetime', ['notnull' => false]);
             $tokenTable->addColumn('date', 'datetime');

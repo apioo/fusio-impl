@@ -66,11 +66,6 @@ readonly class Token
             throw new InvalidScopeException('No scopes provided');
         }
 
-        $scope = implode(',', $scopes);
-        if (strlen($scope) > 1023) {
-            throw new InvalidScopeException('Provided too many scopes');
-        }
-
         $now = new DateTime();
         $categoryId = $this->categoryTable->getCategoryIdByType($tenantId, $categoryType);
         $app = $appId !== null ? $this->getApp($tenantId, $appId) : null;
