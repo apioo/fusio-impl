@@ -101,6 +101,7 @@ class Token extends Generated\TokenTable
     {
         $con = Condition::withAnd();
         $con->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $con->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
         $con->equals(self::COLUMN_REFRESH, $refreshToken);
 
         return $this->findOneBy($con);
