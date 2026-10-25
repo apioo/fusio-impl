@@ -34,6 +34,7 @@ readonly class Captcha
 {
     private const string ALGORITHM = 'SHA-256';
     private const int DEFAULT_EXPIRE_SECONDS = 300;
+    private const int DEFAULT_MAX_NUMBER = 1_000_000;
 
     public function __construct(private FrameworkConfig $config)
     {
@@ -42,7 +43,7 @@ readonly class Captcha
     public function challenge(int $expireSeconds = self::DEFAULT_EXPIRE_SECONDS): CaptchaChallenge
     {
         $salt = bin2hex(random_bytes(16));
-        $maxNumber = 100_000;
+        $maxNumber = self::DEFAULT_MAX_NUMBER;
         $secretNumber = random_int(1000, $maxNumber);
 
         $challenge = hash('sha256', $salt . $secretNumber);
