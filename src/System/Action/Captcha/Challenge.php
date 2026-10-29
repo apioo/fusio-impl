@@ -51,7 +51,7 @@ readonly class Challenge implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponse
     {
-        if ($this->getRequestCount() > 15) {
+        if ($this->getRequestCount() > 10) {
             throw new StatusCode\TooManyRequestsException('Rate limit exceeded', 60);
         }
 
