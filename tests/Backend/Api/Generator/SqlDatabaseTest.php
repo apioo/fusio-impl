@@ -65,55 +65,21 @@ class SqlDatabaseTest extends ProviderTestCase
     {
         return <<<'JSON'
 {
-    "element": [
-        {
-            "element": "select",
-            "name": "connection",
-            "title": "Connection",
-            "help": "The SQL connection which should be used",
-            "options": [
-                {
-                    "key": "8",
-                    "value": "Agent"
-                },
-                {
-                    "key": "6",
-                    "value": "FusioHttpClient"
-                },
-                {
-                    "key": "5",
-                    "value": "LocalFilesystem"
-                },
-                {
-                    "key": "3",
-                    "value": "Paypal"
-                },
-                {
-                    "key": "7",
-                    "value": "StarwarsSDK"
-                },
-                {
-                    "key": "1",
-                    "value": "System"
-                },
-                {
-                    "key": "2",
-                    "value": "Test"
-                },
-                {
-                    "key": "4",
-                    "value": "Worker"
-                }
-            ]
-        },
-        {
-            "element": "input",
-            "name": "prefix",
-            "title": "Prefix",
-            "help": "Includes only tables which start with this prefix",
-            "type": "text"
-        }
-    ]
+  "element": [
+    {
+      "element": "select",
+      "name": "connection",
+      "title": "Connection",
+      "help": "The SQL connection which should be used"
+    },
+    {
+      "element": "input",
+      "name": "prefix",
+      "title": "Prefix",
+      "help": "Includes only tables which start with this prefix",
+      "type": "text"
+    }
+  ]
 }
 JSON;
     }
