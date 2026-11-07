@@ -243,10 +243,12 @@ readonly class Action
 
         try {
             $action = $this->marketplaceRepository->install($user, $name);
-        } catch (MarketplaceMessageException|ClientException $e) {
+        } catch (MarketplaceMessageException $e) {
             $message = $e->getPayload()->getMessage();
 
             throw new StatusCode\InternalServerErrorException('Could not fetch action from marketplace: ' . $message, previous: $e);
+        } catch (ClientException $e) {
+            throw new StatusCode\InternalServerErrorException('Could not fetch action from marketplace: ' . $e->getMessage(), previous: $e);
         }
 
         $actionName = $action->getAuthor()->getName() . '-' . $action->getName();
