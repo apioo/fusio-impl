@@ -212,50 +212,57 @@ readonly class Action
     private function resolveClass(string $class, UserContext $context): string
     {
         $shape = ClassShape::fromString($class);
-        if ($shape === ClassShape::PHP_CLASS) {
-            return ClassName::serialize($class);
-        } elseif ($shape === ClassShape::ENTITY_NAME) {
-            $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $class);
-            if (!$row instanceof Table\Generated\ActionRow) {
-                throw new StatusCode\BadRequestException('Could not resolve action class');
-            }
 
-            return $row->getName();
-        } elseif ($shape === ClassShape::MARKETPLACE_ENTITY) {
-            $parts = explode('/', $class, 2);
-            $user = $parts[0] ?? null;
-            $name = $parts[1] ?? null;
+        return match ($shape) {
+            ClassShape::PHP_CLASS => ClassName::serialize($class),
+            ClassShape::ENTITY_NAME => $this->resolveEntityName($class, $context),
+            ClassShape::MARKETPLACE_ENTITY => $this->resolveMarketplaceEntity($class, $context),
+        };
+    }
 
-            $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $user . '-' . $name);
-            if ($row instanceof Table\Generated\ActionRow) {
-                return $row->getName();
-            }
-
-            try {
-                $action = $this->marketplaceFactory->factory(Marketplace\Type::ACTION)->getRepository()->install($user, $name);
-            } catch (MarketplaceMessageException $e) {
-                $message = $e->getPayload()->getMessage();
-
-                throw new StatusCode\InternalServerErrorException('Could not fetch action from marketplace: ' . $message, previous: $e);
-            }
-
-            if (!$action instanceof MarketplaceAction) {
-                throw new StatusCode\BadRequestException('Provided object ist not an action');
-            }
-
-            $actionName = $action->getAuthor()->getName() . '-' . $action->getName();
-
-            // create action from marketplace
-            $create = new ActionCreate();
-            $create->setName($actionName);
-            $create->setClass($action->getClass());
-            $create->setConfig(ActionConfig::from($action->getConfig() ?? []));
-            $this->create($create, $context);
-
-            return $actionName;
+    private function resolveEntityName(string $class, UserContext $context): string
+    {
+        $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $class);
+        if (!$row instanceof Table\Generated\ActionRow) {
+            throw new StatusCode\BadRequestException('Could not resolve action class');
         }
 
-        throw new StatusCode\BadRequestException('Could not resolve action class');
+        return $row->getName();
+    }
+
+    private function resolveMarketplaceEntity(string $class, UserContext $context): string
+    {
+        $parts = explode('/', $class, 2);
+        $user = $parts[0] ?? null;
+        $name = $parts[1] ?? null;
+
+        $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $user . '-' . $name);
+        if ($row instanceof Table\Generated\ActionRow) {
+            return $row->getName();
+        }
+
+        try {
+            $action = $this->marketplaceFactory->factory(Marketplace\Type::ACTION)->getRepository()->install($user, $name);
+        } catch (MarketplaceMessageException $e) {
+            $message = $e->getPayload()->getMessage();
+
+            throw new StatusCode\InternalServerErrorException('Could not fetch action from marketplace: ' . $message, previous: $e);
+        }
+
+        if (!$action instanceof MarketplaceAction) {
+            throw new StatusCode\BadRequestException('Provided object ist not an action');
+        }
+
+        $actionName = $action->getAuthor()->getName() . '-' . $action->getName();
+
+        // create action from marketplace
+        $create = new ActionCreate();
+        $create->setName($actionName);
+        $create->setClass($action->getClass());
+        $create->setConfig(ActionConfig::from($action->getConfig() ?? []));
+        $this->create($create, $context);
+
+        return $actionName;
     }
 
     /**
