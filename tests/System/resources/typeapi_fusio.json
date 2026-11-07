@@ -428,7 +428,26 @@
           "target": "Backend_ActionIndex"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "marketplace": {
+          "in": "query",
+          "schema": {
+            "type": "boolean"
+          }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [
         {
           "code": 999,
@@ -16211,14 +16230,33 @@
       },
       "discriminator": "type",
       "mapping": {
+        "Common_FormElementAction": "action",
+        "Common_FormElementAgent": "agent",
         "Common_FormElementCheckbox": "checkbox",
         "Common_FormElementCollection": "collection",
+        "Common_FormElementConnection": "connection",
         "Common_FormElementInput": "input",
         "Common_FormElementMap": "map",
         "Common_FormElementSelect": "select",
         "Common_FormElementTextArea": "textarea",
         "Common_FormElementTypeAPI": "typeapi",
         "Common_FormElementTypeSchema": "typeschema"
+      }
+    },
+    "Common_FormElementAction": {
+      "description": "Form element to select an action",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_FormElement"
+      }
+    },
+    "Common_FormElementAgent": {
+      "description": "Form element to select an agent",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_FormElement"
       }
     },
     "Common_FormElementCheckbox": {
@@ -16239,6 +16277,20 @@
       "properties": {
         "type": {
           "description": "The input type i.e. text or password, all HTML input types are allowed",
+          "type": "string"
+        }
+      }
+    },
+    "Common_FormElementConnection": {
+      "description": "Form element to select a connection",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_FormElement"
+      },
+      "properties": {
+        "class": {
+          "description": "Optional to select only specific connection classes",
           "type": "string"
         }
       }
