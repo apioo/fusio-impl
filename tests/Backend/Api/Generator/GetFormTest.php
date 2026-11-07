@@ -45,44 +45,10 @@ class GetFormTest extends DbTestCase
 {
     "element": [
             {
-            "element": "select",
+            "element": "connection",
             "name": "connection",
             "title": "Connection",
-            "help": "The Filesystem connection which should be used",
-            "options": [
-                {
-                    "key": "8",
-                    "value": "Agent"
-                },
-                {
-                    "key": "6",
-                    "value": "FusioHttpClient"
-                },
-                {
-                    "key": "5",
-                    "value": "LocalFilesystem"
-                },
-                {
-                    "key": "3",
-                    "value": "Paypal"
-                },
-                {
-                    "key": "7",
-                    "value": "StarwarsSDK"
-                },
-                {
-                    "key": "1",
-                    "value": "System"
-                },
-                {
-                    "key": "2",
-                    "value": "Test"
-                },
-                {
-                    "key": "4",
-                    "value": "Worker"
-                }
-            ]
+            "help": "The Filesystem connection which should be used"
         },
         {
             "element": "input",

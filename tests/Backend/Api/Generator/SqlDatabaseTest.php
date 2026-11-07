@@ -67,7 +67,7 @@ class SqlDatabaseTest extends ProviderTestCase
 {
   "element": [
     {
-      "element": "select",
+      "element": "connection",
       "name": "connection",
       "title": "Connection",
       "help": "The SQL connection which should be used"

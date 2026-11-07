@@ -57,7 +57,7 @@ class FileDirectoryTest extends ProviderTestCase
 {
   "element": [
     {
-      "element": "select",
+      "element": "connection",
       "name": "connection",
       "title": "Connection",
       "help": "The Filesystem connection which should be used"
