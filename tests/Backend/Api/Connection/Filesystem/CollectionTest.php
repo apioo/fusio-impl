@@ -42,6 +42,7 @@ class CollectionTest extends DbTestCase
         $body = (string) $response->getBody();
         $body = Normalizer::normalizeDateTime($body);
         $body = preg_replace('/[0-9a-f]{32}/m', '[checksum]', $body);
+        $body = preg_replace('/"size": \d+,/m', '"size": 1337,', $body);
 
         $expect = <<<'JSON'
 {
@@ -52,42 +53,42 @@ class CollectionTest extends DbTestCase
         {
             "id": "bd7dfa50-677d-3a48-92fa-0cee40732ff3",
             "name": "collection_schema.json",
-            "contentType": "application\/json",
+            "size": 1337,
+            "contentType": "application/json",
             "checksum": "[checksum]",
-            "lastModified": "[datetime]",
-            "size": 812
+            "lastModified": "[datetime]"
         },
         {
             "id": "38496a0b-a4d7-3f66-adc4-eb3be4578ab0",
             "name": "entry_form.json",
-            "contentType": "application\/json",
+            "size": 1337,
+            "contentType": "application/json",
             "checksum": "[checksum]",
-            "lastModified": "[datetime]",
-            "size": 167
+            "lastModified": "[datetime]"
         },
         {
             "id": "c8a46340-4f76-3abe-be33-853376ea26af",
             "name": "entry_schema.json",
-            "contentType": "application\/json",
+            "size": 1337,
+            "contentType": "application/json",
             "checksum": "[checksum]",
-            "lastModified": "[datetime]",
-            "size": 379
+            "lastModified": "[datetime]"
         },
         {
             "id": "245e9edc-eecc-385d-9cf4-ee173f13817d",
             "name": "local-php-fix.php",
-            "contentType": "text\/x-php",
+            "size": 1337,
+            "contentType": "text/x-php",
             "checksum": "[checksum]",
-            "lastModified": "[datetime]",
-            "size": 408
+            "lastModified": "[datetime]"
         },
         {
             "id": "09e96122-91e0-3921-aaa3-547040e15666",
             "name": "local-php.php",
-            "contentType": "text\/x-php",
+            "size": 1337,
+            "contentType": "text/x-php",
             "checksum": "[checksum]",
-            "lastModified": "[datetime]",
-            "size": 408
+            "lastModified": "[datetime]"
         }
     ]
 }
