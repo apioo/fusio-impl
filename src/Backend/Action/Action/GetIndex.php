@@ -25,9 +25,14 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Provider\ActionProvider;
+use Fusio\Impl\Service\Marketplace;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Service\TypeSystem\KindBuilder;
+use Fusio\Marketplace\MarketplaceAction;
+use Fusio\Marketplace\MarketplaceMessageException;
+use Fusio\Marketplace\MarketplaceUser;
 use Fusio\Model;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * GetIndex
@@ -38,15 +43,50 @@ use Fusio\Model;
  */
 readonly class GetIndex implements ActionInterface
 {
-    public function __construct(private ActionProvider $actionParser, private FrameworkConfig $frameworkConfig)
+    public function __construct(private ActionProvider $actionParser, private FrameworkConfig $frameworkConfig, private Marketplace\Factory $factory)
     {
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
+        $marketplace = (bool) $request->get('marketplace');
+        $startIndex = (int) $request->get('startIndex');
+        $search = $request->get('search');
+
+        if ($marketplace) {
+            try {
+                $result = $this->factory->factory(Marketplace\Type::ACTION)->getRepository()->fetchAll($startIndex, $search);
+            } catch (MarketplaceMessageException $e) {
+                $message = $e->getPayload()->getMessage();
+
+                throw new StatusCode\InternalServerErrorException('Could not fetch actions from marketplace: ' . $message, previous: $e);
+            }
+
+            $actions = [];
+            $objects = $result->getEntry() ?? [];
+            foreach ($objects as $object) {
+                if (!$object instanceof MarketplaceAction) {
+                    continue;
+                }
+
+                $author = $object->getAuthor();
+                if (!$author instanceof MarketplaceUser) {
+                    continue;
+                }
+
+                $actions[] = [
+                    'name' => $author->getName() . ' / ' . $object->getName(),
+                    'description' => $object->getDescription(),
+                    'class' => $author->getName() . '/' . $object->getName(),
+                ];
+            }
+        } else {
+            $actions = $this->actionParser->getClasses($this->frameworkConfig->getActionExclude());
+        }
+
         return [
             'kind' => KindBuilder::build(Model\Backend\ActionIndex::class),
-            'actions' => $this->actionParser->getClasses($this->frameworkConfig->getActionExclude())
+            'actions' => $actions,
         ];
     }
 }

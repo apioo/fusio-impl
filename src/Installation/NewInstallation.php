@@ -272,6 +272,7 @@ class NewInstallation
                     httpPath: '/action/list',
                     httpCode: 200,
                     outgoing: Model\Backend\ActionIndex::class,
+                    parameters: ['marketplace' => PropertyTypeFactory::getBoolean(), 'startIndex' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                     description: 'Returns all available action classes',
                 ),
