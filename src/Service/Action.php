@@ -25,12 +25,16 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Exception\FactoryResolveException;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Inflection\ClassName;
+use Fusio\Engine\Inflection\ClassShape;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Action\CreatedEvent;
 use Fusio\Impl\Event\Action\DeletedEvent;
 use Fusio\Impl\Event\Action\UpdatedEvent;
 use Fusio\Impl\Table;
+use Fusio\Marketplace\MarketplaceAction;
+use Fusio\Marketplace\MarketplaceMessageException;
+use Fusio\Model\Backend\ActionConfig;
 use Fusio\Model\Backend\ActionCreate;
 use Fusio\Model\Backend\ActionUpdate;
 use JsonException;
@@ -51,10 +55,11 @@ readonly class Action
 {
     public function __construct(
         private Action\Committer $actionCommitter,
+        private Action\Validator $validator,
         private Table\Action $actionTable,
         private Factory\ActionInterface $actionFactory,
-        private Action\Validator $validator,
-        private EventDispatcherInterface $eventDispatcher
+        private Marketplace\Factory $marketplaceFactory,
+        private EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
@@ -65,21 +70,24 @@ readonly class Action
         $name = $action->getName() ?? throw new StatusCode\BadRequestException('Provided no action name');
         $class = $action->getClass() ?? throw new StatusCode\BadRequestException('Provided no action class');
 
-        // check source
-        $config     = $action->getConfig()?->getAll() ?? [];
-        $parameters = new Parameters($config);
-        $handler    = $this->newAction($class);
-
         // create action
         try {
             $this->actionTable->beginTransaction();
+
+            // resolve class
+            $class = $this->resolveClass($class, $context);
+
+            // check source
+            $config     = $action->getConfig()?->getAll() ?? [];
+            $parameters = new Parameters($config);
+            $handler    = $this->newAction($class);
 
             $row = new Table\Generated\ActionRow();
             $row->setTenantId($context->getTenantId());
             $row->setCategoryId($context->getCategoryId());
             $row->setStatus(Table\Action::STATUS_ACTIVE);
             $row->setName($name);
-            $row->setClass(ClassName::serialize($class));
+            $row->setClass($class);
             $row->setAsync($action->getAsync() ?? false);
             $row->setConfig(self::serializeConfig($config));
             $row->setMetadata($action->getMetadata() !== null ? Parser::encode($action->getMetadata()) : null);
@@ -123,7 +131,7 @@ readonly class Action
         $this->validator->assert($action, $context->getTenantId(), $existing);
 
         $name = $action->getName() ?? $existing->getName();
-        $class = $action->getClass() ?? $existing->getClass();
+        $class = $existing->getClass();
 
         // check source
         $config     = $action->getConfig()?->getAll() ?? self::unserializeConfig($existing->getConfig());
@@ -135,7 +143,6 @@ readonly class Action
             $this->actionTable->beginTransaction();
 
             $existing->setName($name);
-            $existing->setClass(ClassName::serialize($class));
             $existing->setAsync($action->getAsync() ?? $existing->getAsync());
             $existing->setConfig(self::serializeConfig($config));
             $existing->setMetadata($action->getMetadata() !== null ? Parser::encode($action->getMetadata()) : $existing->getMetadata());
@@ -200,6 +207,55 @@ readonly class Action
         } catch (FactoryResolveException $e) {
             throw new StatusCode\BadRequestException($e->getMessage());
         }
+    }
+
+    private function resolveClass(string $class, UserContext $context): string
+    {
+        $shape = ClassShape::fromString($class);
+        if ($shape === ClassShape::PHP_CLASS) {
+            return ClassName::serialize($class);
+        } elseif ($shape === ClassShape::ENTITY_NAME) {
+            $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $class);
+            if (!$row instanceof Table\Generated\ActionRow) {
+                throw new StatusCode\BadRequestException('Could not resolve action class');
+            }
+
+            return $row->getName();
+        } elseif ($shape === ClassShape::MARKETPLACE_ENTITY) {
+            $parts = explode('/', $class, 2);
+            $user = $parts[0] ?? null;
+            $name = $parts[1] ?? null;
+
+            $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $user . '-' . $name);
+            if ($row instanceof Table\Generated\ActionRow) {
+                return $row->getName();
+            }
+
+            try {
+                $action = $this->marketplaceFactory->factory(Marketplace\Type::ACTION)->getRepository()->install($user, $name);
+            } catch (MarketplaceMessageException $e) {
+                $message = $e->getPayload()->getMessage();
+
+                throw new StatusCode\InternalServerErrorException('Could not fetch action from marketplace: ' . $message, previous: $e);
+            }
+
+            if (!$action instanceof MarketplaceAction) {
+                throw new StatusCode\BadRequestException('Provided object ist not an action');
+            }
+
+            $actionName = $action->getAuthor()->getName() . '-' . $action->getName();
+
+            // create action from marketplace
+            $create = new ActionCreate();
+            $create->setName($actionName);
+            $create->setClass($action->getClass());
+            $create->setConfig(ActionConfig::from($action->getConfig() ?? []));
+            $this->create($create, $context);
+
+            return $actionName;
+        }
+
+        throw new StatusCode\BadRequestException('Could not resolve action class');
     }
 
     /**
