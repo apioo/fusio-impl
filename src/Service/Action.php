@@ -32,7 +32,6 @@ use Fusio\Impl\Event\Action\CreatedEvent;
 use Fusio\Impl\Event\Action\DeletedEvent;
 use Fusio\Impl\Event\Action\UpdatedEvent;
 use Fusio\Impl\Table;
-use Fusio\Marketplace\MarketplaceAction;
 use Fusio\Marketplace\MarketplaceMessageException;
 use Fusio\Model\Backend\ActionConfig;
 use Fusio\Model\Backend\ActionCreate;
@@ -42,6 +41,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Json\Parser;
+use Sdkgen\Client\Exception\ClientException;
 use Throwable;
 
 /**
@@ -58,7 +58,7 @@ readonly class Action
         private Action\Validator $validator,
         private Table\Action $actionTable,
         private Factory\ActionInterface $actionFactory,
-        private Marketplace\Factory $marketplaceFactory,
+        private Marketplace\Action\Repository $marketplaceRepository,
         private EventDispatcherInterface $eventDispatcher,
     ) {
     }
@@ -242,15 +242,11 @@ readonly class Action
         }
 
         try {
-            $action = $this->marketplaceFactory->factory(Marketplace\Type::ACTION)->getRepository()->install($user, $name);
-        } catch (MarketplaceMessageException $e) {
+            $action = $this->marketplaceRepository->install($user, $name);
+        } catch (MarketplaceMessageException|ClientException $e) {
             $message = $e->getPayload()->getMessage();
 
             throw new StatusCode\InternalServerErrorException('Could not fetch action from marketplace: ' . $message, previous: $e);
-        }
-
-        if (!$action instanceof MarketplaceAction) {
-            throw new StatusCode\BadRequestException('Provided object ist not an action');
         }
 
         $actionName = $action->getAuthor()->getName() . '-' . $action->getName();
