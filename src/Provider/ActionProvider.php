@@ -21,10 +21,11 @@
 namespace Fusio\Impl\Provider;
 
 use Fusio\Engine\Form;
+use Fusio\Engine\Model;
 use Fusio\Engine\Provider\ProviderAbstract;
 use Fusio\Impl\Repository\ActionRepository;
 use PSX\Http\Client\ClientInterface;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 /**
  * ActionProvider
@@ -32,10 +33,12 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
+ *
+ * @extends ProviderAbstract<Model\ActionInterface>
  */
 class ActionProvider extends ProviderAbstract
 {
-    public function __construct(Form\ElementFactoryInterface $elementFactory, #[TaggedIterator('fusio.action')] iterable $objects, ActionRepository $repository, ClientInterface $httpClient)
+    public function __construct(Form\ElementFactoryInterface $elementFactory, #[AutowireIterator('fusio.action')] iterable $objects, ActionRepository $repository, ClientInterface $httpClient)
     {
         parent::__construct($elementFactory, $objects, $repository, $httpClient);
     }

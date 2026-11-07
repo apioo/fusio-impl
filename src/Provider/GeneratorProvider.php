@@ -21,8 +21,9 @@
 namespace Fusio\Impl\Provider;
 
 use Fusio\Engine\Form;
+use Fusio\Engine\Model;
 use Fusio\Engine\Provider\ProviderAbstract;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 /**
  * GeneratorProvider
@@ -30,10 +31,12 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
+ *
+ * @extends ProviderAbstract<Model\ModelInterface>
  */
 class GeneratorProvider extends ProviderAbstract
 {
-    public function __construct(Form\ElementFactoryInterface $elementFactory, #[TaggedIterator('fusio.generator')] iterable $objects)
+    public function __construct(Form\ElementFactoryInterface $elementFactory, #[AutowireIterator('fusio.generator')] iterable $objects)
     {
         parent::__construct($elementFactory, $objects);
     }
