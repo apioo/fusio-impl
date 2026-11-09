@@ -33,6 +33,7 @@ use Fusio\Marketplace\MarketplaceMessageException;
 use Fusio\Marketplace\MarketplaceUser;
 use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
+use Sdkgen\Client\Exception\ClientException;
 
 /**
  * GetIndex
@@ -43,8 +44,11 @@ use PSX\Http\Exception as StatusCode;
  */
 readonly class GetIndex implements ActionInterface
 {
-    public function __construct(private ActionProvider $actionParser, private FrameworkConfig $frameworkConfig, private Marketplace\Factory $factory)
-    {
+    public function __construct(
+        private ActionProvider $actionParser,
+        private FrameworkConfig $frameworkConfig,
+        private Marketplace\Action\Repository $marketplaceRepository,
+    ) {
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -55,11 +59,13 @@ readonly class GetIndex implements ActionInterface
 
         if ($marketplace) {
             try {
-                $result = $this->factory->factory(Marketplace\Type::ACTION)->getRepository()->fetchAll($startIndex, $search);
+                $result = $this->marketplaceRepository->fetchAll($startIndex, $search);
             } catch (MarketplaceMessageException $e) {
                 $message = $e->getPayload()->getMessage();
 
                 throw new StatusCode\InternalServerErrorException('Could not fetch actions from marketplace: ' . $message, previous: $e);
+            } catch (ClientException $e) {
+                throw new StatusCode\InternalServerErrorException('Could not fetch actions from marketplace: ' . $e->getMessage(), previous: $e);
             }
 
             $actions = [];
