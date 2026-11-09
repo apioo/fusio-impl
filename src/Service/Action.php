@@ -75,12 +75,13 @@ readonly class Action
             $this->actionTable->beginTransaction();
 
             // resolve class
-            $class = $this->resolveClass($class, $context);
+            $shape = ClassShape::fromString($class);
+            $class = $this->resolveClass($class, $shape, $context);
 
-            // check source
-            $config     = $action->getConfig()?->getAll() ?? [];
-            $parameters = new Parameters($config);
-            $handler    = $this->newAction($class);
+            $config = $action->getConfig()?->getAll() ?? [];
+
+            $handlerConfig = $config;
+            $handler = $this->newAction($class, $context, $handlerConfig);
 
             $row = new Table\Generated\ActionRow();
             $row->setTenantId($context->getTenantId());
@@ -102,7 +103,7 @@ readonly class Action
             // call lifecycle
             if ($handler instanceof LifecycleInterface) {
                 /** @phpstan-ignore arguments.count */
-                $handler->onCreate($name, $parameters, $hash);
+                $handler->onCreate($name, new Parameters($handlerConfig), $hash);
             }
 
             $this->actionTable->commit();
@@ -133,10 +134,10 @@ readonly class Action
         $name = $action->getName() ?? $existing->getName();
         $class = $existing->getClass();
 
-        // check source
-        $config     = $action->getConfig()?->getAll() ?? self::unserializeConfig($existing->getConfig());
-        $parameters = new Parameters($config ?? []);
-        $handler    = $this->newAction($class);
+        $config = $action->getConfig()?->getAll() ?? self::unserializeConfig($existing->getConfig());
+
+        $handlerConfig = $config ?? [];
+        $handler = $this->newAction($class, $context, $handlerConfig);
 
         // update action
         try {
@@ -154,7 +155,7 @@ readonly class Action
             // call lifecycle
             if ($handler instanceof LifecycleInterface) {
                 /** @phpstan-ignore arguments.count */
-                $handler->onUpdate($name, $parameters, $hash);
+                $handler->onUpdate($name, new Parameters($handlerConfig), $hash);
             }
 
             $this->actionTable->commit();
@@ -180,13 +181,16 @@ readonly class Action
             throw new StatusCode\GoneException('Action was deleted');
         }
 
-        $config     = self::unserializeConfig($existing->getConfig());
-        $parameters = new Parameters($config ?: []);
-        $handler    = $this->newAction($existing->getClass());
+        $class = $existing->getClass();
+
+        $config = self::unserializeConfig($existing->getConfig());
+
+        $handlerConfig = $config ?? [];
+        $handler = $this->newAction($class, $context, $handlerConfig);
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {
-            $handler->onDelete($existing->getName(), $parameters);
+            $handler->onDelete($existing->getName(), new Parameters($config));
         }
 
         $existing->setStatus(Table\Action::STATUS_DELETED);
@@ -200,19 +204,34 @@ readonly class Action
     /**
      * Checks whether the provided class is resolvable and returns an action instance
      */
-    private function newAction(string $class): ActionInterface
+    private function newAction(string $class, UserContext $context, array &$config): ActionInterface
     {
-        try {
-            return $this->actionFactory->factory($class);
-        } catch (FactoryResolveException $e) {
-            throw new StatusCode\BadRequestException($e->getMessage());
+        $shape = ClassShape::fromString($class);
+        if ($shape === ClassShape::PHP_CLASS) {
+            try {
+                return $this->actionFactory->factory($class);
+            } catch (FactoryResolveException $e) {
+                throw new StatusCode\BadRequestException($e->getMessage());
+            }
+        } elseif ($shape === ClassShape::ENTITY_NAME) {
+            $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $class);
+            if (!$row instanceof Table\Generated\ActionRow) {
+                throw new StatusCode\BadRequestException('Could not resolve action class');
+            }
+
+            $actionConfig = self::unserializeConfig($row->getConfig());
+            if ($actionConfig !== null) {
+                $config = $actionConfig;
+            }
+
+            return $this->newAction($row->getClass(), $context, $config);
+        } else {
+            throw new StatusCode\BadRequestException('Provided an invalid action class shape');
         }
     }
 
-    private function resolveClass(string $class, UserContext $context): string
+    private function resolveClass(string $class, ClassShape $shape, UserContext $context): string
     {
-        $shape = ClassShape::fromString($class);
-
         return match ($shape) {
             ClassShape::PHP_CLASS => ClassName::serialize($class),
             ClassShape::ENTITY_NAME => $this->resolveEntityName($class, $context),
