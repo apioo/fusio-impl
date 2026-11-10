@@ -75,10 +75,14 @@ readonly class Action
             $this->actionTable->beginTransaction();
 
             // resolve class
+            $resolvedConfig = [];
             $shape = ClassShape::fromString($class);
-            $class = $this->resolveClass($class, $shape, $context);
+            $class = $this->resolveClass($class, $shape, $context, $resolvedConfig);
 
             $config = $action->getConfig()?->getAll() ?? [];
+            if (count($config) === 0) {
+                $config = $resolvedConfig;
+            }
 
             $handlerConfig = $config;
             $handler = $this->newAction($class, $context, $handlerConfig);
@@ -230,12 +234,12 @@ readonly class Action
         }
     }
 
-    private function resolveClass(string $class, ClassShape $shape, UserContext $context): string
+    private function resolveClass(string $class, ClassShape $shape, UserContext $context, array &$config): string
     {
         return match ($shape) {
             ClassShape::PHP_CLASS => ClassName::serialize($class),
             ClassShape::ENTITY_NAME => $this->resolveEntityName($class, $context),
-            ClassShape::MARKETPLACE_ENTITY => $this->resolveMarketplaceEntity($class, $context),
+            ClassShape::MARKETPLACE_ENTITY => $this->resolveMarketplaceEntity($class, $context, $config),
         };
     }
 
@@ -249,13 +253,19 @@ readonly class Action
         return $row->getName();
     }
 
-    private function resolveMarketplaceEntity(string $class, UserContext $context): string
+    private function resolveMarketplaceEntity(string $class, UserContext $context, array &$config): string
     {
         $parts = explode('/', $class, 2);
         $user = $parts[0] ?? null;
         $name = $parts[1] ?? null;
 
-        $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $user . '-' . $name);
+        if (empty($user) || empty($name)) {
+            throw new StatusCode\BadRequestException('Provided an invalid marketplace action name');
+        }
+
+        $actionName = $user . '-' . $name;
+
+        $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $actionName);
         if ($row instanceof Table\Generated\ActionRow) {
             return $row->getName();
         }
@@ -270,16 +280,24 @@ readonly class Action
             throw new StatusCode\InternalServerErrorException('Could not fetch action from marketplace: ' . $e->getMessage(), previous: $e);
         }
 
-        $actionName = $action->getAuthor()->getName() . '-' . $action->getName();
+        $form = $action->getForm() ?? [];
+        if (count($form) > 0) {
+            // we have an action which is configurable we copy the action from the marketplace
+            $create = new ActionCreate();
+            $create->setName($actionName);
+            $create->setClass($action->getClass());
+            $create->setConfig(ActionConfig::from($action->getConfig() ?? []));
+            $this->create($create, $context);
 
-        // create action from marketplace
-        $create = new ActionCreate();
-        $create->setName($actionName);
-        $create->setClass($action->getClass());
-        $create->setConfig(ActionConfig::from($action->getConfig() ?? []));
-        $this->create($create, $context);
+            return $actionName;
+        } else {
+            $actionConfig = $action->getConfig()?->getAll();
+            if (is_array($actionConfig)) {
+                $config = $actionConfig;
+            }
 
-        return $actionName;
+            return $action->getClass();
+        }
     }
 
     /**
