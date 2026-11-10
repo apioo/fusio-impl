@@ -207,6 +207,8 @@ readonly class Action
 
     /**
      * Checks whether the provided class is resolvable and returns an action instance
+     *
+     * @param array<string, mixed> $config
      */
     private function newAction(string $class, UserContext $context, array &$config): ActionInterface
     {
@@ -234,6 +236,9 @@ readonly class Action
         }
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     private function resolveClass(string $class, ClassShape $shape, UserContext $context, array &$config): string
     {
         return match ($shape) {
@@ -253,6 +258,9 @@ readonly class Action
         return $row->getName();
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     private function resolveMarketplaceEntity(string $class, UserContext $context, array &$config): string
     {
         $parts = explode('/', $class, 2);
