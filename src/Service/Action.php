@@ -288,8 +288,8 @@ readonly class Action
             throw new StatusCode\InternalServerErrorException('Could not fetch action from marketplace: ' . $e->getMessage(), previous: $e);
         }
 
-        $form = $action->getForm() ?? [];
-        if (count($form) > 0) {
+        $form = $action->getForm();
+        if (is_array($form) && count($form) > 0) {
             // we have an action which is configurable we copy the action from the marketplace
             $create = new ActionCreate();
             $create->setName($actionName);
