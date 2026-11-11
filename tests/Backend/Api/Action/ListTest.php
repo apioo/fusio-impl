@@ -119,14 +119,6 @@ class ListTest extends DbTestCase
             "class": "Fusio.Impl.Tests.Adapter.Test.MimeAction"
         },
         {
-            "name": "PHP-Processor",
-            "class": "Fusio.Adapter.Php.Action.PhpProcessor"
-        },
-        {
-            "name": "PHP-Sandbox",
-            "class": "Fusio.Adapter.Php.Action.PhpSandbox"
-        },
-        {
             "name": "SMTP-Send",
             "class": "Fusio.Adapter.Smtp.Action.SmtpSend"
         },
