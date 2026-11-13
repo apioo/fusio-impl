@@ -31,6 +31,7 @@ use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Json\Parser;
 use Symfony\AI\Platform\Result\BinaryResult;
 use Symfony\AI\Platform\Result\ChoiceResult;
+use Symfony\AI\Platform\Result\MultiPartResult;
 use Symfony\AI\Platform\Result\ObjectResult;
 use Symfony\AI\Platform\Result\ResultInterface;
 use Symfony\AI\Platform\Result\TextResult;
@@ -47,28 +48,32 @@ readonly class ResultSerializer
 {
     public function serialize(ResultInterface $result): Item
     {
-        if ($result instanceof BinaryResult) {
-            $message = new ItemBinary();
-            $message->setType('binary');
-            $message->setMime($result->getMimeType());
-            $message->setData($result->toBase64());
+        if ($result instanceof MultiPartResult) {
+            $item = new ItemText();
+            $item->setType('text');
+            $item->setContent($result->asText());
+        } elseif ($result instanceof BinaryResult) {
+            $item = new ItemBinary();
+            $item->setType('binary');
+            $item->setMime($result->getMimeType());
+            $item->setData($result->toBase64());
         } elseif ($result instanceof ChoiceResult) {
             $items = [];
-            foreach ($result->getContent() as $item) {
-                $items[] = $this->serialize($item);
+            foreach ($result->getContent() as $choice) {
+                $items[] = $this->serialize($choice);
             }
 
-            $message = new ItemChoice();
-            $message->setType('choice');
-            $message->setItems($items);
+            $item = new ItemChoice();
+            $item->setType('choice');
+            $item->setItems($items);
         } elseif ($result instanceof ObjectResult) {
-            $message = new ItemObject();
-            $message->setType('object');
-            $message->setPayload($result->getContent());
+            $item = new ItemObject();
+            $item->setType('object');
+            $item->setPayload($result->getContent());
         } elseif ($result instanceof TextResult) {
-            $message = new ItemText();
-            $message->setType('text');
-            $message->setContent($result->getContent());
+            $item = new ItemText();
+            $item->setType('text');
+            $item->setContent($result->getContent());
         } elseif ($result instanceof ToolCallResult) {
             $functions = [];
             foreach ($result->getContent() as $toolCall) {
@@ -79,13 +84,13 @@ readonly class ResultSerializer
                 $functions[] = $function;
             }
 
-            $message = new ItemToolCall();
-            $message->setType('tool_call');
-            $message->setFunctions($functions);
+            $item = new ItemToolCall();
+            $item->setType('tool_call');
+            $item->setFunctions($functions);
         } else {
             throw new InternalServerErrorException('Provided an unsupported result type: ' . $result::class);
         }
 
-        return $message;
+        return $item;
     }
 }
