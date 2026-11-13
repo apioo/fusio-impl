@@ -64,7 +64,6 @@ class EntityTest extends DbTestCase
     "description": "An agent test",
     "introduction": "A test agent which always return \"{{ message }}\"",
     "introductionAction": "php+class://Fusio.Impl.Tests.Adapter.Test.IntroductionAction",
-    "temperature": 1,
     "tools": [
         "test_listFoo"
     ],
