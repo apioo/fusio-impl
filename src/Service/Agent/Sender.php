@@ -160,11 +160,18 @@ readonly class Sender implements SenderInterface
                 'tools' => $this->getTools($row),
             ];
 
+            if ($type === Type::ANTHROPIC) {
+                $options['max_tokens'] = 32000;
+            }
+
             if ($costs > 0) {
+                $maxTokens = (int) ($context->getUser()->getPoints() / $costs);
                 if ($type === Type::GEMINI) {
-                    $options['max_output_tokens'] = (int) ($context->getUser()->getPoints() / $costs);
-                } elseif ($type === Type::OPENAI || $type === Type::ANTHROPIC) {
-                    $options['max_tokens'] = (int) ($context->getUser()->getPoints() / $costs);
+                    $options['max_output_tokens'] = $maxTokens;
+                } elseif ($type === Type::OPENAI) {
+                    $options['max_tokens'] = $maxTokens;
+                } elseif ($type === Type::ANTHROPIC) {
+                    $options['max_tokens'] = min($options['max_tokens'], $maxTokens);
                 }
             }
 
