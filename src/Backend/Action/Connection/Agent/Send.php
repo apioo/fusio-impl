@@ -57,7 +57,6 @@ readonly class Send extends AgentAbstract
         $messages = $this->messageUnserializer->unserialize($payload->getItem());
 
         $options = [
-            'temperature' => 0.4
         ];
 
         $result = $agent->call($messages, $options)->getResult();
