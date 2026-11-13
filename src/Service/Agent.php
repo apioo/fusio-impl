@@ -67,7 +67,6 @@ readonly class Agent
             $row->setDescription($agent->getDescription());
             $row->setIntroduction($agent->getIntroduction());
             $row->setIntroductionAction($agent->getIntroductionAction());
-            $row->setTemperature((int) ($agent->getTemperature() * 100));
             $row->setCosts($agent->getCosts());
             $row->setTools($agent->getTools() !== null ? Parser::encode($agent->getTools()) : null);
             $row->setOutgoing($agent->getOutgoing());
@@ -110,7 +109,6 @@ readonly class Agent
         $existing->setDescription($agent->getDescription() ?? $existing->getDescription());
         $existing->setIntroduction($agent->getIntroduction() ?? $existing->getIntroduction());
         $existing->setIntroductionAction($agent->getIntroductionAction() ?? $existing->getIntroductionAction());
-        $existing->setTemperature($agent->getTemperature() !== null ? ((int) ($agent->getTemperature() * 100)) : $existing->getTemperature());
         $existing->setCosts($agent->getCosts() ?? $existing->getCosts());
         $existing->setTools($agent->getTools() !== null ? Parser::encode($agent->getTools()) : $existing->getTools());
         $existing->setOutgoing($agent->getOutgoing() ?? $existing->getOutgoing());

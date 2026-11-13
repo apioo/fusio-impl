@@ -158,7 +158,6 @@ readonly class Sender implements SenderInterface
 
             $options = [
                 'tools' => $this->getTools($row),
-                'temperature' => round($row->getTemperature() / 100, 2),
             ];
 
             if ($costs > 0) {
