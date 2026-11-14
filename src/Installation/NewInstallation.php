@@ -186,8 +186,10 @@ class NewInstallation
             'backend_connection_database_getTable',
         ], Model\Agent\Database::class, tenantId: $tenantId);
         $bag->addAgent('default', null, Table\Agent::TYPE_SEED, false, 'Fusio-Seed', 'Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.', self::readAgent('seed.md'), null, [
+            'backend_connection_getAll',
             'backend_connection_database_getTables',
             'backend_connection_database_getTable',
+            'backend_connection_database_getRows',
         ], Model\Agent\Seed::class, tenantId: $tenantId);
 
         foreach (self::getOperations() as $category => $operations) {
