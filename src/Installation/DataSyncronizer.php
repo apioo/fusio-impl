@@ -41,7 +41,7 @@ class DataSyncronizer
 
         $configs = $data->getData('fusio_config');
         foreach ($configs as $config) {
-            $configId = $connection->fetchOne('SELECT id FROM fusio_config WHERE tenant_id IS NULL AND name = :name', [
+            $configId = (int) $connection->fetchOne('SELECT id FROM fusio_config WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $config['name']
             ]);
 
@@ -52,7 +52,7 @@ class DataSyncronizer
 
         $operations = $data->getData('fusio_operation');
         foreach ($operations as $row) {
-            $operationId = $connection->fetchOne('SELECT id FROM fusio_operation WHERE tenant_id IS NULL AND name = :name', [
+            $operationId = (int) $connection->fetchOne('SELECT id FROM fusio_operation WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $row['name']
             ]);
 
@@ -63,7 +63,7 @@ class DataSyncronizer
 
         $actions = $data->getData('fusio_action');
         foreach ($actions as $action) {
-            $actionId = $connection->fetchOne('SELECT id FROM fusio_action WHERE tenant_id IS NULL AND name = :name', [
+            $actionId = (int) $connection->fetchOne('SELECT id FROM fusio_action WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $action['name']
             ]);
 
@@ -74,7 +74,7 @@ class DataSyncronizer
 
         $agents = $data->getData('fusio_agent');
         foreach ($agents as $agent) {
-            $agentId = $connection->fetchOne('SELECT id FROM fusio_agent WHERE tenant_id IS NULL AND name = :name', [
+            $agentId = (int) $connection->fetchOne('SELECT id FROM fusio_agent WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $agent['name']
             ]);
 
@@ -90,7 +90,7 @@ class DataSyncronizer
 
         $schemas = $data->getData('fusio_schema');
         foreach ($schemas as $schema) {
-            $schemaId = $connection->fetchOne('SELECT id FROM fusio_schema WHERE tenant_id IS NULL AND name = :name', [
+            $schemaId = (int) $connection->fetchOne('SELECT id FROM fusio_schema WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $schema['name']
             ]);
 
@@ -101,7 +101,7 @@ class DataSyncronizer
 
         $events = $data->getData('fusio_event');
         foreach ($events as $event) {
-            $eventId = $connection->fetchOne('SELECT id FROM fusio_event WHERE tenant_id IS NULL AND name = :name', [
+            $eventId = (int) $connection->fetchOne('SELECT id FROM fusio_event WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $event['name']
             ]);
 
@@ -112,7 +112,7 @@ class DataSyncronizer
 
         $cronjobs = $data->getData('fusio_cronjob');
         foreach ($cronjobs as $cronjob) {
-            $cronjobId = $connection->fetchOne('SELECT id FROM fusio_cronjob WHERE tenant_id IS NULL AND name = :name', [
+            $cronjobId = (int) $connection->fetchOne('SELECT id FROM fusio_cronjob WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $cronjob['name']
             ]);
 
@@ -123,7 +123,7 @@ class DataSyncronizer
 
         $scopes = $data->getData('fusio_scope');
         foreach ($scopes as $scope) {
-            $scopeId = $connection->fetchOne('SELECT id FROM fusio_scope WHERE tenant_id IS NULL AND name = :name', [
+            $scopeId = (int) $connection->fetchOne('SELECT id FROM fusio_scope WHERE tenant_id IS NULL AND name = :name', [
                 'name' => $scope['name']
             ]);
 
@@ -141,7 +141,7 @@ class DataSyncronizer
                 continue;
             }
 
-            $id = $connection->fetchOne('SELECT id FROM fusio_scope_operation WHERE scope_id = :scope AND operation_id = :operation', [
+            $id = (int) $connection->fetchOne('SELECT id FROM fusio_scope_operation WHERE scope_id = :scope AND operation_id = :operation', [
                 'scope' => $scopeId,
                 'operation' => $operationId,
             ]);
