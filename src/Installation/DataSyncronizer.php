@@ -72,6 +72,17 @@ class DataSyncronizer
             }
         }
 
+        $agents = $data->getData('fusio_agent');
+        foreach ($agents as $agent) {
+            $agentId = $connection->fetchOne('SELECT id FROM fusio_agent WHERE tenant_id IS NULL AND name = :name', [
+                'name' => $agent['name']
+            ]);
+
+            if (empty($agentId)) {
+                self::insert($connection, 'fusio_agent', $agent);
+            }
+        }
+
         $schemas = $data->getData('fusio_schema');
         foreach ($schemas as $schema) {
             $schemaId = $connection->fetchOne('SELECT id FROM fusio_schema WHERE tenant_id IS NULL AND name = :name', [
