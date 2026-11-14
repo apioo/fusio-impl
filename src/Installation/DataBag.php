@@ -269,8 +269,14 @@ class DataBag
      * @param list<string> $tools
      * @param array<string, mixed>|null $metadata
      */
-    public function addAgent(string $category, ?string $connection, int $type, bool $public, string $name, string $description, string $introduction, ?string $introductionAction, array $tools, ?string $outgoing, int $status = Table\Agent::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null): void
+    public function addAgent(string $category, ?string $connection, int $type, bool $public, string $name, string $description, string $introduction, ?string $introductionAction, array $tools, ?string $outgoing, int $status = Table\Agent::STATUS_ACTIVE, ?array $metadata = null, ?string $date = null, ?string $tenantId = null, ?string $action = null): void
     {
+        if (!empty($action)) {
+            $action = 'php+class://' . ClassName::serialize($action);
+        } else {
+            $action = null;
+        }
+
         if (!empty($outgoing)) {
             if (class_exists($outgoing)) {
                 $outgoing = 'php+class://' . ClassName::serialize($outgoing);
@@ -298,6 +304,7 @@ class DataBag
             'introduction_action' => $introductionAction,
             'tools' => Parser::encode($tools),
             'outgoing' => $outgoing,
+            'action' => $action,
             'metadata' => $metadata !== null ? json_encode($metadata) : null,
             'insert_date' => (new DateTime($date ?? 'now'))->format('Y-m-d H:i:s'),
         ];

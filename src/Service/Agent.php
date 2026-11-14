@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Impl\Action\Scheme as ActionScheme;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Agent\CreatedEvent;
 use Fusio\Impl\Event\Agent\DeletedEvent;
@@ -70,6 +71,7 @@ readonly class Agent
             $row->setCosts($agent->getCosts());
             $row->setTools($agent->getTools() !== null ? Parser::encode($agent->getTools()) : null);
             $row->setOutgoing($agent->getOutgoing());
+            $row->setAction(ActionScheme::wrap($agent->getAction()));
             $row->setInsertDate(LocalDateTime::now());
             $row->setMetadata($agent->getMetadata() !== null ? Parser::encode($agent->getMetadata()) : null);
             $this->agentTable->create($row);
@@ -112,6 +114,7 @@ readonly class Agent
         $existing->setCosts($agent->getCosts() ?? $existing->getCosts());
         $existing->setTools($agent->getTools() !== null ? Parser::encode($agent->getTools()) : $existing->getTools());
         $existing->setOutgoing($agent->getOutgoing() ?? $existing->getOutgoing());
+        $existing->setAction($agent->getAction() !== null ? ActionScheme::wrap($agent->getAction()) : $existing->getAction());
         $existing->setMetadata($agent->getMetadata() !== null ? Parser::encode($agent->getMetadata()) : $existing->getMetadata());
         $this->agentTable->update($existing);
 

@@ -22,6 +22,7 @@ namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Table\Generated\AgentRow;
 use PSX\Sql\Condition;
+use PSX\Sql\OrderBy;
 
 /**
  * Agent
@@ -85,6 +86,23 @@ class Agent extends Generated\AgentTable
         $condition->equals(self::COLUMN_NAME, $name);
 
         return $this->findOneBy($condition);
+    }
+
+    /**
+     * Returns the first active agent of the provided type, this is used to resolve the default sub-agents i.e. of the
+     * architect agent
+     */
+    public function findOneByTenantAndType(?string $tenantId, int $categoryId, int $type): ?AgentRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_CATEGORY_ID, $categoryId);
+        $condition->equals(self::COLUMN_STATUS, self::STATUS_ACTIVE);
+        $condition->equals(self::COLUMN_TYPE, $type);
+
+        $result = $this->findBy($condition, 0, 1, Generated\AgentColumn::ID, OrderBy::ASC);
+
+        return $result[0] ?? null;
     }
 
     /**
