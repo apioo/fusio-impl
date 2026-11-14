@@ -24,6 +24,7 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\Agent\IntroductionContext;
 use Fusio\Impl\Table;
 use PSX\Json\Parser;
 use stdClass;
@@ -37,7 +38,7 @@ use stdClass;
  */
 readonly class Action implements ActionInterface
 {
-    public function __construct(private Table\Action $actionTable)
+    public function __construct(private Table\Action $actionTable, private IntroductionContext $introductionContext)
     {
     }
 
@@ -46,25 +47,29 @@ readonly class Action implements ActionInterface
      */
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): array
     {
+        $result = [
+            'connections' => $this->introductionContext->getConnections($context),
+        ];
+
         $refId = (int) $request->get('refId');
         if (empty($refId)) {
-            return [];
+            return $result;
         }
 
         $row = $this->actionTable->findOneByTenantAndId($context->getTenantId(), $context->getUser()->getCategoryId(), $refId);
         if (!$row instanceof Table\Generated\ActionRow) {
-            return [];
+            return $result;
         }
 
         $code = $this->getCodeFromConfig($row);
         if (empty($code)) {
-            return [];
+            return $result;
         }
 
-        return [
-            'name' => $row->getName(),
-            'code' => $code,
-        ];
+        $result['name'] = $row->getName();
+        $result['code'] = $code;
+
+        return $result;
     }
 
     private function getCodeFromConfig(Table\Generated\ActionRow $row): ?string

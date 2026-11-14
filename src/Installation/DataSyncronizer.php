@@ -84,6 +84,7 @@ class DataSyncronizer
                 self::update($connection, 'fusio_agent', $agentId, [
                     'description' => $agent['description'],
                     'introduction' => $agent['introduction'],
+                    'introduction_action' => $agent['introduction_action'],
                 ]);
             }
         }

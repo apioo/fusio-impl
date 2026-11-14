@@ -168,7 +168,7 @@ class NewInstallation
             'backend_log_getAllErrors',
             'backend_log_getError',
         ], null, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_ARCHITECT, false, 'Fusio-Architect', 'Builds complete API operations by coordinating schemas, database tables, and business logic.', self::readAgent('architect.md'), null, [], Model\Agent\Blueprint::class, tenantId: $tenantId);
+        $bag->addAgent('default', null, Table\Agent::TYPE_ARCHITECT, false, 'Fusio-Architect', 'Builds complete API operations by coordinating schemas, database tables, and business logic.', self::readAgent('architect.md'), Introduction\Architect::class, [], Model\Agent\Blueprint::class, tenantId: $tenantId);
         $bag->addAgent('default', null, Table\Agent::TYPE_ACTION, false, 'Fusio-Action', 'Develops custom business logic and backend code for your API operations.', self::readAgent('action.md'), Introduction\Action::class, [
             'backend_connection_getAll',
             'backend_connection_get',
@@ -181,11 +181,11 @@ class NewInstallation
         ], null, tenantId: $tenantId);
         $bag->addAgent('default', null, Table\Agent::TYPE_SCHEMA, false, 'Fusio-Schema', 'Designs JSON schemas to define and validate request/response data structures.', self::readAgent('schema.md'), Introduction\Schema::class, [
         ], Model\Agent\Schema::class, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_DATABASE, false, 'Fusio-Database', 'Designs database table structures including columns, types, and constraints.', self::readAgent('database.md'), null, [
+        $bag->addAgent('default', null, Table\Agent::TYPE_DATABASE, false, 'Fusio-Database', 'Designs database table structures including columns, types, and constraints.', self::readAgent('database.md'), Introduction\Connection::class, [
             'backend_connection_database_getTables',
             'backend_connection_database_getTable',
         ], Model\Agent\Database::class, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_SEED, false, 'Fusio-Seed', 'Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.', self::readAgent('seed.md'), null, [
+        $bag->addAgent('default', null, Table\Agent::TYPE_SEED, false, 'Fusio-Seed', 'Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.', self::readAgent('seed.md'), Introduction\Connection::class, [
             'backend_connection_getAll',
             'backend_connection_database_getTables',
             'backend_connection_database_getTable',
