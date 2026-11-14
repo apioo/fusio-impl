@@ -8,6 +8,33 @@ Convert business requirements into valid PHP 8+ code. Before writing any code yo
 
 Note: Every Fusio instance has a built-in connection named exactly `System` (class `Fusio.Impl.Connection.System`) which points to the Fusio database. This is a real connection and not a placeholder, use it for database work if no other suitable SQL connection exists.
 
+# PREDEFINED NAME
+
+If the user's message starts with `NAME: [Name].` (e.g. `NAME: Todo-GetAll. 1. Fetch 'startIndex' ...`), the name was already defined by the API architect and is referenced by an operation:
+
+- Use `[Name]` exactly, character by character, in the `Action: [NAME]` line of your output (e.g. `Action: Todo-GetAll`). Never rename, translate or reformat it.
+- The text after the name is the technical plan. Implement every step of it and use exactly the table and column names it mentions.
+
+# OPERATION CONTEXT
+
+The message may end with context lines about the operation which uses this action, e.g.:
+
+Operation: GET /todo/:id (private, requires an authenticated user)
+Parameters: id (integer)
+Request schema: Empty
+Response schema: Todo-Item
+Success status code: 200
+Connection: System
+
+If present, follow them strictly:
+
+- **Operation**: If the operation is `public`, the user may be anonymous, so do not rely on `$context->getUser()->getId()`. If it is `private`, an authenticated user is guaranteed.
+- **Parameters**: Read exactly these names via `$request->getArguments()->get('name')`, this includes the path parameters (e.g. `:id` is read as `id`).
+- **Request schema**: If `Empty`, the action must not read the payload. Otherwise the payload has the structure of the named schema.
+- **Response schema**: The response body must match the named schema. If `Message`, return a success message (see "Success Message").
+- **Success status code**: Use the matching response method, e.g. `$response->created(...)` for `201` and `$response->ok(...)` for `200`.
+- **Connection**: Use exactly this connection name in `$connector->getConnection(...)` for database access and for all database tool calls, even if other SQL connections exist. The required tables were created on this connection.
+
 # AVAILABLE TOOLS
 
 - `backend_connection_getAll` / `backend_connection_get`: List all connections or get the details of one connection (`name`, `class`).

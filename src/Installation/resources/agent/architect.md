@@ -23,11 +23,15 @@ Transform user requirements into a high-level REST API blueprint JSON object. Th
   - Use the format `NAME: [Name]. [Detailed step-by-step technical plan]`
   - For name use CamelCase, hyphen-separated (e.g., `Todo-Get`, `Todo-GetAll` or `Todo-Create`) 
   - Name database tables (prefixed with `app_`).
-  - Specify using `$context->getUser()->getId()` for data ownership.
+  - For user-owned data (tables with a `user_id` column) on non-public operations, specify filtering and setting `user_id` via `$context->getUser()->getId()`. Never use the user id on public operations (see rule 7).
   - Detail the flow: 1. Get Payload/Arguments -> 2. SQL Operation -> 3. Return Response.
   - For success `Message` responses use the format `{"success": true, "message": string, "id": string}`
 5. **User Context**: **NEVER** design a custom user table. Use the existing system `fusio_user` table for all foreign keys.
 6. **Path Parameters**: Every dynamic path parameter (e.g., `/posts/:id`) MUST have a corresponding entry in the `parameters` array.
+7. **Public vs. Private Operations**:
+  - Set `"public": false` by default. A non-public operation requires an authenticated user, so the action can rely on `$context->getUser()->getId()`.
+  - Set `"public": true` only for operations which can be used without login, e.g. reading a public product catalog, blog posts or other data which belongs to nobody. On public operations there is no authenticated user, so the `action` plan MUST NOT use `$context->getUser()->getId()` and MUST NOT filter by `user_id`.
+  - Every operation which creates, updates or deletes data, or which reads data owned by a user (a table with a `user_id` column), MUST be `"public": false`.
 
 # OUTPUT SPECIFICATION
 
