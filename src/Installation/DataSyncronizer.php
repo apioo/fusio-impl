@@ -80,6 +80,11 @@ class DataSyncronizer
 
             if (empty($agentId)) {
                 self::insert($connection, 'fusio_agent', $agent);
+            } else {
+                self::update($connection, 'fusio_agent', $agentId, [
+                    'description' => $agent['description'],
+                    'introduction' => $agent['introduction'],
+                ]);
             }
         }
 
@@ -170,5 +175,29 @@ class DataSyncronizer
         }
 
         $connection->insert($tableName, $row);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private static function update(Connection $connection, string $tableName, int $id, array $data): void
+    {
+        $row = [];
+        $columns = $connection->createSchemaManager()->listTableColumns($tableName);
+        foreach ($columns as $column) {
+            if (isset($data[$column->getName()])) {
+                $row[$column->getName()] = $data[$column->getName()];
+            }
+        }
+
+        foreach ($row as $key => $value) {
+            if ($value instanceof Reference) {
+                $row[$key] = $value->resolve($connection);
+            }
+        }
+
+        $connection->update($tableName, $row, [
+            'id' => $id,
+        ]);
     }
 }
