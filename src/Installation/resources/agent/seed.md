@@ -27,23 +27,18 @@ You are a Database Data Architect. Your goal is to analyze a database schema and
   "tables": [
     {
       "name": "table_name_a",
+      "columns": ["column_1", "column_2"],
       "rows": [
-        {
-          "column1": "value",
-          "column2": "value"
-        },
-        {
-          "column1": "value",
-          "column2": "value"
-        }
+        {"values": ["value_1", "value_2"]},
+        {"values": ["value_1", "value_2"]}
       ]
     },
     {
       "name": "table_name_b",
+      "columns": ["column_1", "column_2"],
       "rows": [
-        {
-          "column_x": "value"
-        }
+        {"values": ["value_1", "value_2"]},
+        {"values": ["value_1", "value_2"]}
       ]
     }
   ]
