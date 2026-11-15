@@ -26,6 +26,10 @@ final class Version20261114203000 extends AbstractMigration
             $agentTable->addColumn('action', 'string', ['notnull' => false]);
         }
 
+        if ($agentTable->hasColumn('temperature')) {
+            $agentTable->dropColumn('temperature');
+        }
+
         if (!$schema->hasTable('fusio_agent_task')) {
             $agentTaskTable = $schema->createTable('fusio_agent_task');
             $agentTaskTable->addColumn('id', 'integer', ['autoincrement' => true]);
