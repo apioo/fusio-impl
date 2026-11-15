@@ -13,6 +13,7 @@ class AgentTaskTable extends \PSX\Sql\TableAbstract
     public const COLUMN_USER_ID = 'user_id';
     public const COLUMN_TENANT_ID = 'tenant_id';
     public const COLUMN_CONNECTION_ID = 'connection_id';
+    public const COLUMN_CHAT_ID = 'chat_id';
     public const COLUMN_STATUS = 'status';
     public const COLUMN_ITEM = 'item';
     public const COLUMN_STEPS = 'steps';
@@ -26,7 +27,7 @@ class AgentTaskTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns(): array
     {
-        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_AGENT_ID => 0x20000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_CONNECTION_ID => 0x4020000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_ITEM => 0xb00000, self::COLUMN_STEPS => 0x40b00000, self::COLUMN_MESSAGE => 0x40b00000, self::COLUMN_START_DATE => 0x40800000, self::COLUMN_END_DATE => 0x40800000, self::COLUMN_INSERT_DATE => 0x800000];
+        return [self::COLUMN_ID => 0x3020000a, self::COLUMN_AGENT_ID => 0x20000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_TENANT_ID => 0x40a00040, self::COLUMN_CONNECTION_ID => 0x4020000a, self::COLUMN_CHAT_ID => 0x40a000ff, self::COLUMN_STATUS => 0x20000a, self::COLUMN_ITEM => 0xb00000, self::COLUMN_STEPS => 0x40b00000, self::COLUMN_MESSAGE => 0x40b00000, self::COLUMN_START_DATE => 0x40800000, self::COLUMN_END_DATE => 0x40800000, self::COLUMN_INSERT_DATE => 0x800000];
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\AgentTaskRow>
@@ -243,6 +244,43 @@ class AgentTaskTable extends \PSX\Sql\TableAbstract
     {
         $condition = \PSX\Sql\Condition::withAnd();
         $condition->equals('connection_id', $value);
+        return $this->doDeleteBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\AgentTaskRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByChatId(string $value, ?int $startIndex = null, ?int $count = null, ?\Fusio\Impl\Table\Generated\AgentTaskColumn $sortBy = null, ?\PSX\Sql\OrderBy $sortOrder = null): array
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('chat_id', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByChatId(string $value): ?\Fusio\Impl\Table\Generated\AgentTaskRow
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('chat_id', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function updateByChatId(string $value, \Fusio\Impl\Table\Generated\AgentTaskRow $record): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('chat_id', $value);
+        return $this->doUpdateBy($condition, $record->toRecord());
+    }
+    /**
+     * @throws \PSX\Sql\Exception\ManipulationException
+     */
+    public function deleteByChatId(string $value): int
+    {
+        $condition = \PSX\Sql\Condition::withAnd();
+        $condition->like('chat_id', $value);
         return $this->doDeleteBy($condition);
     }
     /**

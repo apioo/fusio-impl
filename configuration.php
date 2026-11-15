@@ -21,6 +21,9 @@ return [
     'fusio_mcp_queue_size'     => 500,
     'fusio_mcp_timeout'        => 1800,
 
+    // Whether the A2A endpoint at /a2a is enabled, it allows to invoke the configured agents by another agent
+    'fusio_a2a'                => true,
+
     // Whether the JsonRPC endpoint at /jsonrpc is enabled, it allows to invoke every operation through JsonRPC. For
     // communication with external customers we always recommend to use REST endpoints but for internal cases it can be
     // useful to use JsonRPC

@@ -73,6 +73,74 @@ class Task extends Generated\AgentTaskTable
         return $this->findOneBy($condition);
     }
 
+    public function findOneByTenantAndUser(?string $tenantId, int $userId, int $id): ?Generated\AgentTaskRow
+    {
+        $condition = Condition::withAnd();
+        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
+        $condition->equals(self::COLUMN_USER_ID, $userId);
+        $condition->equals(self::COLUMN_ID, $id);
+
+        return $this->findOneBy($condition);
+    }
+
+    /**
+     * Returns all tasks of a user ordered by the status timestamp (the last status change) descending, this is used by
+     * the A2A ListTasks method
+     *
+     * @return list<Generated\AgentTaskRow>
+     */
+    public function findByUser(?string $tenantId, int $userId, ?string $chatId, ?int $status, ?LocalDateTime $statusTimestampAfter, int $startIndex, int $count): array
+    {
+        $queryBuilder = $this->newUserQuery($tenantId, $userId, $chatId, $status, $statusTimestampAfter)
+            ->select('*')
+            ->orderBy('COALESCE(' . self::COLUMN_END_DATE . ', ' . self::COLUMN_START_DATE . ', ' . self::COLUMN_INSERT_DATE . ')', 'DESC')
+            ->addOrderBy(self::COLUMN_ID, 'DESC')
+            ->setFirstResult($startIndex)
+            ->setMaxResults($count);
+
+        /** @var list<Generated\AgentTaskRow> $result */
+        $result = $this->project($queryBuilder->getSQL(), $queryBuilder->getParameters());
+
+        return $result;
+    }
+
+    public function countByUser(?string $tenantId, int $userId, ?string $chatId, ?int $status, ?LocalDateTime $statusTimestampAfter): int
+    {
+        $queryBuilder = $this->newUserQuery($tenantId, $userId, $chatId, $status, $statusTimestampAfter)
+            ->select('COUNT(*)');
+
+        return (int) $queryBuilder->executeQuery()->fetchOne();
+    }
+
+    private function newUserQuery(?string $tenantId, int $userId, ?string $chatId, ?int $status, ?LocalDateTime $statusTimestampAfter): \Doctrine\DBAL\Query\QueryBuilder
+    {
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->from(self::NAME)
+            ->where(self::COLUMN_USER_ID . ' = :user_id')
+            ->setParameter('user_id', $userId);
+
+        if ($tenantId !== null) {
+            $queryBuilder->andWhere(self::COLUMN_TENANT_ID . ' = :tenant_id')->setParameter('tenant_id', $tenantId);
+        } else {
+            $queryBuilder->andWhere(self::COLUMN_TENANT_ID . ' IS NULL');
+        }
+
+        if ($chatId !== null) {
+            $queryBuilder->andWhere(self::COLUMN_CHAT_ID . ' = :chat_id')->setParameter('chat_id', $chatId);
+        }
+
+        if ($status !== null) {
+            $queryBuilder->andWhere(self::COLUMN_STATUS . ' = :status')->setParameter('status', $status);
+        }
+
+        if ($statusTimestampAfter !== null) {
+            $queryBuilder->andWhere('COALESCE(' . self::COLUMN_END_DATE . ', ' . self::COLUMN_START_DATE . ', ' . self::COLUMN_INSERT_DATE . ') >= :after')
+                ->setParameter('after', $statusTimestampAfter->toDateTime()->format(self::DATE_FORMAT));
+        }
+
+        return $queryBuilder;
+    }
+
     /**
      * Returns the current status directly from the database, this is used by long-running executions to detect whether
      * a task was canceled in the meantime
