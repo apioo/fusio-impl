@@ -42,7 +42,7 @@ class GetAgentCardTest extends DbTestCase
 {
     "name": "Fusio",
     "description": "Self-Hosted API Management for Builders.",
-    "url": "http:\/\/127.0.0.1\/a2a\/v1",
+    "url": "http://127.0.0.1/a2a/v1",
     "skills": [
         {
             "id": "agent-test",
@@ -62,7 +62,7 @@ class GetAgentCardTest extends DbTestCase
         {
             "id": "Fusio-Schema",
             "name": "Fusio-Schema",
-            "description": "Designs JSON schemas to define and validate request\/response data structures."
+            "description": "Designs JSON schemas to define and validate request/response data structures."
         },
         {
             "id": "Fusio-Action",
@@ -79,7 +79,32 @@ class GetAgentCardTest extends DbTestCase
             "name": "Fusio-General",
             "description": "Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs."
         }
-    ]
+    ],
+    "auth": {
+        "type": "oauth2",
+        "description": "Fusio OAuth2 Service used to authorize AI agents",
+        "flows": {
+            "authorizationCode": {
+                "authorizationUrl": "http://127.0.0.1/authorization/authorize",
+                "tokenUrl": "http://127.0.0.1/authorization/token",
+                "scopes": [
+                    "bar",
+                    "default",
+                    "foo",
+                    "plan_scope"
+                ]
+            },
+            "clientCredentials": {
+                "tokenUrl": "http://127.0.0.1/authorization/token",
+                "scopes": [
+                    "bar",
+                    "default",
+                    "foo",
+                    "plan_scope"
+                ]
+            }
+        }
+    }
 }
 JSON;
 
