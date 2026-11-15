@@ -9,6 +9,7 @@ enum AgentTaskColumn : string implements \PSX\Sql\ColumnInterface
     case USER_ID = \Fusio\Impl\Table\Generated\AgentTaskTable::COLUMN_USER_ID;
     case TENANT_ID = \Fusio\Impl\Table\Generated\AgentTaskTable::COLUMN_TENANT_ID;
     case CONNECTION_ID = \Fusio\Impl\Table\Generated\AgentTaskTable::COLUMN_CONNECTION_ID;
+    case CHAT_ID = \Fusio\Impl\Table\Generated\AgentTaskTable::COLUMN_CHAT_ID;
     case STATUS = \Fusio\Impl\Table\Generated\AgentTaskTable::COLUMN_STATUS;
     case ITEM = \Fusio\Impl\Table\Generated\AgentTaskTable::COLUMN_ITEM;
     case STEPS = \Fusio\Impl\Table\Generated\AgentTaskTable::COLUMN_STEPS;

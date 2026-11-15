@@ -9,6 +9,7 @@ class AgentTaskRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?int $userId = null;
     private ?string $tenantId = null;
     private ?int $connectionId = null;
+    private ?string $chatId = null;
     private ?int $status = null;
     private ?string $item = null;
     private ?string $steps = null;
@@ -55,6 +56,14 @@ class AgentTaskRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     public function getConnectionId(): ?int
     {
         return $this->connectionId;
+    }
+    public function setChatId(?string $chatId): void
+    {
+        $this->chatId = $chatId;
+    }
+    public function getChatId(): ?string
+    {
+        return $this->chatId;
     }
     public function setStatus(int $status): void
     {
@@ -121,6 +130,7 @@ class AgentTaskRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('user_id', $this->userId);
         $record->put('tenant_id', $this->tenantId);
         $record->put('connection_id', $this->connectionId);
+        $record->put('chat_id', $this->chatId);
         $record->put('status', $this->status);
         $record->put('item', $this->item);
         $record->put('steps', $this->steps);
@@ -145,6 +155,7 @@ class AgentTaskRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->userId = isset($data['user_id']) && is_int($data['user_id']) ? $data['user_id'] : null;
         $row->tenantId = isset($data['tenant_id']) && is_string($data['tenant_id']) ? $data['tenant_id'] : null;
         $row->connectionId = isset($data['connection_id']) && is_int($data['connection_id']) ? $data['connection_id'] : null;
+        $row->chatId = isset($data['chat_id']) && is_string($data['chat_id']) ? $data['chat_id'] : null;
         $row->status = isset($data['status']) && is_int($data['status']) ? $data['status'] : null;
         $row->item = isset($data['item']) && is_string($data['item']) ? $data['item'] : null;
         $row->steps = isset($data['steps']) && is_string($data['steps']) ? $data['steps'] : null;
