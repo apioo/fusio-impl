@@ -89,7 +89,6 @@ readonly class Task
 
         $taskId = $this->taskTable->getLastInsertId();
 
-        // in case the messenger uses a sync transport the task is executed directly
         $this->messageBus->dispatch(new ExecuteAgentTask($taskId, $context));
 
         return $taskId;

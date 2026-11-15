@@ -28,6 +28,7 @@ use Fusio\Impl\Table;
 use Fusio\Model\Agent\Item;
 use Fusio\Model\Agent\ItemObject;
 use Fusio\Model\Agent\ItemText;
+use JsonSerializable;
 use PSX\Record\RecordableInterface;
 use PSX\Schema\ObjectMapperInterface;
 use PSX\Schema\SchemaSource;
@@ -60,13 +61,7 @@ readonly class Executor
         }
 
         if (!$this->taskTable->markRunning($taskId)) {
-            // the task is not pending anymore i.e. it was canceled before a worker has picked it up
             return;
-        }
-
-        // in case the messenger uses a sync transport the task is executed inside the HTTP request
-        if (function_exists('set_time_limit')) {
-            set_time_limit(0);
         }
 
         try {
@@ -108,10 +103,9 @@ readonly class Executor
 
         $response = $this->processor->execute($action, $request, $context, false);
 
-        // the processor can not extract protected properties, so we convert models i.e. a message model to a record
         if ($response instanceof RecordableInterface) {
             $response = $response->toRecord();
-        } elseif ($response instanceof \JsonSerializable) {
+        } elseif ($response instanceof JsonSerializable) {
             $response = $response->jsonSerialize();
         }
 
