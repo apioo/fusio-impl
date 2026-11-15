@@ -65,7 +65,7 @@ class ChallengeTest extends DbTestCase
 
             $body = (string) $response->getBody();
 
-            $this->assertEquals($i < 15 ? 200 : 429, $response->getStatusCode(), $body);
+            $this->assertEquals($i < 10 ? 200 : 429, $response->getStatusCode(), $body);
         }
     }
 

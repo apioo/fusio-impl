@@ -7,6 +7,7 @@ class AgentMessageRow implements \JsonSerializable, \PSX\Record\RecordableInterf
     private ?int $id = null;
     private ?int $agentId = null;
     private ?int $userId = null;
+    private ?int $refId = null;
     private ?string $chatId = null;
     private ?int $child = null;
     private ?int $origin = null;
@@ -35,6 +36,14 @@ class AgentMessageRow implements \JsonSerializable, \PSX\Record\RecordableInterf
     public function getUserId(): int
     {
         return $this->userId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "user_id" was provided');
+    }
+    public function setRefId(?int $refId): void
+    {
+        $this->refId = $refId;
+    }
+    public function getRefId(): ?int
+    {
+        return $this->refId;
     }
     public function setChatId(string $chatId): void
     {
@@ -83,6 +92,7 @@ class AgentMessageRow implements \JsonSerializable, \PSX\Record\RecordableInterf
         $record->put('id', $this->id);
         $record->put('agent_id', $this->agentId);
         $record->put('user_id', $this->userId);
+        $record->put('ref_id', $this->refId);
         $record->put('chat_id', $this->chatId);
         $record->put('child', $this->child);
         $record->put('origin', $this->origin);
@@ -103,6 +113,7 @@ class AgentMessageRow implements \JsonSerializable, \PSX\Record\RecordableInterf
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
         $row->agentId = isset($data['agent_id']) && is_int($data['agent_id']) ? $data['agent_id'] : null;
         $row->userId = isset($data['user_id']) && is_int($data['user_id']) ? $data['user_id'] : null;
+        $row->refId = isset($data['ref_id']) && is_int($data['ref_id']) ? $data['ref_id'] : null;
         $row->chatId = isset($data['chat_id']) && is_string($data['chat_id']) ? $data['chat_id'] : null;
         $row->child = isset($data['child']) && is_int($data['child']) ? $data['child'] : null;
         $row->origin = isset($data['origin']) && is_int($data['origin']) ? $data['origin'] : null;

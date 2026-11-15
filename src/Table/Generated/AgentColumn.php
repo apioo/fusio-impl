@@ -14,10 +14,11 @@ enum AgentColumn : string implements \PSX\Sql\ColumnInterface
     case NAME = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_NAME;
     case DESCRIPTION = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_DESCRIPTION;
     case INTRODUCTION = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_INTRODUCTION;
-    case TEMPERATURE = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_TEMPERATURE;
+    case INTRODUCTION_ACTION = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_INTRODUCTION_ACTION;
     case COSTS = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_COSTS;
     case TOOLS = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_TOOLS;
     case OUTGOING = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_OUTGOING;
+    case ACTION = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_ACTION;
     case METADATA = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_METADATA;
     case INSERT_DATE = \Fusio\Impl\Table\Generated\AgentTable::COLUMN_INSERT_DATE;
 }

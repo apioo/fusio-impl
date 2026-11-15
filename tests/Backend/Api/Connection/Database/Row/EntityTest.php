@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Connection\Database\Row;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -35,7 +36,7 @@ class EntityTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows/1', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body   = (string) $response->getBody();
@@ -44,7 +45,7 @@ class EntityTest extends DbTestCase
     "id": 1,
     "title": "foo",
     "content": "bar",
-    "date": "2015-02-27 19:59:15"
+    "date": "2015-02-27T19:59:15+00:00"
 }
 JSON;
 
@@ -56,7 +57,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows/1337', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -64,14 +65,14 @@ JSON;
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
         $this->assertFalse($data->success);
-        $this->assertStringStartsWith('Row not found', $data->message);
+        $this->assertStringStartsWith('Entry not available', $data->message);
     }
 
     public function testPost(): void
     {
         $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows/1', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -85,7 +86,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows/1', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'title'   => 'bar',
             'content' => 'bar',
@@ -96,7 +97,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Row successfully updated",
+    "message": "Entry successfully updated",
     "id": "1"
 }
 JSON;
@@ -123,14 +124,14 @@ JSON;
     {
         $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows/1', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Row successfully deleted",
+    "message": "Entry successfully deleted",
     "id": "1"
 }
 JSON;

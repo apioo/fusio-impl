@@ -26,6 +26,7 @@ use Fusio\Impl\Action\Scheme;
 use Fusio\Impl\Authorization;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Backend;
+use Fusio\Impl\Backend\Action\Agent\Introduction;
 use Fusio\Impl\Connection\System as ConnectionSystem;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\System;
@@ -135,7 +136,7 @@ class NewInstallation
         $bag->addPage('Authorization', 'authorization', self::readPage('authorization.html'), tenantId: $tenantId);
         $bag->addPage('Support', 'support', self::readPage('support.html'), tenantId: $tenantId);
         $bag->addPage('SDK', 'sdk', self::readPage('sdk.html'), tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_GENERAL, false, 'Fusio-General', 'Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.', self::readAgent('general.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_GENERAL, false, 'Fusio-General', 'Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs.', self::readAgent('general.md'), null, [
             'backend_operation_getAll',
             'backend_operation_get',
             'backend_action_getAll',
@@ -167,8 +168,8 @@ class NewInstallation
             'backend_log_getAllErrors',
             'backend_log_getError',
         ], null, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_ARCHITECT, false, 'Fusio-Architect', 'Builds complete API operations by coordinating schemas, database tables, and business logic.', self::readAgent('architect.md'), [], Model\Agent\Blueprint::class, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_ACTION, false, 'Fusio-Action', 'Develops custom business logic and backend code for your API operations.', self::readAgent('action.md'), [
+        $bag->addAgent('default', null, Table\Agent::TYPE_ARCHITECT, false, 'Fusio-Architect', 'Builds complete API operations by coordinating schemas, database tables, and business logic.', self::readAgent('architect.md'), Introduction\Architect::class, [], Model\Agent\Blueprint::class, tenantId: $tenantId, action: Backend\Action\Agent\Executor\Architect::class);
+        $bag->addAgent('default', null, Table\Agent::TYPE_ACTION, false, 'Fusio-Action', 'Develops custom business logic and backend code for your API operations.', self::readAgent('action.md'), Introduction\Action::class, [
             'backend_connection_getAll',
             'backend_connection_get',
             'backend_connection_database_getTables',
@@ -177,17 +178,19 @@ class NewInstallation
             'backend_connection_filesystem_get',
             'backend_connection_http_execute',
             'backend_connection_sdk_get',
-        ], null, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_SCHEMA, false, 'Fusio-Schema', 'Designs JSON schemas to define and validate request/response data structures.', self::readAgent('schema.md'), [
-        ], Model\Agent\Schema::class, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_DATABASE, false, 'Fusio-Database', 'Designs database table structures including columns, types, and constraints.', self::readAgent('database.md'), [
+        ], null, tenantId: $tenantId, action: Backend\Action\Agent\Executor\Action::class);
+        $bag->addAgent('default', null, Table\Agent::TYPE_SCHEMA, false, 'Fusio-Schema', 'Designs JSON schemas to define and validate request/response data structures.', self::readAgent('schema.md'), Introduction\Schema::class, [
+        ], Model\Agent\Schema::class, tenantId: $tenantId, action: Backend\Action\Agent\Executor\Schema::class);
+        $bag->addAgent('default', null, Table\Agent::TYPE_DATABASE, false, 'Fusio-Database', 'Designs database table structures including columns, types, and constraints.', self::readAgent('database.md'), Introduction\Connection::class, [
             'backend_connection_database_getTables',
             'backend_connection_database_getTable',
-        ], Model\Agent\Database::class, tenantId: $tenantId);
-        $bag->addAgent('default', null, Table\Agent::TYPE_SEED, false, 'Fusio-Seed', 'Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.', self::readAgent('seed.md'), [
+        ], Model\Agent\Database::class, tenantId: $tenantId, action: Backend\Action\Agent\Executor\Database::class);
+        $bag->addAgent('default', null, Table\Agent::TYPE_SEED, false, 'Fusio-Seed', 'Populates tables with context-aware data. Generates realistic test records or accurate factual data for production.', self::readAgent('seed.md'), Introduction\Connection::class, [
+            'backend_connection_getAll',
             'backend_connection_database_getTables',
             'backend_connection_database_getTable',
-        ], Model\Agent\Seed::class, tenantId: $tenantId);
+            'backend_connection_database_getRows',
+        ], Model\Agent\Seed::class, tenantId: $tenantId, action: Backend\Action\Agent\Executor\Seed::class);
 
         foreach (self::getOperations() as $category => $operations) {
             $bag->addOperations($tenantId, $category, $operations);
@@ -271,6 +274,7 @@ class NewInstallation
                     httpPath: '/action/list',
                     httpCode: 200,
                     outgoing: Model\Backend\ActionIndex::class,
+                    parameters: ['marketplace' => PropertyTypeFactory::getBoolean(), 'startIndex' => PropertyTypeFactory::getInteger(), 'search' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                     description: 'Returns all available action classes',
                 ),
@@ -400,7 +404,7 @@ class NewInstallation
                     httpPath: '/agent/$agent_id<[0-9]+|^~>/message',
                     httpCode: 200,
                     outgoing: Model\Backend\AgentMessageCollection::class,
-                    parameters: ['chat_id' => PropertyTypeFactory::getString()],
+                    parameters: ['ref_id' => PropertyTypeFactory::getInteger(), 'chat_id' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                     description: 'Returns a paginated list of agent messages',
                 ),
@@ -410,9 +414,49 @@ class NewInstallation
                     httpPath: '/agent/$agent_id<[0-9]+|^~>/message',
                     httpCode: 201,
                     outgoing: Model\Agent\Output::class,
+                    parameters: ['ref_id' => PropertyTypeFactory::getInteger()],
                     incoming: Model\Agent\Input::class,
                     throws: [999 => Model\Common\Message::class],
                     description: 'Submits a new agent message',
+                ),
+                'agent.task.getAll' => new Operation(
+                    action: Backend\Action\Agent\Task\GetAll::class,
+                    httpMethod: 'GET',
+                    httpPath: '/agent/$agent_id<[0-9]+|^~>/task',
+                    httpCode: 200,
+                    outgoing: Model\Backend\AgentTaskCollection::class,
+                    parameters: ['startIndex' => PropertyTypeFactory::getInteger(), 'count' => PropertyTypeFactory::getInteger()],
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a paginated list of agent tasks of the current user',
+                ),
+                'agent.task.create' => new Operation(
+                    action: Backend\Action\Agent\Task\Create::class,
+                    httpMethod: 'POST',
+                    httpPath: '/agent/$agent_id<[0-9]+|^~>/task',
+                    httpCode: 202,
+                    outgoing: Model\Common\Message::class,
+                    parameters: ['connection' => PropertyTypeFactory::getString()],
+                    incoming: Model\Backend\AgentTaskCreate::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Creates a new agent task which executes the action of the agent in the background, the optional connection is passed to the action i.e. to create tables on a specific connection',
+                ),
+                'agent.task.get' => new Operation(
+                    action: Backend\Action\Agent\Task\Get::class,
+                    httpMethod: 'GET',
+                    httpPath: '/agent/$agent_id<[0-9]+|^~>/task/:task_id',
+                    httpCode: 200,
+                    outgoing: Model\Backend\AgentTask::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Returns a specific agent task including all executed steps',
+                ),
+                'agent.task.cancel' => new Operation(
+                    action: Backend\Action\Agent\Task\Cancel::class,
+                    httpMethod: 'DELETE',
+                    httpPath: '/agent/$agent_id<[0-9]+|^~>/task/:task_id',
+                    httpCode: 200,
+                    outgoing: Model\Common\Message::class,
+                    throws: [999 => Model\Common\Message::class],
+                    description: 'Cancels a pending or running agent task',
                 ),
                 'app.getAll' => new Operation(
                     action: Backend\Action\App\GetAll::class,
@@ -2385,7 +2429,7 @@ class NewInstallation
                     httpPath: '/agent/$agent_id<[0-9]+|^~>/message',
                     httpCode: 200,
                     outgoing: Model\Consumer\AgentMessageCollection::class,
-                    parameters: ['chat_id' => PropertyTypeFactory::getString()],
+                    parameters: ['ref_id' => PropertyTypeFactory::getInteger(), 'chat_id' => PropertyTypeFactory::getString()],
                     throws: [999 => Model\Common\Message::class],
                     description: 'Returns a paginated list of agent messages',
                 ),
@@ -2395,6 +2439,7 @@ class NewInstallation
                     httpPath: '/agent/$agent_id<[0-9]+|^~>/message',
                     httpCode: 201,
                     outgoing: Model\Agent\Output::class,
+                    parameters: ['ref_id' => PropertyTypeFactory::getInteger()],
                     incoming: Model\Agent\Input::class,
                     throws: [999 => Model\Common\Message::class],
                     description: 'Submits a new agent message',

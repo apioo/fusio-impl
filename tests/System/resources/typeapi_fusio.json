@@ -428,7 +428,26 @@
           "target": "Backend_ActionIndex"
         }
       },
-      "arguments": [],
+      "arguments": {
+        "marketplace": {
+          "in": "query",
+          "schema": {
+            "type": "boolean"
+          }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
       "throws": [
         {
           "code": 999,
@@ -793,6 +812,12 @@
             "type": "string"
           }
         },
+        "ref_id": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
         "chat_id": {
           "in": "query",
           "schema": {
@@ -842,6 +867,12 @@
             "type": "reference",
             "target": "Agent_Input"
           }
+        },
+        "ref_id": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
         }
       },
       "throws": [
@@ -854,6 +885,191 @@
         }
       ],
       "description": "Submits a new agent message",
+      "stability": 2,
+      "security": [
+        "backend.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "backend.agent.task.cancel": {
+      "path": "/backend/agent/$agent_id<[0-9]+|^~>/task/:task_id",
+      "method": "DELETE",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "task_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Cancels a pending or running agent task",
+      "stability": 2,
+      "security": [
+        "backend.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "backend.agent.task.create": {
+      "path": "/backend/agent/$agent_id<[0-9]+|^~>/task",
+      "method": "POST",
+      "return": {
+        "code": 202,
+        "schema": {
+          "type": "reference",
+          "target": "Common_Message"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "in": "body",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_AgentTaskCreate"
+          }
+        },
+        "connection": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Creates a new agent task which executes the action of the agent in the background, the optional connection is passed to the action i.e. to create tables on a specific connection",
+      "stability": 2,
+      "security": [
+        "backend.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "backend.agent.task.get": {
+      "path": "/backend/agent/$agent_id<[0-9]+|^~>/task/:task_id",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_AgentTask"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "task_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a specific agent task including all executed steps",
+      "stability": 2,
+      "security": [
+        "backend.agent"
+      ],
+      "authorization": true,
+      "tags": [
+        "agent"
+      ]
+    },
+    "backend.agent.task.getAll": {
+      "path": "/backend/agent/$agent_id<[0-9]+|^~>/task",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_AgentTaskCollection"
+        }
+      },
+      "arguments": {
+        "agent_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of agent tasks of the current user",
       "stability": 2,
       "security": [
         "backend.agent"
@@ -10938,6 +11154,12 @@
             "type": "string"
           }
         },
+        "ref_id": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
         "chat_id": {
           "in": "query",
           "schema": {
@@ -10986,6 +11208,12 @@
           "schema": {
             "type": "reference",
             "target": "Agent_Input"
+          }
+        },
+        "ref_id": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
           }
         }
       },
@@ -13117,6 +13345,10 @@
           "description": "Human-readable name of the action class",
           "type": "string"
         },
+        "description": {
+          "description": "A longer description what the action does",
+          "type": "string"
+        },
         "class": {
           "description": "Technical identifier of the action class",
           "type": "string"
@@ -13167,9 +13399,9 @@
           "description": "Introduction message",
           "type": "string"
         },
-        "temperature": {
-          "description": "The used temperature default is 1.0",
-          "type": "number"
+        "introductionAction": {
+          "description": "Introduction action",
+          "type": "string"
         },
         "costs": {
           "description": "Costs per token",
@@ -13261,6 +13493,101 @@
         "target": "Common_Collection",
         "template": {
           "T": "Backend_AgentMessage"
+        }
+      }
+    },
+    "Backend_AgentTask": {
+      "description": "This object represents a task which executes the action of an agent in the background, i.e. to create all resources of a generated blueprint",
+      "type": "struct",
+      "properties": {
+        "kind": {
+          "description": "Uniquely identifies the object schema type",
+          "type": "string"
+        },
+        "id": {
+          "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "status": {
+          "description": "The status of the task, one of: pending, running, completed, failed or canceled",
+          "type": "string"
+        },
+        "item": {
+          "description": "The agent output which is processed by the task",
+          "type": "reference",
+          "target": "Agent_Item"
+        },
+        "steps": {
+          "description": "A log of all steps which were executed by the task",
+          "type": "array",
+          "schema": {
+            "type": "reference",
+            "target": "Backend_AgentTaskStep"
+          }
+        },
+        "message": {
+          "description": "A message which describes the result of the task",
+          "type": "string"
+        },
+        "startDate": {
+          "description": "Timestamp when the task was started by a worker",
+          "type": "string",
+          "format": "date-time"
+        },
+        "endDate": {
+          "description": "Timestamp when the task was completed, failed or canceled",
+          "type": "string",
+          "format": "date-time"
+        },
+        "insertDate": {
+          "description": "Timestamp when the task was created",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Backend_AgentTaskCollection": {
+      "description": "Represents a collection of agent tasks",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_Collection",
+        "template": {
+          "T": "Backend_AgentTask"
+        }
+      }
+    },
+    "Backend_AgentTaskCreate": {
+      "description": "Payload for creating a new agent task, the provided item is passed to the action of the agent",
+      "type": "struct",
+      "properties": {
+        "item": {
+          "description": "The agent output which should be processed, i.e. a generated blueprint",
+          "type": "reference",
+          "target": "Agent_Item"
+        }
+      }
+    },
+    "Backend_AgentTaskStep": {
+      "description": "Represents a single step of an agent task",
+      "type": "struct",
+      "properties": {
+        "name": {
+          "description": "Name of the step, i.e. \"Schema create: Todo-Item\"",
+          "type": "string"
+        },
+        "success": {
+          "description": "Indicates whether the step was successful",
+          "type": "boolean"
+        },
+        "message": {
+          "description": "A message which describes the result of the step",
+          "type": "string"
+        },
+        "insertDate": {
+          "description": "Timestamp when the step was executed",
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
@@ -13760,6 +14087,10 @@
       "properties": {
         "name": {
           "description": "Human-readable name of the connection class",
+          "type": "string"
+        },
+        "description": {
+          "description": "A longer description what the connection does",
           "type": "string"
         },
         "class": {
@@ -16183,14 +16514,33 @@
       },
       "discriminator": "type",
       "mapping": {
+        "Common_FormElementAction": "action",
+        "Common_FormElementAgent": "agent",
         "Common_FormElementCheckbox": "checkbox",
         "Common_FormElementCollection": "collection",
+        "Common_FormElementConnection": "connection",
         "Common_FormElementInput": "input",
         "Common_FormElementMap": "map",
         "Common_FormElementSelect": "select",
         "Common_FormElementTextArea": "textarea",
         "Common_FormElementTypeAPI": "typeapi",
         "Common_FormElementTypeSchema": "typeschema"
+      }
+    },
+    "Common_FormElementAction": {
+      "description": "Form element to select an action",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_FormElement"
+      }
+    },
+    "Common_FormElementAgent": {
+      "description": "Form element to select an agent",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_FormElement"
       }
     },
     "Common_FormElementCheckbox": {
@@ -16211,6 +16561,20 @@
       "properties": {
         "type": {
           "description": "The input type i.e. text or password, all HTML input types are allowed",
+          "type": "string"
+        }
+      }
+    },
+    "Common_FormElementConnection": {
+      "description": "Form element to select a connection",
+      "type": "struct",
+      "parent": {
+        "type": "reference",
+        "target": "Common_FormElement"
+      },
+      "properties": {
+        "class": {
+          "description": "Optional to select only specific connection classes",
           "type": "string"
         }
       }
@@ -16341,6 +16705,10 @@
         },
         "id": {
           "description": "Unique identifier for the object",
+          "type": "integer"
+        },
+        "type": {
+          "description": "The agent type",
           "type": "integer"
         },
         "name": {
@@ -17539,6 +17907,9 @@
         "class": {
           "type": "string"
         },
+        "form": {
+          "type": "any"
+        },
         "config": {
           "type": "reference",
           "target": "MarketplaceActionConfig"
@@ -17785,6 +18156,9 @@
       "type": "struct",
       "properties": {
         "id": {
+          "type": "integer"
+        },
+        "visibility": {
           "type": "integer"
         },
         "name": {

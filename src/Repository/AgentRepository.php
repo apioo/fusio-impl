@@ -80,7 +80,6 @@ class AgentRepository implements Repository\AgentInterface
             return null;
         }
 
-        $hash = null;
         if (is_numeric($id)) {
             $column = Table\Generated\AgentTable::COLUMN_ID;
         } else {

@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Agent;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 
@@ -45,7 +46,7 @@ class EntityTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/agent/' . $this->id, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body   = (string) $response->getBody();
@@ -53,6 +54,7 @@ class EntityTest extends DbTestCase
 {
     "id": {$this->id},
     "status": 1,
+    "type": 0,
     "name": "agent-test",
     "description": "An agent test"
 }
@@ -66,7 +68,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/agent/10', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -81,7 +83,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/agent/' . $this->id, 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -95,7 +97,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/agent/' . $this->id, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'name' => 'foo',
             'description' => 'foo',
@@ -111,7 +113,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/agent/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();

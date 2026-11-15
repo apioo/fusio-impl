@@ -67,9 +67,6 @@ readonly class Token
         }
 
         $scope = implode(',', $scopes);
-        if (strlen($scope) > 1023) {
-            throw new InvalidScopeException('Provided too many scopes');
-        }
 
         $now = new DateTime();
         $categoryId = $this->categoryTable->getCategoryIdByType($tenantId, $categoryType);

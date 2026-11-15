@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 
@@ -36,7 +37,7 @@ class ListTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/action/list', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -111,16 +112,12 @@ class ListTest extends DbTestCase
             "class": "Fusio.Impl.Tests.Adapter.Test.InspectAction"
         },
         {
+            "name": "Introduction-Action",
+            "class": "Fusio.Impl.Tests.Adapter.Test.IntroductionAction"
+        },
+        {
             "name": "MIME-Action",
             "class": "Fusio.Impl.Tests.Adapter.Test.MimeAction"
-        },
-        {
-            "name": "PHP-Processor",
-            "class": "Fusio.Adapter.Php.Action.PhpProcessor"
-        },
-        {
-            "name": "PHP-Sandbox",
-            "class": "Fusio.Adapter.Php.Action.PhpSandbox"
         },
         {
             "name": "SMTP-Send",
@@ -159,7 +156,7 @@ class ListTest extends DbTestCase
             "class": "Fusio.Adapter.Sql.Action.SqlUpdate"
         },
         {
-            "name": "Util-A\/B-Test",
+            "name": "Util-A/B-Test",
             "class": "Fusio.Adapter.Util.Action.UtilABTest"
         },
         {

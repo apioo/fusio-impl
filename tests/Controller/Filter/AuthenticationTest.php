@@ -29,6 +29,7 @@ use Fusio\Impl\Repository\AppRepository;
 use Fusio\Impl\Service\Security\TokenValidator;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table\Operation;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\Environment;
@@ -50,12 +51,10 @@ class AuthenticationTest extends DbTestCase
 {
     public function testHandle(): void
     {
-        $authorization = 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873';
-
         $contextFactory = new ContextFactory();
-        $this->newContext($contextFactory->factory(), $authorization);
+        $this->newContext($contextFactory->factory(), Authorization::FOOAPP_CONSUMER);
 
-        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => [$authorization]]);
+        $request = new Request(Uri::parse('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => [Authorization::FOOAPP_CONSUMER]]);
         $response = new Response();
 
         $filterChain = $this->getMockBuilder(FilterChain::class)

@@ -23,20 +23,14 @@ namespace Fusio\Impl\Backend\Action\Connection\Database;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
-use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Connector;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\System\FrameworkConfig;
-use Fusio\Model\Backend\DatabaseRow;
 use Fusio\Model\Backend\DatabaseTable;
-use PSX\DateTime\LocalDate;
-use PSX\DateTime\LocalDateTime;
-use PSX\DateTime\LocalTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\Exception\BadRequestException;
-use PSX\Http\Exception\InternalServerErrorException;
 use PSX\Http\Exception\NotFoundException;
 
 /**
@@ -86,50 +80,6 @@ abstract readonly class TableAbstract implements ActionInterface
         }
 
         return $schemaManager->introspectTable($tableName);
-    }
-
-    protected function getPrimaryKeyColumn(Table $table): string
-    {
-        $primaryKey = $table->getPrimaryKey();
-        if (!$primaryKey instanceof Index) {
-            throw new InternalServerErrorException('Provided table has no primary key');
-        }
-
-        $columns = $primaryKey->getColumns();
-        if (count($columns) !== 1) {
-            throw new InternalServerErrorException('Provided table has multiple primary key columns which are not supported');
-        }
-
-        $primaryKey = $columns[0] ?? null;
-        if (empty($primaryKey)) {
-            throw new InternalServerErrorException('Provided table has no primary key');
-        }
-
-        return $primaryKey;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    protected function getRow(DatabaseRow $payload, Table $table): array
-    {
-        $result = [];
-        foreach ($table->getColumns() as $column) {
-            if ($payload->containsKey($column->getName())) {
-                $value = $payload->get($column->getName());
-                if ($value instanceof LocalDate) {
-                    $value = $value->toDateTime()->format('Y-m-d');
-                } elseif ($value instanceof LocalDateTime) {
-                    $value = $value->toDateTime()->format('Y-m-d H:i:s');
-                } elseif ($value instanceof LocalTime) {
-                    $value = $value->toDateTime()->format('H:i:s');
-                }
-
-                $result[$column->getName()] = $value;
-            }
-        }
-
-        return $result;
     }
 
     protected function createTable(DatabaseTable $table): Table

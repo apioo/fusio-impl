@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Controller;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 
@@ -142,7 +143,7 @@ JSON;
 
         $response = $this->sendRequest('/backend/generator/sqlentity', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'path' => '/provider',
             'scopes' => ['provider'],

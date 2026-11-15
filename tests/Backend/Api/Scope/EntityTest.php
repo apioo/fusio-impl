@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Scope;
 
 use Fusio\Impl\Table;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
@@ -47,7 +48,7 @@ class EntityTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/scope/' . $this->id, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -60,6 +61,30 @@ class EntityTest extends DbTestCase
     "name": "bar",
     "description": "Bar access",
     "operations": [
+        {
+            "id": 289,
+            "scopeId": 61,
+            "operationId": 296,
+            "allow": true
+        },
+        {
+            "id": 288,
+            "scopeId": 61,
+            "operationId": 295,
+            "allow": true
+        },
+        {
+            "id": 287,
+            "scopeId": 61,
+            "operationId": 294,
+            "allow": true
+        },
+        {
+            "id": 286,
+            "scopeId": 61,
+            "operationId": 293,
+            "allow": true
+        },
         {
             "id": 285,
             "scopeId": 61,
@@ -97,51 +122,27 @@ class EntityTest extends DbTestCase
             "allow": true
         },
         {
-            "id": 279,
+            "id": 278,
             "scopeId": 61,
             "operationId": 286,
             "allow": true
         },
         {
-            "id": 278,
+            "id": 276,
             "scopeId": 61,
             "operationId": 285,
             "allow": true
         },
         {
-            "id": 277,
+            "id": 275,
             "scopeId": 61,
             "operationId": 284,
             "allow": true
         },
         {
-            "id": 276,
-            "scopeId": 61,
-            "operationId": 283,
-            "allow": true
-        },
-        {
             "id": 274,
             "scopeId": 61,
-            "operationId": 282,
-            "allow": true
-        },
-        {
-            "id": 272,
-            "scopeId": 61,
-            "operationId": 281,
-            "allow": true
-        },
-        {
-            "id": 271,
-            "scopeId": 61,
-            "operationId": 280,
-            "allow": true
-        },
-        {
-            "id": 270,
-            "scopeId": 61,
-            "operationId": 279,
+            "operationId": 283,
             "allow": true
         }
     ]
@@ -156,7 +157,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/scope/~bar', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -169,6 +170,30 @@ JSON;
     "name": "bar",
     "description": "Bar access",
     "operations": [
+        {
+            "id": 289,
+            "scopeId": 61,
+            "operationId": 296,
+            "allow": true
+        },
+        {
+            "id": 288,
+            "scopeId": 61,
+            "operationId": 295,
+            "allow": true
+        },
+        {
+            "id": 287,
+            "scopeId": 61,
+            "operationId": 294,
+            "allow": true
+        },
+        {
+            "id": 286,
+            "scopeId": 61,
+            "operationId": 293,
+            "allow": true
+        },
         {
             "id": 285,
             "scopeId": 61,
@@ -206,51 +231,27 @@ JSON;
             "allow": true
         },
         {
-            "id": 279,
+            "id": 278,
             "scopeId": 61,
             "operationId": 286,
             "allow": true
         },
         {
-            "id": 278,
+            "id": 276,
             "scopeId": 61,
             "operationId": 285,
             "allow": true
         },
         {
-            "id": 277,
+            "id": 275,
             "scopeId": 61,
             "operationId": 284,
             "allow": true
         },
         {
-            "id": 276,
-            "scopeId": 61,
-            "operationId": 283,
-            "allow": true
-        },
-        {
             "id": 274,
             "scopeId": 61,
-            "operationId": 282,
-            "allow": true
-        },
-        {
-            "id": 272,
-            "scopeId": 61,
-            "operationId": 281,
-            "allow": true
-        },
-        {
-            "id": 271,
-            "scopeId": 61,
-            "operationId": 280,
-            "allow": true
-        },
-        {
-            "id": 270,
-            "scopeId": 61,
-            "operationId": 279,
+            "operationId": 283,
             "allow": true
         }
     ]
@@ -265,7 +266,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/scope/100', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -280,7 +281,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/scope/' . $this->id, 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -298,7 +299,7 @@ JSON;
 
         $response = $this->sendRequest('/backend/scope/' . $this->id, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'name'     => 'Test',
             'metadata' => $metadata,
@@ -341,7 +342,7 @@ JSON;
 
         $response = $this->sendRequest('/backend/scope/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -377,7 +378,7 @@ JSON;
 
         $response = $this->sendRequest('/backend/scope/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -404,7 +405,7 @@ JSON;
 
         $response = $this->sendRequest('/backend/scope/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();

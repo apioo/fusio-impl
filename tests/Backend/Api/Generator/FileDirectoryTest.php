@@ -55,15 +55,21 @@ class FileDirectoryTest extends ProviderTestCase
     {
         return <<<'JSON'
 {
-    "element": [
-        {
-            "element": "input",
-            "help": "A path to a directory which you want expose",
-            "name": "directory",
-            "title": "Directory",
-            "type": "text"
-        }
-    ]
+  "element": [
+    {
+      "element": "connection",
+      "name": "connection",
+      "title": "Connection",
+      "help": "The Filesystem connection which should be used"
+    },
+    {
+      "element": "input",
+      "help": "A path to a directory which you want expose",
+      "name": "directory",
+      "title": "Directory",
+      "type": "text"
+    }
+  ]
 }
 JSON;
     }

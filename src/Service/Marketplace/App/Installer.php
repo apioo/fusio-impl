@@ -227,6 +227,10 @@ class Installer implements InstallerInterface
                 continue;
             }
 
+            if (!is_writable($file)) {
+                continue;
+            }
+
             $content = (string) file_get_contents($file);
 
             foreach ($env as $key => $value) {

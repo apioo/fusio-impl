@@ -43,6 +43,7 @@ readonly class GetAll implements ActionInterface
     {
         return $this->view->getCollection(
             (int) $request->get('agent_id'),
+            (int) $request->get('ref_id'),
             $request->get('chat_id'),
             $context
         );

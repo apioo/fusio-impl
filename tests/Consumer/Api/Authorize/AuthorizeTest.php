@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Authorize;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 
@@ -48,7 +49,7 @@ class AuthorizeTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/authorize?client_id=5347307d-d801-4075-9aaa-a21a29a448c5&scope=backend,foo,bar', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -81,7 +82,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -100,7 +101,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'responseType' => 'code',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
@@ -144,7 +145,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'responseType' => 'code',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
@@ -185,7 +186,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'responseType' => 'code',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
@@ -213,7 +214,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'responseType' => 'token',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
@@ -241,7 +242,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'responseType' => 'token',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
@@ -266,7 +267,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'responseType' => 'token',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
@@ -293,7 +294,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'responseType' => 'foo',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
@@ -320,7 +321,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'responseType' => 'code',
             'clientId' => 'a347307d-d801-4075-9aaa-a21a29a448c5',
@@ -347,7 +348,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'responseType' => 'code',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
@@ -373,7 +374,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'responseType' => 'code',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
@@ -399,7 +400,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/authorize', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'responseType' => 'code',
             'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
@@ -422,11 +423,33 @@ JSON;
         $this->assertEquals('http://yahoo.com?error=invalid_request&error_description=Redirect+uri+must+have+the+same+host+as+the+app+url&state=state', $data['redirectUri'], $body);
     }
 
+    public function testPostInvalidHostSuffix(): void
+    {
+        $response = $this->sendRequest('/consumer/authorize', 'POST', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
+        ], json_encode([
+            'responseType' => 'code',
+            'clientId' => '5347307d-d801-4075-9aaa-a21a29a448c5',
+            'redirectUri' => 'http://notgoogle.com',
+            'scope' => 'bar,backend,authorization,foo',
+            'state' => 'state',
+            'allow' => true,
+        ]));
+
+        $body = (string) $response->getBody();
+        $data = json_decode($body, true);
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertEquals('invalid_request', $data['type'], $body);
+        $this->assertEquals('Redirect uri must have the same host as the app url', $data['error'], $body);
+    }
+
     public function testPut(): void
     {
         $response = $this->sendRequest('/consumer/authorize', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -440,7 +463,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/authorize', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));

@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Agent;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
@@ -46,7 +47,7 @@ class EntityTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/agent/' . $this->id, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -55,19 +56,19 @@ class EntityTest extends DbTestCase
         $expect = <<<JSON
 {
     "kind": "[kind]",
-    "id": {$this->id},
+    "id": 7,
     "status": 1,
     "connection": 8,
     "public": true,
     "type": 0,
     "name": "agent-test",
     "description": "An agent test",
-    "introduction": "A test agent which always return \"Hello World\"",
-    "temperature": 1,
+    "introduction": "A test agent which always return \"{{ message }}\"",
+    "introductionAction": "php+class://Fusio.Impl.Tests.Adapter.Test.IntroductionAction",
     "tools": [
         "test_listFoo"
     ],
-    "outgoing": "schema:\/\/Entry-Schema",
+    "outgoing": "schema://Entry-Schema",
     "insertDate": "[datetime]"
 }
 JSON;
@@ -80,7 +81,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/agent/10', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -95,7 +96,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/agent/' . $this->id, 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -109,7 +110,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/agent/' . $this->id, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'name' => 'foo',
             'description' => 'foo',
@@ -151,7 +152,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/agent/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();

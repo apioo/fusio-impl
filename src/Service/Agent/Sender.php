@@ -23,9 +23,12 @@ namespace Fusio\Impl\Service\Agent;
 use Fusio\Engine\Agent\SenderInterface;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Model\Agent;
+use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
-use Fusio\Impl\Table;
+use Fusio\Engine\Request;
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use Fusio\Model\Agent\Input;
 use Fusio\Model\Agent\Item;
 use Fusio\Model\Agent\ItemObject;
@@ -49,6 +52,8 @@ use Symfony\AI\Platform\Message\Message;
 use Symfony\AI\Platform\Message\MessageBag;
 use Symfony\AI\Platform\TokenUsage\TokenUsageInterface;
 use Throwable;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 /**
  * Sender
@@ -62,7 +67,7 @@ readonly class Sender implements SenderInterface
     /**
      * Max number of messages which are attached to the context
      */
-    public const CONTEXT_MESSAGES_LENGTH = 10;
+    public const int CONTEXT_MESSAGES_LENGTH = 10;
 
     public function __construct(
         private Table\Agent $agentTable,
@@ -76,10 +81,11 @@ readonly class Sender implements SenderInterface
         private ObjectMapperInterface $objectMapper,
         private Repository\ConnectionInterface $connectionRepository,
         private Service\Plan\Payer $planPayerService,
+        private ProcessorInterface $processor,
     ) {
     }
 
-    public function send(int $agentId, Input $input, ContextInterface $context, bool $public = false): Output
+    public function send(int $agentId, Input $input, ContextInterface $context, bool $public = false, ?int $refId = null): Output
     {
         $row = $this->agentTable->findOneByTenantAndId($context->getTenantId(), $context->getUser()->getCategoryId(), $agentId);
         if (!$row instanceof Table\Generated\AgentRow) {
@@ -122,16 +128,29 @@ readonly class Sender implements SenderInterface
         $this->agentTable->beginTransaction();
 
         try {
+            $introduction = $row->getIntroduction();
+
+            $action = $row->getIntroductionAction();
+            if (!empty($action)) {
+                $arguments = [
+                    'agentId' => $agentId,
+                    'refId' => $refId,
+                    'chatId' => $chatId,
+                ];
+
+                $introduction = $this->renderIntroduction($introduction, $action, $row, $arguments, $input, $context);
+            }
+
             $messages = new MessageBag();
-            $messages->add(Message::forSystem($row->getIntroduction()));
+            $messages->add(Message::forSystem($introduction));
 
             if (!empty($chatId)) {
-                $messages = $this->loadPreviousMessages($agentId, $context->getUser()->getId(), $chatId, $messages);
+                $messages = $this->loadPreviousMessages($agentId, $context->getUser()->getId(), $refId, $chatId, $messages);
             }
 
             $userMessages = $this->messageUnserializer->unserialize($item);
 
-            $chatId = $this->persistUserMessages($agentId, $context->getUser()->getId(), $chatId, $userMessages);
+            $chatId = $this->persistUserMessages($agentId, $context->getUser()->getId(), $refId, $chatId, $userMessages);
 
             $messages = $messages->merge($userMessages);
 
@@ -139,14 +158,20 @@ readonly class Sender implements SenderInterface
 
             $options = [
                 'tools' => $this->getTools($row),
-                'temperature' => round($row->getTemperature() / 100, 2),
             ];
 
+            if ($type === Type::ANTHROPIC) {
+                $options['max_tokens'] = 32000;
+            }
+
             if ($costs > 0) {
+                $maxTokens = (int) ($context->getUser()->getPoints() / $costs);
                 if ($type === Type::GEMINI) {
-                    $options['max_output_tokens'] = (int) ($context->getUser()->getPoints() / $costs);
-                } elseif ($type === Type::OPENAI || $type === Type::ANTHROPIC) {
-                    $options['max_tokens'] = (int) ($context->getUser()->getPoints() / $costs);
+                    $options['max_output_tokens'] = $maxTokens;
+                } elseif ($type === Type::OPENAI) {
+                    $options['max_tokens'] = $maxTokens;
+                } elseif ($type === Type::ANTHROPIC) {
+                    $options['max_tokens'] = min($options['max_tokens'], $maxTokens);
                 }
             }
 
@@ -161,7 +186,7 @@ readonly class Sender implements SenderInterface
                 ];
             }
 
-            $result = $agent->call($messages, $options);
+            $result = $agent->call($messages, $options)->getResult();
 
             if ($costs > 0) {
                 $tokenUsage = $result->getMetadata()->get('token_usage');
@@ -176,7 +201,7 @@ readonly class Sender implements SenderInterface
                 $item = $this->resultSerializer->serialize($result);
             }
 
-            $this->messageTable->addAssistantMessage($row->getId(), $context->getUser()->getId(), $chatId, $item);
+            $this->messageTable->addAssistantMessage($row->getId(), $context->getUser()->getId(), $refId, $chatId, $item);
 
             $this->agentTable->commit();
 
@@ -195,11 +220,16 @@ readonly class Sender implements SenderInterface
         }
     }
 
-    private function loadPreviousMessages(int $agentId, int $userId, string $chatId, MessageBag $messages): MessageBag
+    private function loadPreviousMessages(int $agentId, int $userId, ?int $refId, string $chatId, MessageBag $messages): MessageBag
     {
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AgentMessageColumn::AGENT_ID, $agentId);
         $condition->equals(Table\Generated\AgentMessageColumn::USER_ID, $userId);
+
+        if (!empty($refId)) {
+            $condition->equals(Table\Generated\AgentMessageColumn::REF_ID, $refId);
+        }
+
         $condition->equals(Table\Generated\AgentMessageColumn::CHAT_ID, $chatId);
 
         $count = $this->messageTable->getCount($condition);
@@ -229,11 +259,11 @@ readonly class Sender implements SenderInterface
         return $messages;
     }
 
-    private function persistUserMessages(int $agentId, int $userId, ?string $chatId, MessageBag $userMessages): string
+    private function persistUserMessages(int $agentId, int $userId, ?int $refId, ?string $chatId, MessageBag $userMessages): string
     {
         foreach ($userMessages as $userMessage) {
             foreach ($this->messageSerializer->serialize($userMessage) as $content) {
-                $message = $this->messageTable->addUserMessage($agentId, $userId, $chatId, $content);
+                $message = $this->messageTable->addUserMessage($agentId, $userId, $refId, $chatId, $content);
 
                 if (empty($chatId)) {
                     $chatId = $message->getChatId();
@@ -305,5 +335,22 @@ readonly class Sender implements SenderInterface
         } else {
             return Type::OPENAI;
         }
+    }
+
+    /**
+     * @param array<string, mixed> $arguments
+     */
+    private function renderIntroduction(string $introduction, string $action, Table\Generated\AgentRow $row, array $arguments, Input $input, ContextInterface $context): string
+    {
+        $agent = new Agent($row->getId(), $row->getName(), $row->getDescription());
+        $request = new Request($arguments, $input, new Request\AgentRequestContext($agent));
+
+        $response = $this->processor->execute($action, $request, $context, false);
+        $introductionContext = $this->processor->extract($response);
+
+        $loader = new ArrayLoader(['introduction' => $introduction]);
+        $twig = new Environment($loader, ['autoescape' => false]);
+
+        return $twig->render('introduction', $introductionContext?->getAll() ?? []);
     }
 }

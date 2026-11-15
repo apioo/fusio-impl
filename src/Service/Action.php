@@ -25,12 +25,15 @@ use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Exception\FactoryResolveException;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Inflection\ClassName;
+use Fusio\Engine\Inflection\ClassShape;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Action\CreatedEvent;
 use Fusio\Impl\Event\Action\DeletedEvent;
 use Fusio\Impl\Event\Action\UpdatedEvent;
 use Fusio\Impl\Table;
+use Fusio\Marketplace\MarketplaceMessageException;
+use Fusio\Model\Backend\ActionConfig;
 use Fusio\Model\Backend\ActionCreate;
 use Fusio\Model\Backend\ActionUpdate;
 use JsonException;
@@ -38,6 +41,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use PSX\DateTime\LocalDateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Json\Parser;
+use Sdkgen\Client\Exception\ClientException;
 use Throwable;
 
 /**
@@ -51,10 +55,11 @@ readonly class Action
 {
     public function __construct(
         private Action\Committer $actionCommitter,
+        private Action\Validator $validator,
         private Table\Action $actionTable,
         private Factory\ActionInterface $actionFactory,
-        private Action\Validator $validator,
-        private EventDispatcherInterface $eventDispatcher
+        private Marketplace\Action\Repository $marketplaceRepository,
+        private EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
@@ -65,21 +70,29 @@ readonly class Action
         $name = $action->getName() ?? throw new StatusCode\BadRequestException('Provided no action name');
         $class = $action->getClass() ?? throw new StatusCode\BadRequestException('Provided no action class');
 
-        // check source
-        $config     = $action->getConfig()?->getAll() ?? [];
-        $parameters = new Parameters($config);
-        $handler    = $this->newAction($class);
-
         // create action
         try {
             $this->actionTable->beginTransaction();
+
+            // resolve class
+            $resolvedConfig = [];
+            $shape = ClassShape::fromString($class);
+            $class = $this->resolveClass($class, $shape, $context, $resolvedConfig);
+
+            $config = $action->getConfig()?->getAll() ?? [];
+            if (count($config) === 0) {
+                $config = $resolvedConfig;
+            }
+
+            $handlerConfig = $config;
+            $handler = $this->newAction($class, $context, $handlerConfig);
 
             $row = new Table\Generated\ActionRow();
             $row->setTenantId($context->getTenantId());
             $row->setCategoryId($context->getCategoryId());
             $row->setStatus(Table\Action::STATUS_ACTIVE);
             $row->setName($name);
-            $row->setClass(ClassName::serialize($class));
+            $row->setClass($class);
             $row->setAsync($action->getAsync() ?? false);
             $row->setConfig(self::serializeConfig($config));
             $row->setMetadata($action->getMetadata() !== null ? Parser::encode($action->getMetadata()) : null);
@@ -94,7 +107,7 @@ readonly class Action
             // call lifecycle
             if ($handler instanceof LifecycleInterface) {
                 /** @phpstan-ignore arguments.count */
-                $handler->onCreate($name, $parameters, $hash);
+                $handler->onCreate($name, new Parameters($handlerConfig), $hash);
             }
 
             $this->actionTable->commit();
@@ -123,19 +136,18 @@ readonly class Action
         $this->validator->assert($action, $context->getTenantId(), $existing);
 
         $name = $action->getName() ?? $existing->getName();
-        $class = $action->getClass() ?? $existing->getClass();
+        $class = $existing->getClass();
 
-        // check source
-        $config     = $action->getConfig()?->getAll() ?? self::unserializeConfig($existing->getConfig());
-        $parameters = new Parameters($config ?? []);
-        $handler    = $this->newAction($class);
+        $config = $action->getConfig()?->getAll() ?? self::unserializeConfig($existing->getConfig());
+
+        $handlerConfig = $config ?? [];
+        $handler = $this->newAction($class, $context, $handlerConfig);
 
         // update action
         try {
             $this->actionTable->beginTransaction();
 
             $existing->setName($name);
-            $existing->setClass(ClassName::serialize($class));
             $existing->setAsync($action->getAsync() ?? $existing->getAsync());
             $existing->setConfig(self::serializeConfig($config));
             $existing->setMetadata($action->getMetadata() !== null ? Parser::encode($action->getMetadata()) : $existing->getMetadata());
@@ -147,7 +159,7 @@ readonly class Action
             // call lifecycle
             if ($handler instanceof LifecycleInterface) {
                 /** @phpstan-ignore arguments.count */
-                $handler->onUpdate($name, $parameters, $hash);
+                $handler->onUpdate($name, new Parameters($handlerConfig), $hash);
             }
 
             $this->actionTable->commit();
@@ -173,13 +185,16 @@ readonly class Action
             throw new StatusCode\GoneException('Action was deleted');
         }
 
-        $config     = self::unserializeConfig($existing->getConfig());
-        $parameters = new Parameters($config ?: []);
-        $handler    = $this->newAction($existing->getClass());
+        $class = $existing->getClass();
+
+        $config = self::unserializeConfig($existing->getConfig());
+
+        $handlerConfig = $config ?? [];
+        $handler = $this->newAction($class, $context, $handlerConfig);
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {
-            $handler->onDelete($existing->getName(), $parameters);
+            $handler->onDelete($existing->getName(), new Parameters($config));
         }
 
         $existing->setStatus(Table\Action::STATUS_DELETED);
@@ -192,13 +207,104 @@ readonly class Action
 
     /**
      * Checks whether the provided class is resolvable and returns an action instance
+     *
+     * @param array<string, mixed> $config
      */
-    private function newAction(string $class): ActionInterface
+    private function newAction(string $class, UserContext $context, array &$config): ActionInterface
     {
+        $shape = ClassShape::fromString($class);
+        if ($shape === ClassShape::PHP_CLASS) {
+            try {
+                return $this->actionFactory->factory($class);
+            } catch (FactoryResolveException $e) {
+                throw new StatusCode\BadRequestException($e->getMessage());
+            }
+        } elseif ($shape === ClassShape::ENTITY_NAME) {
+            $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $class);
+            if (!$row instanceof Table\Generated\ActionRow) {
+                throw new StatusCode\BadRequestException('Could not resolve action class');
+            }
+
+            $actionConfig = self::unserializeConfig($row->getConfig());
+            if ($actionConfig !== null) {
+                $config = $actionConfig;
+            }
+
+            return $this->newAction($row->getClass(), $context, $config);
+        } else {
+            throw new StatusCode\BadRequestException('Provided an invalid action class shape');
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $config
+     */
+    private function resolveClass(string $class, ClassShape $shape, UserContext $context, array &$config): string
+    {
+        return match ($shape) {
+            ClassShape::PHP_CLASS => ClassName::serialize($class),
+            ClassShape::ENTITY_NAME => $this->resolveEntityName($class, $context),
+            ClassShape::MARKETPLACE_ENTITY => $this->resolveMarketplaceEntity($class, $context, $config),
+        };
+    }
+
+    private function resolveEntityName(string $class, UserContext $context): string
+    {
+        $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $class);
+        if (!$row instanceof Table\Generated\ActionRow) {
+            throw new StatusCode\BadRequestException('Could not resolve action class');
+        }
+
+        return $row->getName();
+    }
+
+    /**
+     * @param array<string, mixed> $config
+     */
+    private function resolveMarketplaceEntity(string $class, UserContext $context, array &$config): string
+    {
+        $parts = explode('/', $class, 2);
+        $user = $parts[0] ?? null;
+        $name = $parts[1] ?? null;
+
+        if (empty($user) || empty($name)) {
+            throw new StatusCode\BadRequestException('Provided an invalid marketplace action name');
+        }
+
+        $actionName = $user . '-' . $name;
+
+        $row = $this->actionTable->findOneByTenantAndName($context->getTenantId(), $context->getCategoryId(), $actionName);
+        if ($row instanceof Table\Generated\ActionRow) {
+            return $row->getName();
+        }
+
         try {
-            return $this->actionFactory->factory($class);
-        } catch (FactoryResolveException $e) {
-            throw new StatusCode\BadRequestException($e->getMessage());
+            $action = $this->marketplaceRepository->install($user, $name);
+        } catch (MarketplaceMessageException $e) {
+            $message = $e->getPayload()->getMessage();
+
+            throw new StatusCode\InternalServerErrorException('Could not fetch action from marketplace: ' . $message, previous: $e);
+        } catch (ClientException $e) {
+            throw new StatusCode\InternalServerErrorException('Could not fetch action from marketplace: ' . $e->getMessage(), previous: $e);
+        }
+
+        $form = $action->getForm();
+        if (is_array($form) && count($form) > 0) {
+            // we have an action which is configurable we copy the action from the marketplace
+            $create = new ActionCreate();
+            $create->setName($actionName);
+            $create->setClass($action->getClass());
+            $create->setConfig(ActionConfig::from($action->getConfig() ?? []));
+            $this->create($create, $context);
+
+            return $actionName;
+        } else {
+            $actionConfig = $action->getConfig()?->getAll();
+            if (is_array($actionConfig)) {
+                $config = $actionConfig;
+            }
+
+            return $action->getClass();
         }
     }
 

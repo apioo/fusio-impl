@@ -88,12 +88,11 @@ class Agent extends ViewAbstract
             'name' => Table\Generated\AgentTable::COLUMN_NAME,
             'description' => Table\Generated\AgentTable::COLUMN_DESCRIPTION,
             'introduction' => Table\Generated\AgentTable::COLUMN_INTRODUCTION,
-            'temperature' => $builder->fieldCallback(Table\Generated\AgentTable::COLUMN_TEMPERATURE, function (int $value) {
-                return round($value / 100, 2);
-            }),
+            'introductionAction' => Table\Generated\AgentTable::COLUMN_INTRODUCTION_ACTION,
             'costs' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_COSTS),
             'tools' => $builder->fieldJson(Table\Generated\AgentTable::COLUMN_TOOLS),
             'outgoing' => Table\Generated\AgentTable::COLUMN_OUTGOING,
+            'action' => Table\Generated\AgentTable::COLUMN_ACTION,
             'metadata' => $builder->fieldJson(Table\Generated\AgentTable::COLUMN_METADATA),
             'insertDate' => $builder->fieldDateTime(Table\Generated\AgentTable::COLUMN_INSERT_DATE),
         ]);

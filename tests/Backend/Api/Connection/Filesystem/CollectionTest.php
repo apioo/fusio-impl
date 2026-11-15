@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Connection\Filesystem;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 
@@ -36,12 +37,13 @@ class CollectionTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/connection/LocalFilesystem/filesystem', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
         $body = Normalizer::normalizeDateTime($body);
         $body = preg_replace('/[0-9a-f]{32}/m', '[checksum]', $body);
+        $body = preg_replace('/"size": \d+,/m', '"size": 1337,', $body);
 
         $expect = <<<'JSON'
 {
@@ -50,37 +52,42 @@ class CollectionTest extends DbTestCase
     "startIndex": 0,
     "entry": [
         {
-            "id": "385ee9e8-53fe-3082-8719-352b32044b13",
+            "id": "bd7dfa50-677d-3a48-92fa-0cee40732ff3",
             "name": "collection_schema.json",
-            "contentType": "application\/json",
+            "size": 1337,
+            "contentType": "application/json",
             "checksum": "[checksum]",
             "lastModified": "[datetime]"
         },
         {
-            "id": "7564504c-bfbb-387b-9ab2-bd937fa1dab7",
+            "id": "38496a0b-a4d7-3f66-adc4-eb3be4578ab0",
             "name": "entry_form.json",
-            "contentType": "application\/json",
+            "size": 1337,
+            "contentType": "application/json",
             "checksum": "[checksum]",
             "lastModified": "[datetime]"
         },
         {
-            "id": "79accfa8-013d-3d8d-8b5c-d7eba46910bf",
+            "id": "c8a46340-4f76-3abe-be33-853376ea26af",
             "name": "entry_schema.json",
-            "contentType": "application\/json",
+            "size": 1337,
+            "contentType": "application/json",
             "checksum": "[checksum]",
             "lastModified": "[datetime]"
         },
         {
-            "id": "1314aaa1-23c4-3ef7-85a1-4ae9cf90ca87",
+            "id": "245e9edc-eecc-385d-9cf4-ee173f13817d",
             "name": "local-php-fix.php",
-            "contentType": "text\/x-php",
+            "size": 1337,
+            "contentType": "text/x-php",
             "checksum": "[checksum]",
             "lastModified": "[datetime]"
         },
         {
-            "id": "62574473-a47d-387b-a6bc-bfba25f83771",
+            "id": "09e96122-91e0-3921-aaa3-547040e15666",
             "name": "local-php.php",
-            "contentType": "text\/x-php",
+            "size": 1337,
+            "contentType": "text/x-php",
             "checksum": "[checksum]",
             "lastModified": "[datetime]"
         }
@@ -101,7 +108,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/connection/LocalFilesystem/filesystem', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -115,7 +122,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/connection/LocalFilesystem/filesystem', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));

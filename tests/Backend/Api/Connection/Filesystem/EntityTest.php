@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Connection\Filesystem;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -33,9 +34,9 @@ class EntityTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/connection/LocalFilesystem/filesystem/385ee9e8-53fe-3082-8719-352b32044b13', 'GET', [
+        $response = $this->sendRequest('/backend/connection/LocalFilesystem/filesystem/bd7dfa50-677d-3a48-92fa-0cee40732ff3', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body   = (string) $response->getBody();
@@ -52,7 +53,7 @@ class EntityTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/connection/LocalFilesystem/filesystem/foobar', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -60,14 +61,14 @@ class EntityTest extends DbTestCase
 
         $this->assertEquals(404, $response->getStatusCode(), $body);
         $this->assertFalse($data->success);
-        $this->assertStringStartsWith('Provided in invalid id', $data->message);
+        $this->assertStringStartsWith('Provided id does not exist', $data->message);
     }
 
     public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/connection/LocalFilesystem/filesystem/385ee9e8-53fe-3082-8719-352b32044b13', 'POST', [
+        $response = $this->sendRequest('/backend/connection/LocalFilesystem/filesystem/bd7dfa50-677d-3a48-92fa-0cee40732ff3', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\Agent\Serializer;
 use Fusio\Model\Agent\Item;
 use Fusio\Model\Agent\ItemObject;
 use stdClass;
+use Symfony\AI\Platform\Result\MultiPartResult;
 use Symfony\AI\Platform\Result\ResultInterface;
 use Symfony\AI\Platform\Result\TextResult;
 
@@ -37,10 +38,15 @@ readonly class JsonResultSerializer extends ResultSerializer
 {
     public function serialize(ResultInterface $result): Item
     {
-        if ($result instanceof TextResult) {
-            $content = $this->removeNoice($result->getContent());
+        $json = null;
+        if ($result instanceof MultiPartResult) {
+            $json = $this->removeNoice($result->asText());
+        } elseif ($result instanceof TextResult) {
+            $json = $this->removeNoice($result->getContent());
+        }
 
-            $payload = json_decode($content);
+        if (!empty($json)) {
+            $payload = json_decode($json);
             if ($payload instanceof stdClass) {
                 $object = new ItemObject();
                 $object->setType('object');

@@ -34,6 +34,7 @@ use PSX\Api\Attribute\Post;
 use PSX\Framework\Controller\ControllerAbstract;
 use PSX\Http\Exception\ServiceUnavailableException;
 use PSX\Http\FilterChainInterface;
+use PSX\Http\FilterInterface;
 use PSX\Http\PsrFactory;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
@@ -46,7 +47,7 @@ use PSX\Schema\ContentType;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class McpController extends ControllerAbstract
+class McpController extends ControllerAbstract implements FilterInterface
 {
     public function __construct(
         private readonly Mcp $mcp,
@@ -61,9 +62,6 @@ class McpController extends ControllerAbstract
         $filter = parent::getPreFilter();
         $filter[] = Filter\Tenant::class;
         $filter[] = Filter\Firewall::class;
-        $filter[] = function (RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain) {
-            $this->run($request, $response);
-        };
 
         return $filter;
     }
@@ -90,7 +88,7 @@ class McpController extends ControllerAbstract
     {
     }
 
-    private function run(RequestInterface $request, ResponseInterface $response): void
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         if (!$this->frameworkConfig->isMCPEnabled()) {
             throw new ServiceUnavailableException('MCP service is not enabled');
@@ -106,5 +104,7 @@ class McpController extends ControllerAbstract
         $response->setStatus($psrResponse->getStatusCode());
         $response->setHeaders($psrResponse->getHeaders());
         $response->setBody($psrResponse->getBody());
+
+        $filterChain->handle($request, $response);
     }
 }

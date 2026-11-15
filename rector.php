@@ -6,6 +6,7 @@ use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\CodingStyle\Rector\String_\SimplifyQuoteEscapeRector;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
+use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
 use Rector\Set\ValueObject\SetList;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\TypeDeclaration\Rector\StmtsAwareInterface\SafeDeclareStrictTypesRector;
@@ -29,8 +30,8 @@ return RectorConfig::configure()
         RemoveUnusedVariableAssignRector::class,
         SafeDeclareStrictTypesRector::class,
         RepeatedOrEqualToInArrayRector::class,
-        DisallowedEmptyRuleFixerRector::class,
         CatchExceptionNameMatchingTypeRector::class,
         SimplifyQuoteEscapeRector::class,
+        RemoveAlwaysElseRector::class,
         __DIR__ . '/src/Table/Generated/*',
     ]);

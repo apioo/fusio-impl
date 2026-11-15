@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Account;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 
@@ -36,7 +37,7 @@ class AccountTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/account', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a'
+            'Authorization' => Authorization::BACKEND_DEVELOPER,
         ]);
 
         $body = (string) $response->getBody();
@@ -123,7 +124,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/account', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a'
+            'Authorization' => Authorization::BACKEND_DEVELOPER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -137,7 +138,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/account', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a'
+            'Authorization' => Authorization::BACKEND_DEVELOPER,
         ], json_encode([
             'email' => 'foo@bar.com',
         ]));
@@ -172,7 +173,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/account', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a'
+            'Authorization' => Authorization::BACKEND_DEVELOPER,
         ], json_encode([
             'foo' => 'bar',
         ]));

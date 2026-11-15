@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Marketplace\Bundle;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -36,7 +37,7 @@ class EntityTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/marketplace/bundle/fusio/hello-world', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -52,7 +53,7 @@ class EntityTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/marketplace/bundle/fusio/foobar', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -71,7 +72,7 @@ class EntityTest extends DbTestCase
 
         $response = $this->sendRequest('/backend/marketplace/bundle/fusio/BulkInsert', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -91,7 +92,7 @@ class EntityTest extends DbTestCase
 
         $response = $this->sendRequest('/backend/marketplace/bundle/fusio/BulkInsert', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body   = (string) $response->getBody();
@@ -115,7 +116,7 @@ JSON;
 
         $response = $this->sendRequest('/backend/marketplace/bundle/fusio/BulkInsert', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body   = (string) $response->getBody();

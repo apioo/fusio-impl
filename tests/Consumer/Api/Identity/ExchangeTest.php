@@ -26,6 +26,7 @@ use Fusio\Impl\Provider\Identity\Google;
 use Fusio\Impl\Provider\Identity\OpenIDConnect;
 use Fusio\Impl\Service\Security\JsonWebToken;
 use Fusio\Impl\Table\User;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -62,7 +63,7 @@ class ExchangeTest extends DbTestCase
 
         $response = $this->sendRequest('/consumer/identity/1/exchange?code=foobar&state=facebook-state', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -109,7 +110,7 @@ class ExchangeTest extends DbTestCase
 
         $response = $this->sendRequest('/consumer/identity/2/exchange?code=foobar&state=github-state', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -156,7 +157,7 @@ class ExchangeTest extends DbTestCase
 
         $response = $this->sendRequest('/consumer/identity/3/exchange?code=foobar&state=google-state', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -203,7 +204,7 @@ class ExchangeTest extends DbTestCase
 
         $response = $this->sendRequest('/consumer/identity/4/exchange?code=foobar&state=openid-state', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -236,7 +237,7 @@ class ExchangeTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/identity/1/exchange', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -250,7 +251,7 @@ class ExchangeTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/identity/1/exchange', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -264,7 +265,7 @@ class ExchangeTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/identity/1/exchange', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));

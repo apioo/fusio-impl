@@ -20,6 +20,8 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Backup;
 
+use Composer\InstalledVersions;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 
@@ -36,7 +38,7 @@ class ExportTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/backup/export', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -50,7 +52,7 @@ class ExportTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/backup/export', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
         ]));
 
@@ -62,6 +64,9 @@ class ExportTest extends DbTestCase
         $actual = \json_encode($actual);
         $expect = file_get_contents(__DIR__ . '/resource/export.json');
 
+        $version = ltrim(InstalledVersions::getPrettyVersion('fusio/sdk'), 'v');
+        $expect = str_replace('[base_kind]', 'https://typehub.cloud/s/fusio/sdk/' . $version, $expect);
+
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
@@ -70,7 +75,7 @@ class ExportTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/backup/export', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -84,7 +89,7 @@ class ExportTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/backup/export', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));

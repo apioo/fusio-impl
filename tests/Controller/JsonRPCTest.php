@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Tests\Controller;
 
-use Fusio\Impl\Base;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -36,7 +36,7 @@ class JsonRPCTest extends DbTestCase
     {
         $response = $this->sendRequest('/jsonrpc', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ]);
 
         $this->assertEquals(404, $response->getStatusCode());
@@ -60,7 +60,7 @@ JSON;
 
         $response = $this->sendRequest('/jsonrpc', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ], $body);
 
         $actual = (string) $response->getBody();
@@ -110,7 +110,7 @@ JSON;
 
         $response = $this->sendRequest('/jsonrpc', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ], $body);
 
         $actual = (string) $response->getBody();
@@ -165,7 +165,7 @@ JSON;
     {
         $response = $this->sendRequest('/jsonrpc', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ]);
 
         $this->assertEquals(404, $response->getStatusCode());
@@ -175,7 +175,7 @@ JSON;
     {
         $response = $this->sendRequest('/jsonrpc', 'PATCH', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ]);
 
         $this->assertEquals(404, $response->getStatusCode());
@@ -185,7 +185,7 @@ JSON;
     {
         $response = $this->sendRequest('/jsonrpc', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ]);
 
         $this->assertEquals(404, $response->getStatusCode());

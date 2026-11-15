@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Authorization\GrantType;
 
+use DateInterval;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\Environment\IPResolver;
@@ -45,6 +46,7 @@ class RefreshToken extends RefreshTokenAbstract
         private Service\Token $tokenService,
         private Service\System\FrameworkConfig $frameworkConfig,
         private Service\Firewall $firewallService,
+        private Table\Firewall\Log $firewallLogTable,
         private IPResolver $ipResolver,
     ) {
     }
@@ -60,6 +62,11 @@ class RefreshToken extends RefreshTokenAbstract
         }
 
         try {
+            $requestCount = $this->firewallLogTable->getResponseCodeCount($this->frameworkConfig->getTenantId(), $ip, new DateInterval('PT1M'));
+            if ($requestCount > 10) {
+                throw new InvalidRequestException('Your IP has sent to many requests please try again later');
+            }
+
             $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'n/a';
             $ip = $this->ipResolver->resolveByEnvironment();
             $name = $userAgent;

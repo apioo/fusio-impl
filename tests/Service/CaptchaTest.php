@@ -44,7 +44,7 @@ class CaptchaTest extends TestCase
         $this::assertSame(64, strlen((string) $challenge->getChallenge()));
         $this::assertSame(32, strlen((string) $challenge->getSalt()));
         $this::assertSame(64, strlen((string) $challenge->getSignature()));
-        $this::assertSame(100_000, $challenge->getMaxnumber());
+        $this::assertSame(1_000_000, $challenge->getMaxnumber());
         $this::assertGreaterThan(time(), $challenge->getExpires());
     }
 

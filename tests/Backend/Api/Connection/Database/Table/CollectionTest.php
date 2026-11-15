@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Connection\Database\Table;
 
 use Doctrine\DBAL\Types\Type;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -36,13 +37,13 @@ class CollectionTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/connection/Test/database', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 51,
+    "totalResults": 52,
     "itemsPerPage": 16,
     "startIndex": 0,
     "entry": [
@@ -68,6 +69,9 @@ class CollectionTest extends DbTestCase
             "name": "fusio_agent_message"
         },
         {
+            "name": "fusio_agent_task"
+        },
+        {
             "name": "fusio_app"
         },
         {
@@ -90,9 +94,6 @@ class CollectionTest extends DbTestCase
         },
         {
             "name": "fusio_connection"
-        },
-        {
-            "name": "fusio_cronjob"
         }
     ]
 }
@@ -111,7 +112,7 @@ JSON;
 
         $response = $this->sendRequest('/backend/connection/Test/database', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'name'    => 'my_table',
             'columns' => [
@@ -157,7 +158,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/connection/Test/database', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -171,7 +172,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/connection/Test/database', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));

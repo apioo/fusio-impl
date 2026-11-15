@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Operation;
 
 use Fusio\Impl\Tests\Assert;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 use PSX\Api\OperationInterface;
@@ -39,7 +40,7 @@ class CollectionTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/operation', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -54,16 +55,68 @@ class CollectionTest extends DbTestCase
     "entry": [
         {
             "kind": "[kind]",
+            "id": 296,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "/mime/xml",
+            "httpCode": 200,
+            "name": "mime.xml",
+            "action": "action://MIME-Action"
+        },
+        {
+            "kind": "[kind]",
+            "id": 295,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "/mime/text",
+            "httpCode": 200,
+            "name": "mime.text",
+            "action": "action://MIME-Action"
+        },
+        {
+            "kind": "[kind]",
+            "id": 294,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "/mime/multipart",
+            "httpCode": 200,
+            "name": "mime.multipart",
+            "action": "action://MIME-Action"
+        },
+        {
+            "kind": "[kind]",
+            "id": 293,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "/mime/json",
+            "httpCode": 200,
+            "name": "mime.json",
+            "action": "action://MIME-Action"
+        },
+        {
+            "kind": "[kind]",
             "id": 292,
             "status": 1,
             "active": true,
             "public": false,
             "stability": 2,
             "httpMethod": "POST",
-            "httpPath": "\/mime\/xml",
+            "httpPath": "/mime/form",
             "httpCode": 200,
-            "name": "mime.xml",
-            "action": "action:\/\/MIME-Action"
+            "name": "mime.form",
+            "action": "action://MIME-Action"
         },
         {
             "kind": "[kind]",
@@ -73,10 +126,10 @@ class CollectionTest extends DbTestCase
             "public": false,
             "stability": 2,
             "httpMethod": "POST",
-            "httpPath": "\/mime\/text",
+            "httpPath": "/mime/binary",
             "httpCode": 200,
-            "name": "mime.text",
-            "action": "action:\/\/MIME-Action"
+            "name": "mime.binary",
+            "action": "action://MIME-Action"
         },
         {
             "kind": "[kind]",
@@ -85,11 +138,11 @@ class CollectionTest extends DbTestCase
             "active": true,
             "public": false,
             "stability": 2,
-            "httpMethod": "POST",
-            "httpPath": "\/mime\/multipart",
+            "httpMethod": "DELETE",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
-            "name": "mime.multipart",
-            "action": "action:\/\/MIME-Action"
+            "name": "inspect.delete",
+            "action": "action://Inspect-Action"
         },
         {
             "kind": "[kind]",
@@ -98,11 +151,11 @@ class CollectionTest extends DbTestCase
             "active": true,
             "public": false,
             "stability": 2,
-            "httpMethod": "POST",
-            "httpPath": "\/mime\/json",
+            "httpMethod": "PATCH",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
-            "name": "mime.json",
-            "action": "action:\/\/MIME-Action"
+            "name": "inspect.patch",
+            "action": "action://Inspect-Action"
         },
         {
             "kind": "[kind]",
@@ -111,11 +164,11 @@ class CollectionTest extends DbTestCase
             "active": true,
             "public": false,
             "stability": 2,
-            "httpMethod": "POST",
-            "httpPath": "\/mime\/form",
+            "httpMethod": "PUT",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
-            "name": "mime.form",
-            "action": "action:\/\/MIME-Action"
+            "name": "inspect.put",
+            "action": "action://Inspect-Action"
         },
         {
             "kind": "[kind]",
@@ -125,10 +178,10 @@ class CollectionTest extends DbTestCase
             "public": false,
             "stability": 2,
             "httpMethod": "POST",
-            "httpPath": "\/mime\/binary",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
-            "name": "mime.binary",
-            "action": "action:\/\/MIME-Action"
+            "name": "inspect.post",
+            "action": "action://Inspect-Action"
         },
         {
             "kind": "[kind]",
@@ -137,11 +190,11 @@ class CollectionTest extends DbTestCase
             "active": true,
             "public": false,
             "stability": 2,
-            "httpMethod": "DELETE",
-            "httpPath": "\/inspect\/:foo",
+            "httpMethod": "GET",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
-            "name": "inspect.delete",
-            "action": "action:\/\/Inspect-Action"
+            "name": "inspect.get",
+            "action": "action://Inspect-Action"
         },
         {
             "kind": "[kind]",
@@ -150,11 +203,11 @@ class CollectionTest extends DbTestCase
             "active": true,
             "public": false,
             "stability": 2,
-            "httpMethod": "PATCH",
-            "httpPath": "\/inspect\/:foo",
-            "httpCode": 200,
-            "name": "inspect.patch",
-            "action": "action:\/\/Inspect-Action"
+            "httpMethod": "POST",
+            "httpPath": "/bar",
+            "httpCode": 201,
+            "name": "test.createBar",
+            "action": "action://PHP-Local@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
         },
         {
             "kind": "[kind]",
@@ -163,76 +216,24 @@ class CollectionTest extends DbTestCase
             "active": true,
             "public": false,
             "stability": 2,
-            "httpMethod": "PUT",
-            "httpPath": "\/inspect\/:foo",
-            "httpCode": 200,
-            "name": "inspect.put",
-            "action": "action:\/\/Inspect-Action"
+            "httpMethod": "POST",
+            "httpPath": "/foo",
+            "httpCode": 201,
+            "name": "test.createFoo",
+            "action": "action://Sql-Insert"
         },
         {
             "kind": "[kind]",
             "id": 283,
             "status": 1,
             "active": true,
-            "public": false,
-            "stability": 2,
-            "httpMethod": "POST",
-            "httpPath": "\/inspect\/:foo",
-            "httpCode": 200,
-            "name": "inspect.post",
-            "action": "action:\/\/Inspect-Action"
-        },
-        {
-            "kind": "[kind]",
-            "id": 282,
-            "status": 1,
-            "active": true,
-            "public": false,
-            "stability": 2,
-            "httpMethod": "GET",
-            "httpPath": "\/inspect\/:foo",
-            "httpCode": 200,
-            "name": "inspect.get",
-            "action": "action:\/\/Inspect-Action"
-        },
-        {
-            "kind": "[kind]",
-            "id": 281,
-            "status": 1,
-            "active": true,
-            "public": false,
-            "stability": 2,
-            "httpMethod": "POST",
-            "httpPath": "\/bar",
-            "httpCode": 201,
-            "name": "test.createBar",
-            "action": "action:\/\/PHP-Local@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
-        },
-        {
-            "kind": "[kind]",
-            "id": 280,
-            "status": 1,
-            "active": true,
-            "public": false,
-            "stability": 2,
-            "httpMethod": "POST",
-            "httpPath": "\/foo",
-            "httpCode": 201,
-            "name": "test.createFoo",
-            "action": "action:\/\/Sql-Insert"
-        },
-        {
-            "kind": "[kind]",
-            "id": 279,
-            "status": 1,
-            "active": true,
             "public": true,
             "stability": 1,
             "httpMethod": "GET",
-            "httpPath": "\/foo",
+            "httpPath": "/foo",
             "httpCode": 200,
             "name": "test.listFoo",
-            "action": "action:\/\/Sql-Select-All"
+            "action": "action://Sql-Select-All"
         },
         {
             "kind": "[kind]",
@@ -242,10 +243,10 @@ class CollectionTest extends DbTestCase
             "public": true,
             "stability": 2,
             "httpMethod": "GET",
-            "httpPath": "\/",
+            "httpPath": "/",
             "httpCode": 200,
             "name": "meta.getAbout",
-            "action": "php+class:\/\/Fusio.Impl.System.Action.Meta.GetAbout"
+            "action": "php+class://Fusio.Impl.System.Action.Meta.GetAbout"
         }
     ]
 }
@@ -259,7 +260,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation?search=inspec', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -274,68 +275,68 @@ JSON;
     "entry": [
         {
             "kind": "[kind]",
-            "id": 286,
+            "id": 290,
             "status": 1,
             "active": true,
             "public": false,
             "stability": 2,
             "httpMethod": "DELETE",
-            "httpPath": "\/inspect\/:foo",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
             "name": "inspect.delete",
-            "action": "action:\/\/Inspect-Action"
+            "action": "action://Inspect-Action"
         },
         {
             "kind": "[kind]",
-            "id": 285,
+            "id": 289,
             "status": 1,
             "active": true,
             "public": false,
             "stability": 2,
             "httpMethod": "PATCH",
-            "httpPath": "\/inspect\/:foo",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
             "name": "inspect.patch",
-            "action": "action:\/\/Inspect-Action"
+            "action": "action://Inspect-Action"
         },
         {
             "kind": "[kind]",
-            "id": 284,
+            "id": 288,
             "status": 1,
             "active": true,
             "public": false,
             "stability": 2,
             "httpMethod": "PUT",
-            "httpPath": "\/inspect\/:foo",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
             "name": "inspect.put",
-            "action": "action:\/\/Inspect-Action"
+            "action": "action://Inspect-Action"
         },
         {
             "kind": "[kind]",
-            "id": 283,
+            "id": 287,
             "status": 1,
             "active": true,
             "public": false,
             "stability": 2,
             "httpMethod": "POST",
-            "httpPath": "\/inspect\/:foo",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
             "name": "inspect.post",
-            "action": "action:\/\/Inspect-Action"
+            "action": "action://Inspect-Action"
         },
         {
             "kind": "[kind]",
-            "id": 282,
+            "id": 286,
             "status": 1,
             "active": true,
             "public": false,
             "stability": 2,
             "httpMethod": "GET",
-            "httpPath": "\/inspect\/:foo",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
             "name": "inspect.get",
-            "action": "action:\/\/Inspect-Action"
+            "action": "action://Inspect-Action"
         }
     ]
 }
@@ -349,7 +350,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation?search=taxonomy_id:1', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -364,16 +365,16 @@ JSON;
     "entry": [
         {
             "kind": "[kind]",
-            "id": 279,
+            "id": 283,
             "status": 1,
             "active": true,
             "public": true,
             "stability": 1,
             "httpMethod": "GET",
-            "httpPath": "\/foo",
+            "httpPath": "/foo",
             "httpCode": 200,
             "name": "test.listFoo",
-            "action": "action:\/\/Sql-Select-All"
+            "action": "action://Sql-Select-All"
         }
     ]
 }
@@ -387,7 +388,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation?count=80', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -402,16 +403,68 @@ JSON;
     "entry": [
         {
             "kind": "[kind]",
+            "id": 296,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "/mime/xml",
+            "httpCode": 200,
+            "name": "mime.xml",
+            "action": "action://MIME-Action"
+        },
+        {
+            "kind": "[kind]",
+            "id": 295,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "/mime/text",
+            "httpCode": 200,
+            "name": "mime.text",
+            "action": "action://MIME-Action"
+        },
+        {
+            "kind": "[kind]",
+            "id": 294,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "/mime/multipart",
+            "httpCode": 200,
+            "name": "mime.multipart",
+            "action": "action://MIME-Action"
+        },
+        {
+            "kind": "[kind]",
+            "id": 293,
+            "status": 1,
+            "active": true,
+            "public": false,
+            "stability": 2,
+            "httpMethod": "POST",
+            "httpPath": "/mime/json",
+            "httpCode": 200,
+            "name": "mime.json",
+            "action": "action://MIME-Action"
+        },
+        {
+            "kind": "[kind]",
             "id": 292,
             "status": 1,
             "active": true,
             "public": false,
             "stability": 2,
             "httpMethod": "POST",
-            "httpPath": "\/mime\/xml",
+            "httpPath": "/mime/form",
             "httpCode": 200,
-            "name": "mime.xml",
-            "action": "action:\/\/MIME-Action"
+            "name": "mime.form",
+            "action": "action://MIME-Action"
         },
         {
             "kind": "[kind]",
@@ -421,10 +474,10 @@ JSON;
             "public": false,
             "stability": 2,
             "httpMethod": "POST",
-            "httpPath": "\/mime\/text",
+            "httpPath": "/mime/binary",
             "httpCode": 200,
-            "name": "mime.text",
-            "action": "action:\/\/MIME-Action"
+            "name": "mime.binary",
+            "action": "action://MIME-Action"
         },
         {
             "kind": "[kind]",
@@ -433,11 +486,11 @@ JSON;
             "active": true,
             "public": false,
             "stability": 2,
-            "httpMethod": "POST",
-            "httpPath": "\/mime\/multipart",
+            "httpMethod": "DELETE",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
-            "name": "mime.multipart",
-            "action": "action:\/\/MIME-Action"
+            "name": "inspect.delete",
+            "action": "action://Inspect-Action"
         },
         {
             "kind": "[kind]",
@@ -446,11 +499,11 @@ JSON;
             "active": true,
             "public": false,
             "stability": 2,
-            "httpMethod": "POST",
-            "httpPath": "\/mime\/json",
+            "httpMethod": "PATCH",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
-            "name": "mime.json",
-            "action": "action:\/\/MIME-Action"
+            "name": "inspect.patch",
+            "action": "action://Inspect-Action"
         },
         {
             "kind": "[kind]",
@@ -459,11 +512,11 @@ JSON;
             "active": true,
             "public": false,
             "stability": 2,
-            "httpMethod": "POST",
-            "httpPath": "\/mime\/form",
+            "httpMethod": "PUT",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
-            "name": "mime.form",
-            "action": "action:\/\/MIME-Action"
+            "name": "inspect.put",
+            "action": "action://Inspect-Action"
         },
         {
             "kind": "[kind]",
@@ -473,10 +526,10 @@ JSON;
             "public": false,
             "stability": 2,
             "httpMethod": "POST",
-            "httpPath": "\/mime\/binary",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
-            "name": "mime.binary",
-            "action": "action:\/\/MIME-Action"
+            "name": "inspect.post",
+            "action": "action://Inspect-Action"
         },
         {
             "kind": "[kind]",
@@ -485,11 +538,11 @@ JSON;
             "active": true,
             "public": false,
             "stability": 2,
-            "httpMethod": "DELETE",
-            "httpPath": "\/inspect\/:foo",
+            "httpMethod": "GET",
+            "httpPath": "/inspect/:foo",
             "httpCode": 200,
-            "name": "inspect.delete",
-            "action": "action:\/\/Inspect-Action"
+            "name": "inspect.get",
+            "action": "action://Inspect-Action"
         },
         {
             "kind": "[kind]",
@@ -498,11 +551,11 @@ JSON;
             "active": true,
             "public": false,
             "stability": 2,
-            "httpMethod": "PATCH",
-            "httpPath": "\/inspect\/:foo",
-            "httpCode": 200,
-            "name": "inspect.patch",
-            "action": "action:\/\/Inspect-Action"
+            "httpMethod": "POST",
+            "httpPath": "/bar",
+            "httpCode": 201,
+            "name": "test.createBar",
+            "action": "action://PHP-Local@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
         },
         {
             "kind": "[kind]",
@@ -511,76 +564,24 @@ JSON;
             "active": true,
             "public": false,
             "stability": 2,
-            "httpMethod": "PUT",
-            "httpPath": "\/inspect\/:foo",
-            "httpCode": 200,
-            "name": "inspect.put",
-            "action": "action:\/\/Inspect-Action"
+            "httpMethod": "POST",
+            "httpPath": "/foo",
+            "httpCode": 201,
+            "name": "test.createFoo",
+            "action": "action://Sql-Insert"
         },
         {
             "kind": "[kind]",
             "id": 283,
             "status": 1,
             "active": true,
-            "public": false,
-            "stability": 2,
-            "httpMethod": "POST",
-            "httpPath": "\/inspect\/:foo",
-            "httpCode": 200,
-            "name": "inspect.post",
-            "action": "action:\/\/Inspect-Action"
-        },
-        {
-            "kind": "[kind]",
-            "id": 282,
-            "status": 1,
-            "active": true,
-            "public": false,
-            "stability": 2,
-            "httpMethod": "GET",
-            "httpPath": "\/inspect\/:foo",
-            "httpCode": 200,
-            "name": "inspect.get",
-            "action": "action:\/\/Inspect-Action"
-        },
-        {
-            "kind": "[kind]",
-            "id": 281,
-            "status": 1,
-            "active": true,
-            "public": false,
-            "stability": 2,
-            "httpMethod": "POST",
-            "httpPath": "\/bar",
-            "httpCode": 201,
-            "name": "test.createBar",
-            "action": "action:\/\/PHP-Local@913c5d62a340e5db90e2577f01caf9bd072e1bfa"
-        },
-        {
-            "kind": "[kind]",
-            "id": 280,
-            "status": 1,
-            "active": true,
-            "public": false,
-            "stability": 2,
-            "httpMethod": "POST",
-            "httpPath": "\/foo",
-            "httpCode": 201,
-            "name": "test.createFoo",
-            "action": "action:\/\/Sql-Insert"
-        },
-        {
-            "kind": "[kind]",
-            "id": 279,
-            "status": 1,
-            "active": true,
             "public": true,
             "stability": 1,
             "httpMethod": "GET",
-            "httpPath": "\/foo",
+            "httpPath": "/foo",
             "httpCode": 200,
             "name": "test.listFoo",
-            "action": "action:\/\/Sql-Select-All"
+            "action": "action://Sql-Select-All"
         },
         {
             "kind": "[kind]",
@@ -590,10 +591,10 @@ JSON;
             "public": true,
             "stability": 2,
             "httpMethod": "GET",
-            "httpPath": "\/",
+            "httpPath": "/",
             "httpCode": 200,
             "name": "meta.getAbout",
-            "action": "php+class:\/\/Fusio.Impl.System.Action.Meta.GetAbout"
+            "action": "php+class://Fusio.Impl.System.Action.Meta.GetAbout"
         }
     ]
 }
@@ -611,7 +612,7 @@ JSON;
 
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -644,7 +645,7 @@ JSON;
     "kind": "[kind]",
     "success": true,
     "message": "Operation successfully created",
-    "id": "293"
+    "id": "297"
 }
 JSON;
 
@@ -663,7 +664,7 @@ JSON;
 
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -694,7 +695,7 @@ JSON;
         $this->assertEquals(201, $response->getStatusCode(), $body);
         $this->assertSame(true, $data->success);
         $this->assertSame('Operation successfully created', $data->message);
-        $this->assertContains($data->id, ['293', '294']); // postgres does not reset the auto increment so we need to check both
+        $this->assertContains($data->id, ['297', '298']); // postgres does not reset the auto increment so we need to check both
 
         // check database
         Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'test.bar', 'GET', '/foo/bar', 200, ['foo', 'baz'], $metadata);
@@ -704,7 +705,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -729,7 +730,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -754,7 +755,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -779,7 +780,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -804,7 +805,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -829,7 +830,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -854,7 +855,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -884,7 +885,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -914,7 +915,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -940,7 +941,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -966,7 +967,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -991,7 +992,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -1016,7 +1017,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -1044,7 +1045,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -1072,7 +1073,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -1100,7 +1101,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -1125,7 +1126,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -1150,7 +1151,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active' => true,
             'public' => true,
@@ -1176,7 +1177,7 @@ JSON;
         // move operation to stable
         $response = $this->sendRequest('/backend/operation/' . $data->id, 'PUT', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active' => true,
             'public' => true,
@@ -1220,7 +1221,7 @@ JSON;
         // move schema back to experimental
         $response = $this->sendRequest('/backend/operation/' . $id, 'PUT', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active' => true,
             'public' => true,
@@ -1265,7 +1266,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -1279,7 +1280,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));

@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Authorization\GrantType;
 
+use DateInterval;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\Environment\IPResolver;
@@ -49,6 +50,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
         private Service\System\FrameworkConfig $frameworkConfig,
         private Service\Firewall $firewallService,
         private Table\App\Code $appCodeTable,
+        private Table\Firewall\Log $firewallLogTable,
         private IPResolver $ipResolver,
     ) {
     }
@@ -64,6 +66,11 @@ class AuthorizationCode extends AuthorizationCodeAbstract
         }
 
         try {
+            $requestCount = $this->firewallLogTable->getResponseCodeCount($this->frameworkConfig->getTenantId(), $ip, new DateInterval('PT1M'));
+            if ($requestCount > 10) {
+                throw new InvalidRequestException('Your IP has sent to many requests please try again later');
+            }
+
             $code = $this->appCodeTable->getCodeByRequest(
                 $credentials->getClientId(),
                 $credentials->getClientSecret(),

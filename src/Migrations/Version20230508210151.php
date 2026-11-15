@@ -77,10 +77,11 @@ final class Version20230508210151 extends AbstractMigration
             $agentTable->addColumn('name', 'string');
             $agentTable->addColumn('description', 'string');
             $agentTable->addColumn('introduction', 'text');
-            $agentTable->addColumn('temperature', 'integer', ['default' => 100]);
+            $agentTable->addColumn('introduction_action', 'string', ['notnull' => false]);
             $agentTable->addColumn('costs', 'integer', ['notnull' => false]);
             $agentTable->addColumn('tools', 'text', ['notnull' => false, 'default' => null]);
             $agentTable->addColumn('outgoing', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
+            $agentTable->addColumn('action', 'string', ['notnull' => false]);
             $agentTable->addColumn('metadata', 'text', ['notnull' => false]);
             $agentTable->addColumn('insert_date', 'datetime');
             $agentTable->setPrimaryKey(['id']);
@@ -92,6 +93,7 @@ final class Version20230508210151 extends AbstractMigration
             $agentMessageTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $agentMessageTable->addColumn('agent_id', 'integer');
             $agentMessageTable->addColumn('user_id', 'integer');
+            $agentMessageTable->addColumn('ref_id', 'integer', ['notnull' => false, 'default' => null]);
             $agentMessageTable->addColumn('chat_id', 'string');
             $agentMessageTable->addColumn('child', 'integer');
             $agentMessageTable->addColumn('origin', 'integer');
@@ -105,17 +107,19 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_agent_task')) {
             $agentTaskTable = $schema->createTable('fusio_agent_task');
             $agentTaskTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $agentTaskTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $agentTaskTable->addColumn('agent_id', 'integer');
             $agentTaskTable->addColumn('user_id', 'integer');
-            $agentTaskTable->addColumn('context_id', 'string', ['length' => 64, 'notnull' => false]);
-            $agentTaskTable->addColumn('status', 'integer', ['default' => 1]); // 1: submitted, 2: working, 3: requires_action, 4: completed, 5: failed
-            $agentTaskTable->addColumn('input', 'text', ['notnull' => false]);
-            $agentTaskTable->addColumn('output', 'text', ['notnull' => false]);
-            $agentTaskTable->addColumn('pending_data', 'text', ['notnull' => false]);
-            $agentTaskTable->addColumn('update_date', 'datetime');
+            $agentTaskTable->addColumn('connection_id', 'integer', ['notnull' => false, 'default' => null]);
+            $agentTaskTable->addColumn('status', 'integer', ['default' => Table\Agent\Task::STATUS_PENDING]);
+            $agentTaskTable->addColumn('item', 'text');
+            $agentTaskTable->addColumn('steps', 'text', ['notnull' => false, 'default' => null]);
+            $agentTaskTable->addColumn('message', 'text', ['notnull' => false, 'default' => null]);
+            $agentTaskTable->addColumn('start_date', 'datetime', ['notnull' => false, 'default' => null]);
+            $agentTaskTable->addColumn('end_date', 'datetime', ['notnull' => false, 'default' => null]);
             $agentTaskTable->addColumn('insert_date', 'datetime');
             $agentTaskTable->setPrimaryKey(['id']);
-            $agentTaskTable->addIndex(['context_id']);
+            $agentTaskTable->addIndex(['agent_id', 'user_id']);
         }
 
         if (!$schema->hasTable('fusio_app')) {
@@ -588,6 +592,7 @@ final class Version20230508210151 extends AbstractMigration
             $testTable->addColumn('body', 'text', ['notnull' => false]);
             $testTable->setPrimaryKey(['id']);
             $testTable->addUniqueIndex(['operation_id']);
+
         }
 
         if (!$schema->hasTable('fusio_token')) {
@@ -601,7 +606,7 @@ final class Version20230508210151 extends AbstractMigration
             $tokenTable->addColumn('name', 'string', ['length' => 255, 'notnull' => false]);
             $tokenTable->addColumn('token', 'string', ['length' => 512]);
             $tokenTable->addColumn('refresh', 'string', ['length' => 255, 'notnull' => false]);
-            $tokenTable->addColumn('scope', 'string', ['length' => 1023]);
+            $tokenTable->addColumn('scope', 'text');
             $tokenTable->addColumn('ip', 'string', ['length' => 40]);
             $tokenTable->addColumn('expire', 'datetime', ['notnull' => false]);
             $tokenTable->addColumn('date', 'datetime');

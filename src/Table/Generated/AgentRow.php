@@ -14,10 +14,11 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?string $name = null;
     private ?string $description = null;
     private ?string $introduction = null;
-    private ?int $temperature = null;
+    private ?string $introductionAction = null;
     private ?int $costs = null;
     private ?string $tools = null;
     private ?string $outgoing = null;
+    private ?string $action = null;
     private ?string $metadata = null;
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
     public function setId(int $id): void
@@ -100,13 +101,13 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->introduction ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "introduction" was provided');
     }
-    public function setTemperature(int $temperature): void
+    public function setIntroductionAction(?string $introductionAction): void
     {
-        $this->temperature = $temperature;
+        $this->introductionAction = $introductionAction;
     }
-    public function getTemperature(): int
+    public function getIntroductionAction(): ?string
     {
-        return $this->temperature ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "temperature" was provided');
+        return $this->introductionAction;
     }
     public function setCosts(?int $costs): void
     {
@@ -131,6 +132,14 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     public function getOutgoing(): ?string
     {
         return $this->outgoing;
+    }
+    public function setAction(?string $action): void
+    {
+        $this->action = $action;
+    }
+    public function getAction(): ?string
+    {
+        return $this->action;
     }
     public function setMetadata(?string $metadata): void
     {
@@ -162,10 +171,11 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('name', $this->name);
         $record->put('description', $this->description);
         $record->put('introduction', $this->introduction);
-        $record->put('temperature', $this->temperature);
+        $record->put('introduction_action', $this->introductionAction);
         $record->put('costs', $this->costs);
         $record->put('tools', $this->tools);
         $record->put('outgoing', $this->outgoing);
+        $record->put('action', $this->action);
         $record->put('metadata', $this->metadata);
         $record->put('insert_date', $this->insertDate);
         return $record;
@@ -190,10 +200,11 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->name = isset($data['name']) && is_string($data['name']) ? $data['name'] : null;
         $row->description = isset($data['description']) && is_string($data['description']) ? $data['description'] : null;
         $row->introduction = isset($data['introduction']) && is_string($data['introduction']) ? $data['introduction'] : null;
-        $row->temperature = isset($data['temperature']) && is_int($data['temperature']) ? $data['temperature'] : null;
+        $row->introductionAction = isset($data['introduction_action']) && is_string($data['introduction_action']) ? $data['introduction_action'] : null;
         $row->costs = isset($data['costs']) && is_int($data['costs']) ? $data['costs'] : null;
         $row->tools = isset($data['tools']) && is_string($data['tools']) ? $data['tools'] : null;
         $row->outgoing = isset($data['outgoing']) && is_string($data['outgoing']) ? $data['outgoing'] : null;
+        $row->action = isset($data['action']) && is_string($data['action']) ? $data['action'] : null;
         $row->metadata = isset($data['metadata']) && is_string($data['metadata']) ? $data['metadata'] : null;
         $row->insertDate = isset($data['insert_date']) && $data['insert_date'] instanceof \DateTimeInterface ? \PSX\DateTime\LocalDateTime::from($data['insert_date']) : null;
         return $row;

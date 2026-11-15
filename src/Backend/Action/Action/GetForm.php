@@ -37,7 +37,7 @@ use PSX\Http\Exception\InternalServerErrorException;
  */
 readonly class GetForm implements ActionInterface
 {
-    public function __construct(private ActionProvider $actionParser)
+    public function __construct(private ActionProvider $actionProvider)
     {
     }
 
@@ -45,7 +45,7 @@ readonly class GetForm implements ActionInterface
     {
         try {
             $className = $request->get('class');
-            $form = $this->actionParser->getForm($className);
+            $form = $this->actionProvider->getForm($className);
 
             return $form instanceof Container ? $form : new Container();
         } catch (\Throwable $e) {

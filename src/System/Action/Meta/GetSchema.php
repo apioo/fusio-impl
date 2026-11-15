@@ -32,6 +32,7 @@ use Fusio\Model;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\Generator;
 use PSX\Schema\SchemaManagerInterface;
+use function json_decode;
 
 /**
  * GetSchema
@@ -64,12 +65,12 @@ readonly class GetSchema implements ActionInterface
         $source = Scheme::wrap($schema['name']) ?? throw new StatusCode\BadRequestException('Could not get schema name');
 
         $type = $this->schemaManager->getSchema($source);
-        $json = \json_decode((string) (new Generator\TypeSchema())->generate($type));
+        $json = json_decode((string) new Generator\TypeSchema()->generate($type));
 
         return [
             'kind' => Service\TypeSystem\KindBuilder::build(Model\System\Schema::class),
             'schema' => $json,
-            'form' => $schema['form'],
+            'form' => $schema['form'] ?? null,
         ];
     }
 }
