@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\System\Api\WellKnown;
 
+use Fusio\Impl\Base;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -38,78 +39,81 @@ class GetAgentCardTest extends DbTestCase
         ]);
 
         $actual = (string) $response->getBody();
-        $expect = <<<JSON
+        $data = json_decode($actual, true);
+
+        $this->assertEquals(200, $response->getStatusCode(), $actual);
+
+        // the version depends on the installed Fusio version
+        $this->assertSame(Base::getVersion() ?? '0.0.0', $data['version'] ?? null, $actual);
+        unset($data['version']);
+
+        $expect = <<<'JSON'
 {
-    "name": "Fusio",
-    "description": "Self-Hosted API Management for Builders.",
-    "url": "http://127.0.0.1/a2a/v1",
+    "name": "Fusio-Architect",
+    "description": "Builds complete API operations by coordinating schemas, database tables, and business logic.",
+    "supportedInterfaces": [
+        {
+            "url": "http://127.0.0.1/a2a/v1",
+            "protocolBinding": "JSONRPC",
+            "protocolVersion": "1.0"
+        }
+    ],
+    "capabilities": {
+        "streaming": false,
+        "pushNotifications": false,
+        "extendedAgentCard": false
+    },
+    "defaultInputModes": ["text/plain", "application/json"],
+    "defaultOutputModes": ["application/json"],
     "skills": [
-        {
-            "id": "agent-test",
-            "name": "agent-test",
-            "description": "An agent test"
-        },
-        {
-            "id": "Fusio-Seed",
-            "name": "Fusio-Seed",
-            "description": "Populates tables with context-aware data. Generates realistic test records or accurate factual data for production."
-        },
-        {
-            "id": "Fusio-Database",
-            "name": "Fusio-Database",
-            "description": "Designs database table structures including columns, types, and constraints."
-        },
-        {
-            "id": "Fusio-Schema",
-            "name": "Fusio-Schema",
-            "description": "Designs JSON schemas to define and validate request/response data structures."
-        },
-        {
-            "id": "Fusio-Action",
-            "name": "Fusio-Action",
-            "description": "Develops custom business logic and backend code for your API operations."
-        },
         {
             "id": "Fusio-Architect",
             "name": "Fusio-Architect",
-            "description": "Builds complete API operations by coordinating schemas, database tables, and business logic."
-        },
-        {
-            "id": "Fusio-General",
-            "name": "Fusio-General",
-            "description": "Provides real-time instance insights and debugging. Explores your setup to analyze operations, tables, and logs."
+            "description": "Builds complete API operations by coordinating schemas, database tables, and business logic.",
+            "tags": ["fusio", "architect"],
+            "inputModes": ["text/plain", "application/json"],
+            "outputModes": ["application/json"]
         }
     ],
-    "auth": {
-        "type": "oauth2",
-        "description": "Fusio OAuth2 Service used to authorize AI agents",
-        "flows": {
-            "authorizationCode": {
-                "authorizationUrl": "http://127.0.0.1/authorization/authorize",
-                "tokenUrl": "http://127.0.0.1/authorization/token",
-                "scopes": [
-                    "bar",
-                    "default",
-                    "foo",
-                    "plan_scope"
-                ]
-            },
-            "clientCredentials": {
-                "tokenUrl": "http://127.0.0.1/authorization/token",
-                "scopes": [
-                    "bar",
-                    "default",
-                    "foo",
-                    "plan_scope"
-                ]
+    "securitySchemes": {
+        "oauth2": {
+            "oauth2SecurityScheme": {
+                "description": "Fusio OAuth2 authorization, the token requires the \"backend.agent\" scope",
+                "flows": {
+                    "authorizationCode": {
+                        "authorizationUrl": "http://127.0.0.1/authorization/authorize",
+                        "tokenUrl": "http://127.0.0.1/authorization/token",
+                        "scopes": {
+                            "backend": "Access to the backend scope",
+                            "backend.agent": "Access to the backend.agent scope"
+                        }
+                    }
+                }
+            }
+        },
+        "oauth2ClientCredentials": {
+            "oauth2SecurityScheme": {
+                "description": "Fusio OAuth2 client credentials, the app requires the \"backend.agent\" scope",
+                "flows": {
+                    "clientCredentials": {
+                        "tokenUrl": "http://127.0.0.1/authorization/token",
+                        "scopes": {
+                            "backend": "Access to the backend scope",
+                            "backend.agent": "Access to the backend.agent scope"
+                        }
+                    }
+                }
             }
         }
-    }
+    },
+    "securityRequirements": [
+        {"schemes": {"oauth2": {"list": ["backend.agent"]}}},
+        {"schemes": {"oauth2ClientCredentials": {"list": ["backend.agent"]}}}
+    ]
 }
 JSON;
 
-        $this->assertEquals(200, $response->getStatusCode(), $actual);
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+        $this->assertJsonStringEqualsJsonString($expect, (string) json_encode($data), $actual);
     }
 
     public function testPost(): void

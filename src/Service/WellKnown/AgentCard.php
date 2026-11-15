@@ -20,9 +20,11 @@
 
 namespace Fusio\Impl\Service\WellKnown;
 
-use Fusio\Impl\Service;
+use Fusio\Impl\Base;
+use Fusio\Impl\Service\Agent\A2A\Server;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use Fusio\Impl\Table;
+use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use PSX\Sql\OrderBy;
 
@@ -35,8 +37,12 @@ use PSX\Sql\OrderBy;
  */
 readonly class AgentCard
 {
+    /**
+     * The scope which is required to access the A2A endpoint, it grants access to all backend agent operations
+     */
+    public const string REQUIRED_SCOPE = 'backend.agent';
+
     public function __construct(
-        private Service\Config $configService,
         private Table\Agent $agentTable,
         private Table\Scope $scopeTable,
         private FrameworkConfig $frameworkConfig
@@ -44,69 +50,118 @@ readonly class AgentCard
     }
 
     /**
+     * Returns the agent card according to the A2A specification. We only expose the architect agent of the instance
+     *
+     * @see https://a2a-protocol.org/latest/specification/
      * @return array<string, mixed>
      */
     public function get(): array
     {
+        $agent = $this->findAgent();
         $scopes = $this->getScopes();
+        $tokenUrl = $this->frameworkConfig->getDispatchUrl('authorization', 'token');
+        $outputMode = !empty($agent->getOutgoing()) ? 'application/json' : 'text/plain';
 
         return [
-            'name' => $this->configService->getString('info_title') ?: 'Fusio',
-            'description' => $this->configService->getString('info_description') ?: null,
-            'url' => $this->frameworkConfig->getDispatchUrl('a2a', 'v1'),
-            'skills' => $this->getSkills(),
-            'auth' => [
-                'type' => 'oauth2',
-                'description' => 'Fusio OAuth2 Service used to authorize AI agents',
-                'flows' => [
-                    'authorizationCode' => [
-                        'authorizationUrl' => $this->frameworkConfig->getDispatchUrl('authorization', 'authorize'),
-                        'tokenUrl' => $this->frameworkConfig->getDispatchUrl('authorization', 'token'),
-                        'scopes' => $scopes,
-                    ],
-                    'clientCredentials' => [
-                        'tokenUrl' => $this->frameworkConfig->getDispatchUrl('authorization', 'token'),
-                        'scopes' => $scopes,
+            'name' => $agent->getName(),
+            'description' => $agent->getDescription(),
+            'supportedInterfaces' => [
+                [
+                    'url' => $this->frameworkConfig->getDispatchUrl('a2a', 'v1'),
+                    'protocolBinding' => 'JSONRPC',
+                    'protocolVersion' => Server::PROTOCOL_VERSION,
+                ],
+            ],
+            'version' => Base::getVersion() ?? '0.0.0',
+            'capabilities' => [
+                'streaming' => false,
+                'pushNotifications' => false,
+                'extendedAgentCard' => false,
+            ],
+            'defaultInputModes' => ['text/plain', 'application/json'],
+            'defaultOutputModes' => [$outputMode],
+            'skills' => [
+                [
+                    'id' => $agent->getName(),
+                    'name' => $agent->getName(),
+                    'description' => $agent->getDescription(),
+                    'tags' => ['fusio', self::getTypeTag($agent->getType())],
+                    'inputModes' => ['text/plain', 'application/json'],
+                    'outputModes' => [$outputMode],
+                ],
+            ],
+            'securitySchemes' => [
+                'oauth2' => [
+                    'oauth2SecurityScheme' => [
+                        'description' => 'Fusio OAuth2 authorization, the token requires the "backend.agent" scope',
+                        'flows' => [
+                            'authorizationCode' => [
+                                'authorizationUrl' => $this->frameworkConfig->getDispatchUrl('authorization', 'authorize'),
+                                'tokenUrl' => $tokenUrl,
+                                'scopes' => $scopes,
+                            ],
+                        ],
                     ],
                 ],
+                'oauth2ClientCredentials' => [
+                    'oauth2SecurityScheme' => [
+                        'description' => 'Fusio OAuth2 client credentials, the app requires the "backend.agent" scope',
+                        'flows' => [
+                            'clientCredentials' => [
+                                'tokenUrl' => $tokenUrl,
+                                'scopes' => $scopes,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'securityRequirements' => [
+                ['schemes' => ['oauth2' => ['list' => [self::REQUIRED_SCOPE]]]],
+                ['schemes' => ['oauth2ClientCredentials' => ['list' => [self::REQUIRED_SCOPE]]]],
             ],
         ];
     }
 
-    /**
-     * @return list<array{id: string, name: string, description: string}>
-     */
-    private function getSkills(): array
+    private function findAgent(): Table\Generated\AgentRow
     {
-        $skills = [];
-
         $condition = Condition::withAnd();
         $condition->equals(Table\Generated\AgentTable::COLUMN_TENANT_ID, $this->frameworkConfig->getTenantId());
+        $condition->equals(Table\Generated\AgentTable::COLUMN_TYPE, Table\Agent::TYPE_ARCHITECT);
+        $condition->equals(Table\Generated\AgentTable::COLUMN_STATUS, Table\Agent::STATUS_ACTIVE);
 
-        $result = $this->agentTable->findAll($condition);
-        foreach ($result as $agent) {
-            $skills[] = [
-                'id' => $agent->getName(),
-                'name' => $agent->getName(),
-                'description' => $agent->getDescription(),
-            ];
+        $agent = $this->agentTable->findAll($condition, 0, 1, Table\Generated\AgentColumn::ID, OrderBy::ASC)[0] ?? null;
+        if (!$agent instanceof Table\Generated\AgentRow) {
+            throw new StatusCode\NotFoundException('The architect agent is not available');
         }
 
-        return $skills;
+        return $agent;
+    }
+
+    private static function getTypeTag(int $type): string
+    {
+        return match ($type) {
+            Table\Agent::TYPE_ARCHITECT => 'architect',
+            Table\Agent::TYPE_ACTION => 'action',
+            Table\Agent::TYPE_SCHEMA => 'schema',
+            Table\Agent::TYPE_DATABASE => 'database',
+            Table\Agent::TYPE_SEED => 'seed',
+            default => 'general',
+        };
     }
 
     /**
-     * @return list<string>
+     * Returns the scopes which are relevant for the A2A endpoint as map of scope name to description
+     *
+     * @return array<string, string>
      */
     private function getScopes(): array
     {
-        $condition = Condition::withAnd();
-        $condition->equals('category_id', 1);
-        $categories = $this->scopeTable->findAll($condition, 0, 1024, Table\Generated\ScopeColumn::NAME, OrderBy::ASC);
-
         $result = [];
-        foreach ($categories as $row) {
-            $result[] = $row->getName();
+        foreach (['backend', self::REQUIRED_SCOPE] as $name) {
+            $row = $this->scopeTable->findOneByTenantAndName($this->frameworkConfig->getTenantId(), null, $name);
+            if ($row instanceof Table\Generated\ScopeRow) {
+                $result[$name] = $row->getDescription() ?: 'Access to the ' . $name . ' scope';
+            }
         }
 
         return $result;

@@ -47,7 +47,10 @@ readonly class Task
     ) {
     }
 
-    public function create(string $agentId, AgentTaskCreate $task, ?string $connection, ContextInterface $context): int
+    /**
+     * @param string|null $chatId the chat (A2A context) to which this task belongs i.e. the conversation which has produced the item
+     */
+    public function create(string $agentId, AgentTaskCreate $task, ?string $connection, ContextInterface $context, ?string $chatId = null): int
     {
         $agent = $this->agentTable->findOneByIdentifier($context->getTenantId(), $context->getUser()->getCategoryId(), $agentId);
         if (!$agent instanceof Table\Generated\AgentRow) {
@@ -82,6 +85,7 @@ readonly class Task
         $row->setAgentId($agent->getId());
         $row->setUserId($context->getUser()->getId());
         $row->setConnectionId($connectionId);
+        $row->setChatId($chatId);
         $row->setStatus(Table\Agent\Task::STATUS_PENDING);
         $row->setItem(Parser::encode($item));
         $row->setInsertDate(LocalDateTime::now());
