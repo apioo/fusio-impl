@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Controller;
 
-use Fusio\Impl\Service\A2A;
+use Fusio\Impl\Service\Agent\A2A\Server as A2AServer;
 use Fusio\Impl\Service\System\FrameworkConfig;
 use JsonException;
 use PSX\Api\Attribute\Incoming;
@@ -48,7 +48,7 @@ use PSX\Schema\ContentType;
 class A2AController extends ControllerAbstract
 {
     public function __construct(
-        private readonly A2A $server,
+        private readonly A2AServer $server,
         private readonly FrameworkConfig $frameworkConfig,
     ) {
     }
