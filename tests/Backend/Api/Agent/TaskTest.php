@@ -34,8 +34,6 @@ use Symfony\Component\Messenger\Transport\TransportInterface;
  */
 class TaskTest extends DbTestCase
 {
-    private const AUTHORIZATION = 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf';
-
     public function testCreateAndExecute(): void
     {
         $agentId = Fixture::getReference('fusio_agent', 'Fusio-Schema')->resolve($this->connection);
@@ -65,7 +63,7 @@ class TaskTest extends DbTestCase
 
         $response = $this->sendRequest('/backend/agent/' . $agentId . '/task/' . $taskId, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => self::AUTHORIZATION,
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
         ]);
 
         $body = (string) $response->getBody();
@@ -93,7 +91,7 @@ class TaskTest extends DbTestCase
 
         $response = $this->sendRequest('/backend/agent/' . $agentId . '/task', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => self::AUTHORIZATION,
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
         ]);
 
         $body = (string) $response->getBody();
@@ -112,7 +110,7 @@ class TaskTest extends DbTestCase
 
         $response = $this->sendRequest('/backend/agent/' . $agentId . '/task/' . $taskId, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => self::AUTHORIZATION,
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
         ]);
 
         $body = (string) $response->getBody();
@@ -128,7 +126,7 @@ class TaskTest extends DbTestCase
         // a finished task can not be canceled again
         $response = $this->sendRequest('/backend/agent/' . $agentId . '/task/' . $taskId, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => self::AUTHORIZATION,
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
         ]);
 
         $this->assertSame(400, $response->getStatusCode(), (string) $response->getBody());
@@ -140,7 +138,7 @@ class TaskTest extends DbTestCase
 
         $response = $this->sendRequest('/backend/agent/' . $agentId . '/task', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => self::AUTHORIZATION,
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
         ], json_encode([
             'item' => ['type' => 'text', 'content' => 'foo'],
         ]));
@@ -158,7 +156,7 @@ class TaskTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/agent/' . $agentId . '/task', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => self::AUTHORIZATION,
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
         ], json_encode([
             'item' => $item,
         ]));
