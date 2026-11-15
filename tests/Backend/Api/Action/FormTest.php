@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -36,7 +37,7 @@ class FormTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/action/form?class=' . urlencode(UtilStaticResponse::class), 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body   = (string) $response->getBody();

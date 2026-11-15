@@ -21,6 +21,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Agent;
 use Fusio\Impl\Messenger\ExecuteAgentTask;
 use Fusio\Impl\Service\Agent\Task\Executor;
 use Fusio\Impl\Table;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\Environment;
@@ -63,7 +64,7 @@ class TaskTest extends DbTestCase
 
         $response = $this->sendRequest('/backend/agent/' . $agentId . '/task/' . $taskId, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -91,7 +92,7 @@ class TaskTest extends DbTestCase
 
         $response = $this->sendRequest('/backend/agent/' . $agentId . '/task', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -110,7 +111,7 @@ class TaskTest extends DbTestCase
 
         $response = $this->sendRequest('/backend/agent/' . $agentId . '/task/' . $taskId, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -126,7 +127,7 @@ class TaskTest extends DbTestCase
         // a finished task can not be canceled again
         $response = $this->sendRequest('/backend/agent/' . $agentId . '/task/' . $taskId, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $this->assertSame(400, $response->getStatusCode(), (string) $response->getBody());
@@ -138,7 +139,7 @@ class TaskTest extends DbTestCase
 
         $response = $this->sendRequest('/backend/agent/' . $agentId . '/task', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'item' => ['type' => 'text', 'content' => 'foo'],
         ]));
@@ -156,7 +157,7 @@ class TaskTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/agent/' . $agentId . '/task', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'item' => $item,
         ]));
