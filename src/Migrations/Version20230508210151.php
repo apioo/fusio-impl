@@ -107,7 +107,6 @@ final class Version20230508210151 extends AbstractMigration
         if (!$schema->hasTable('fusio_agent_task')) {
             $agentTaskTable = $schema->createTable('fusio_agent_task');
             $agentTaskTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $agentTaskTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
             $agentTaskTable->addColumn('agent_id', 'integer');
             $agentTaskTable->addColumn('user_id', 'integer');
             $agentTaskTable->addColumn('connection_id', 'integer', ['notnull' => false, 'default' => null]);

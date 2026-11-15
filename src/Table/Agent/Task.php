@@ -62,10 +62,9 @@ class Task extends Generated\AgentTaskTable
         return in_array($status, [self::STATUS_COMPLETED, self::STATUS_FAILED, self::STATUS_CANCELED], true);
     }
 
-    public function findOneByTenantAndId(?string $tenantId, int $agentId, int $userId, int $id): ?Generated\AgentTaskRow
+    public function findOneByAgentAndId(int $agentId, int $userId, int $id): ?Generated\AgentTaskRow
     {
         $condition = Condition::withAnd();
-        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
         $condition->equals(self::COLUMN_AGENT_ID, $agentId);
         $condition->equals(self::COLUMN_USER_ID, $userId);
         $condition->equals(self::COLUMN_ID, $id);

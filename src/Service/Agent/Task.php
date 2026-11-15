@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Service\Agent;
 
 use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Framework\Loader\ContextFactory;
 use Fusio\Impl\Messenger\ExecuteAgentTask;
 use Fusio\Impl\Service\Agent\Task\StepLogger;
 use Fusio\Impl\Table;
@@ -44,6 +45,7 @@ readonly class Task
         private Table\Agent\Task $taskTable,
         private Table\Connection $connectionTable,
         private MessageBusInterface $messageBus,
+        private ContextFactory $contextFactory,
     ) {
     }
 
@@ -78,7 +80,6 @@ readonly class Task
         }
 
         $row = new Table\Generated\AgentTaskRow();
-        $row->setTenantId($context->getTenantId());
         $row->setAgentId($agent->getId());
         $row->setUserId($context->getUser()->getId());
         $row->setConnectionId($connectionId);
@@ -89,7 +90,7 @@ readonly class Task
 
         $taskId = $this->taskTable->getLastInsertId();
 
-        $this->messageBus->dispatch(new ExecuteAgentTask($taskId, $context));
+        $this->messageBus->dispatch(new ExecuteAgentTask($taskId, $context, $this->contextFactory->getActive()));
 
         return $taskId;
     }
@@ -101,7 +102,7 @@ readonly class Task
             throw new StatusCode\NotFoundException('Could not find agent');
         }
 
-        $task = $this->taskTable->findOneByTenantAndId($context->getTenantId(), $agent->getId(), $context->getUser()->getId(), $taskId);
+        $task = $this->taskTable->findOneByAgentAndId($agent->getId(), $context->getUser()->getId(), $taskId);
         if (!$task instanceof Table\Generated\AgentTaskRow) {
             throw new StatusCode\NotFoundException('Could not find task');
         }

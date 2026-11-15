@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Framework\Loader;
 
 use PSX\Framework\Loader\ContextFactoryInterface;
+use RuntimeException;
 
 /**
  * Context
@@ -40,6 +41,11 @@ class ContextFactory implements ContextFactoryInterface
 
     public function getActive(): Context
     {
-        return $this->context ?? throw new \RuntimeException('No active context was set');
+        return $this->context ?? throw new RuntimeException('No active context was set');
+    }
+
+    public function setActive(Context $context): void
+    {
+        $this->context = $context;
     }
 }

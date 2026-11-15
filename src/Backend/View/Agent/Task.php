@@ -45,7 +45,6 @@ class Task extends ViewAbstract
         $count = $filter->getCount();
 
         $condition = Condition::withAnd();
-        $condition->equals(Table\Generated\AgentTaskTable::COLUMN_TENANT_ID, $context->getTenantId());
         $condition->equals(Table\Generated\AgentTaskTable::COLUMN_AGENT_ID, $agentId);
         $condition->equals(Table\Generated\AgentTaskTable::COLUMN_USER_ID, $context->getUser()->getId());
 
@@ -74,7 +73,7 @@ class Task extends ViewAbstract
     {
         $builder = new Builder($this->connection);
 
-        $definition = $builder->doEntity([$this->getTable(Table\Agent\Task::class), 'findOneByTenantAndId'], [$context->getTenantId(), $agentId, $context->getUser()->getId(), $taskId], [
+        $definition = $builder->doEntity([$this->getTable(Table\Agent\Task::class), 'findOneByAgentAndId'], [$agentId, $context->getUser()->getId(), $taskId], [
             'kind' => $builder->fieldValue(Service\TypeSystem\KindBuilder::build(Model\Backend\AgentTask::class)),
             'id' => $builder->fieldInteger(Table\Generated\AgentTaskTable::COLUMN_ID),
             'status' => $builder->fieldCallback(Table\Generated\AgentTaskTable::COLUMN_STATUS, fn($value) => Table\Agent\Task::getStatusName((int) $value)),

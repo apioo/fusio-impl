@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Messenger;
 
 use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Framework\Loader\Context;
 
 /**
  * Message to execute an agent task in the background
@@ -31,7 +32,7 @@ use Fusio\Engine\ContextInterface;
  */
 readonly class ExecuteAgentTask
 {
-    public function __construct(private int $taskId, private ContextInterface $context)
+    public function __construct(private int $taskId, private ContextInterface $context, private Context $frameworkContext)
     {
     }
 
@@ -43,5 +44,10 @@ readonly class ExecuteAgentTask
     public function getContext(): ContextInterface
     {
         return $this->context;
+    }
+
+    public function getFrameworkContext(): Context
+    {
+        return $this->frameworkContext;
     }
 }

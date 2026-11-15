@@ -24,6 +24,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Model\Agent;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Request;
+use Fusio\Impl\Framework\Loader\ContextFactory;
+use Fusio\Impl\Messenger\ExecuteAgentTask;
 use Fusio\Impl\Table;
 use Fusio\Model\Agent\Item;
 use Fusio\Model\Agent\ItemObject;
@@ -50,30 +52,33 @@ readonly class Executor
         private Table\Agent $agentTable,
         private ProcessorInterface $processor,
         private ObjectMapperInterface $objectMapper,
+        private ContextFactory $contextFactory,
     ) {
     }
 
-    public function execute(int $taskId, ContextInterface $context): void
+    public function execute(ExecuteAgentTask $agentTask): void
     {
-        $task = $this->taskTable->find($taskId);
+        $this->contextFactory->setActive($agentTask->getFrameworkContext());
+
+        $task = $this->taskTable->find($agentTask->getTaskId());
         if (!$task instanceof Table\Generated\AgentTaskRow) {
             return;
         }
 
-        if (!$this->taskTable->markRunning($taskId)) {
+        if (!$this->taskTable->markRunning($agentTask->getTaskId())) {
             return;
         }
 
         try {
-            [$success, $message] = $this->invoke($task, $context);
+            [$success, $message] = $this->invoke($task, $agentTask->getContext());
         } catch (Throwable $e) {
             $success = false;
             $message = $e->getMessage();
 
-            $this->taskTable->addStep($taskId, 'Task failed', false, $message);
+            $this->taskTable->addStep($agentTask->getTaskId(), 'Task failed', false, $message);
         }
 
-        $this->taskTable->markFinished($taskId, $success ? Table\Agent\Task::STATUS_COMPLETED : Table\Agent\Task::STATUS_FAILED, $message);
+        $this->taskTable->markFinished($agentTask->getTaskId(), $success ? Table\Agent\Task::STATUS_COMPLETED : Table\Agent\Task::STATUS_FAILED, $message);
     }
 
     /**

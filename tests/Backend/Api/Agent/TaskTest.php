@@ -187,7 +187,7 @@ class TaskTest extends DbTestCase
         foreach ($transport->get() as $envelope) {
             $message = $envelope->getMessage();
             if ($message instanceof ExecuteAgentTask) {
-                $executor->execute($message->getTaskId(), $message->getContext());
+                $executor->execute($message);
             }
 
             $transport->ack($envelope);

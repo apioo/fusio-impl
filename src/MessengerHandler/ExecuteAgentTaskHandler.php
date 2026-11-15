@@ -40,6 +40,6 @@ readonly class ExecuteAgentTaskHandler
 
     public function __invoke(ExecuteAgentTask $message): void
     {
-        $this->executor->execute($message->getTaskId(), $message->getContext());
+        $this->executor->execute($message);
     }
 }

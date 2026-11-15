@@ -7,7 +7,6 @@ class AgentTaskRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?int $id = null;
     private ?int $agentId = null;
     private ?int $userId = null;
-    private ?string $tenantId = null;
     private ?int $connectionId = null;
     private ?int $status = null;
     private ?string $item = null;
@@ -39,14 +38,6 @@ class AgentTaskRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     public function getUserId(): int
     {
         return $this->userId ?? throw new \PSX\Sql\Exception\NoValueAvailable('No value for required column "user_id" was provided');
-    }
-    public function setTenantId(?string $tenantId): void
-    {
-        $this->tenantId = $tenantId;
-    }
-    public function getTenantId(): ?string
-    {
-        return $this->tenantId;
     }
     public function setConnectionId(?int $connectionId): void
     {
@@ -119,7 +110,6 @@ class AgentTaskRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('id', $this->id);
         $record->put('agent_id', $this->agentId);
         $record->put('user_id', $this->userId);
-        $record->put('tenant_id', $this->tenantId);
         $record->put('connection_id', $this->connectionId);
         $record->put('status', $this->status);
         $record->put('item', $this->item);
@@ -143,7 +133,6 @@ class AgentTaskRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->id = isset($data['id']) && is_int($data['id']) ? $data['id'] : null;
         $row->agentId = isset($data['agent_id']) && is_int($data['agent_id']) ? $data['agent_id'] : null;
         $row->userId = isset($data['user_id']) && is_int($data['user_id']) ? $data['user_id'] : null;
-        $row->tenantId = isset($data['tenant_id']) && is_string($data['tenant_id']) ? $data['tenant_id'] : null;
         $row->connectionId = isset($data['connection_id']) && is_int($data['connection_id']) ? $data['connection_id'] : null;
         $row->status = isset($data['status']) && is_int($data['status']) ? $data['status'] : null;
         $row->item = isset($data['item']) && is_string($data['item']) ? $data['item'] : null;
