@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 
@@ -36,7 +37,7 @@ class ChangePasswordTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/account/change_password', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -48,7 +49,7 @@ class ChangePasswordTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/account/change_password', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -62,7 +63,7 @@ class ChangePasswordTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/account/change_password', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'oldPassword'    => 'qf2vX10Ec3wFZHx0K1eL',
             'newPassword'    => 'qf2vX10Ec4wFZHx0K1eL!',
@@ -98,7 +99,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/account/change_password', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));

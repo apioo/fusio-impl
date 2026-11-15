@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Tests\Controller;
 
-use Fusio\Impl\Base;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -36,7 +36,7 @@ class VersionTest extends DbTestCase
     {
         $response = $this->sendRequest('/bar', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873',
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ]);
 
         $actual = (string) $response->getBody();
@@ -54,7 +54,7 @@ JSON;
     {
         $response = $this->sendRequest('/bar', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873',
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
             'Api-Version'   => '0.1.0',
         ]);
 
@@ -73,7 +73,7 @@ JSON;
     {
         $response = $this->sendRequest('/bar', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873',
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
             'Api-Version'   => '0.1.1',
         ]);
 

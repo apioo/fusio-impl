@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Controller;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -75,7 +76,7 @@ JSON;
     {
         $response = $this->sendRequest('/foo', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -116,7 +117,7 @@ JSON;
     {
         $response = $this->sendRequest('/foo', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -234,7 +235,7 @@ JSON;
 
         $response = $this->sendRequest('/foo', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ], $body);
 
         $body = (string)$response->getBody();

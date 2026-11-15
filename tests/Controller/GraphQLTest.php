@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Tests\Controller;
 
 use Fusio\Impl\Base;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -36,7 +37,7 @@ class GraphQLTest extends DbTestCase
     {
         $response = $this->sendRequest('/graphql?query={testListFoo{totalResults}}', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ]);
 
         $actual = (string) $response->getBody();
@@ -64,7 +65,7 @@ JSON;
 
         $response = $this->sendRequest('/graphql', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ], $body);
 
         $actual = (string) $response->getBody();
@@ -92,7 +93,7 @@ JSON;
 
         $response = $this->sendRequest('/graphql', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ], $body);
 
         $actual = (string) $response->getBody();
@@ -124,7 +125,7 @@ JSON;
 
         $response = $this->sendRequest('/graphql', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ], $body);
 
         $actual = (string) $response->getBody();
@@ -160,7 +161,7 @@ JSON;
     {
         $response = $this->sendRequest('/graphql', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ]);
 
         $this->assertEquals(404, $response->getStatusCode());
@@ -170,7 +171,7 @@ JSON;
     {
         $response = $this->sendRequest('/graphql', 'PATCH', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ]);
 
         $this->assertEquals(404, $response->getStatusCode());
@@ -180,7 +181,7 @@ JSON;
     {
         $response = $this->sendRequest('/graphql', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ]);
 
         $this->assertEquals(404, $response->getStatusCode());

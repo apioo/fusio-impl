@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Payment;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -35,7 +36,7 @@ class PortalTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/payment/Paypal/portal', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -47,7 +48,7 @@ class PortalTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/payment/Paypal/portal', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'returnUrl' => 'http://myapp.com',
         ]));
@@ -67,7 +68,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/payment/Paypal/portal', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -81,7 +82,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/payment/Paypal/portal', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();

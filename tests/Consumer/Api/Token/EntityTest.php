@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Consumer\Api\Token;
 
 use Fusio\Impl\Table;
 use Fusio\Impl\Table\Token;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 
@@ -38,7 +39,7 @@ class EntityTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/token/2', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -72,7 +73,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/token/2', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -86,7 +87,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/token/3', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'name' => 'baz',
             'expire' => new \DateTime()->add(new \DateInterval('P4D'))->format('Y-m-d'),
@@ -138,7 +139,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/token/2', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
