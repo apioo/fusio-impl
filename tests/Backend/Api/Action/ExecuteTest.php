@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Action;
 
 use Fusio\Engine\Inflection\ClassName;
 use Fusio\Impl\System\Action\Meta\GetDebug;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 
@@ -38,7 +39,7 @@ class ExecuteTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/action/execute/3', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -50,7 +51,7 @@ class ExecuteTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/action/execute/' . ClassName::serialize(GetDebug::class), 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'method'       => 'GET',
             'uriFragments' => 'news_id=10',
@@ -87,7 +88,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/action/execute/3', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -101,7 +102,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/action/execute/3', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));

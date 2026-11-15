@@ -18,6 +18,7 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     private ?int $costs = null;
     private ?string $tools = null;
     private ?string $outgoing = null;
+    private ?string $action = null;
     private ?string $metadata = null;
     private ?\PSX\DateTime\LocalDateTime $insertDate = null;
     public function setId(int $id): void
@@ -132,6 +133,14 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
     {
         return $this->outgoing;
     }
+    public function setAction(?string $action): void
+    {
+        $this->action = $action;
+    }
+    public function getAction(): ?string
+    {
+        return $this->action;
+    }
     public function setMetadata(?string $metadata): void
     {
         $this->metadata = $metadata;
@@ -166,6 +175,7 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $record->put('costs', $this->costs);
         $record->put('tools', $this->tools);
         $record->put('outgoing', $this->outgoing);
+        $record->put('action', $this->action);
         $record->put('metadata', $this->metadata);
         $record->put('insert_date', $this->insertDate);
         return $record;
@@ -194,6 +204,7 @@ class AgentRow implements \JsonSerializable, \PSX\Record\RecordableInterface
         $row->costs = isset($data['costs']) && is_int($data['costs']) ? $data['costs'] : null;
         $row->tools = isset($data['tools']) && is_string($data['tools']) ? $data['tools'] : null;
         $row->outgoing = isset($data['outgoing']) && is_string($data['outgoing']) ? $data['outgoing'] : null;
+        $row->action = isset($data['action']) && is_string($data['action']) ? $data['action'] : null;
         $row->metadata = isset($data['metadata']) && is_string($data['metadata']) ? $data['metadata'] : null;
         $row->insertDate = isset($data['insert_date']) && $data['insert_date'] instanceof \DateTimeInterface ? \PSX\DateTime\LocalDateTime::from($data['insert_date']) : null;
         return $row;

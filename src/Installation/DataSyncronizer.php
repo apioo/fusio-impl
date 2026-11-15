@@ -85,6 +85,7 @@ class DataSyncronizer
                     'description' => $agent['description'],
                     'introduction' => $agent['introduction'],
                     'introduction_action' => $agent['introduction_action'],
+                    'action' => $agent['action'],
                 ]);
             }
         }

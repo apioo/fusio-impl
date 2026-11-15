@@ -81,6 +81,7 @@ final class Version20230508210151 extends AbstractMigration
             $agentTable->addColumn('costs', 'integer', ['notnull' => false]);
             $agentTable->addColumn('tools', 'text', ['notnull' => false, 'default' => null]);
             $agentTable->addColumn('outgoing', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
+            $agentTable->addColumn('action', 'string', ['notnull' => false]);
             $agentTable->addColumn('metadata', 'text', ['notnull' => false]);
             $agentTable->addColumn('insert_date', 'datetime');
             $agentTable->setPrimaryKey(['id']);
@@ -101,6 +102,24 @@ final class Version20230508210151 extends AbstractMigration
             $agentMessageTable->setPrimaryKey(['id']);
             $agentMessageTable->addIndex(['agent_id', 'user_id', 'chat_id']);
             $agentMessageTable->addIndex(['agent_id', 'user_id', 'child']);
+        }
+
+        if (!$schema->hasTable('fusio_agent_task')) {
+            $agentTaskTable = $schema->createTable('fusio_agent_task');
+            $agentTaskTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $agentTaskTable->addColumn('tenant_id', 'string', ['length' => 64, 'notnull' => false, 'default' => null]);
+            $agentTaskTable->addColumn('agent_id', 'integer');
+            $agentTaskTable->addColumn('user_id', 'integer');
+            $agentTaskTable->addColumn('connection_id', 'integer', ['notnull' => false, 'default' => null]);
+            $agentTaskTable->addColumn('status', 'integer', ['default' => Table\Agent\Task::STATUS_PENDING]);
+            $agentTaskTable->addColumn('item', 'text');
+            $agentTaskTable->addColumn('steps', 'text', ['notnull' => false, 'default' => null]);
+            $agentTaskTable->addColumn('message', 'text', ['notnull' => false, 'default' => null]);
+            $agentTaskTable->addColumn('start_date', 'datetime', ['notnull' => false, 'default' => null]);
+            $agentTaskTable->addColumn('end_date', 'datetime', ['notnull' => false, 'default' => null]);
+            $agentTaskTable->addColumn('insert_date', 'datetime');
+            $agentTaskTable->setPrimaryKey(['id']);
+            $agentTaskTable->addIndex(['agent_id', 'user_id']);
         }
 
         if (!$schema->hasTable('fusio_app')) {
@@ -732,6 +751,11 @@ final class Version20230508210151 extends AbstractMigration
         if (isset($agentMessageTable)) {
             $agentMessageTable->addForeignKeyConstraint($schema->getTable('fusio_agent'), ['agent_id'], ['id'], [], 'agent_message_agent_id');
             $agentMessageTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'agent_message_user_id');
+        }
+
+        if (isset($agentTaskTable)) {
+            $agentTaskTable->addForeignKeyConstraint($schema->getTable('fusio_agent'), ['agent_id'], ['id'], [], 'agent_task_agent_id');
+            $agentTaskTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'agent_task_user_id');
         }
 
         if (isset($appTable)) {

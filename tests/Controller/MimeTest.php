@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Controller;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 use PSX\Data\Exception\UploadException;
@@ -37,7 +38,7 @@ class MimeTest extends DbTestCase
     {
         $response = $this->sendRequest('/mime/binary', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873',
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
             'Content-Type' => 'application/octet-stream'
         ], 'foobar');
 
@@ -59,7 +60,7 @@ JSON;
     {
         $response = $this->sendRequest('/mime/form', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873',
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
             'Content-Type' => 'application/x-www-form-urlencoded'
         ], 'foo=bar');
 
@@ -83,7 +84,7 @@ JSON;
     {
         $response = $this->sendRequest('/mime/json', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873',
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
             'Content-Type' => 'application/json'
         ], \json_encode(['foo' => 'bar']));
 
@@ -118,7 +119,7 @@ JSON;
 
         $response = $this->sendRequest('/mime/multipart', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873',
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
             'Content-Type' => 'multipart/form-data'
         ], \json_encode(['foo' => 'bar']));
 
@@ -148,7 +149,7 @@ JSON;
     {
         $response = $this->sendRequest('/mime/text', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873',
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
             'Content-Type' => 'text/plain'
         ], 'foobar');
 
@@ -170,7 +171,7 @@ JSON;
     {
         $response = $this->sendRequest('/mime/xml', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873',
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
             'Content-Type' => 'application/xml'
         ], '<root><foo>bar</foo></root>');
 

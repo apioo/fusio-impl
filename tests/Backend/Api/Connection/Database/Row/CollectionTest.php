@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Connection\Database\Row;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -35,7 +36,7 @@ class CollectionTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body   = (string) $response->getBody();
@@ -69,7 +70,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows?startsIndex=2&count=1', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body   = (string) $response->getBody();
@@ -97,7 +98,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows?filterBy=title&filterOp=contains&filterValue=bar', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body   = (string) $response->getBody();
@@ -125,7 +126,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows?columns=id,title', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body   = (string) $response->getBody();
@@ -155,7 +156,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'title'   => 'foo',
             'content' => 'foo',
@@ -195,7 +196,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -209,7 +210,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/connection/Test/database/app_news/rows', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));

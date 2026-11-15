@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Trigger;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 
@@ -36,7 +37,7 @@ class CollectionTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/trigger', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -83,7 +84,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/trigger?search=Test', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -119,7 +120,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/trigger?search=taxonomy_id:1', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -155,7 +156,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/trigger?count=80', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -206,7 +207,7 @@ JSON;
 
         $response = $this->sendRequest('/backend/trigger', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'name'     => 'New-Trigger',
             'event'    => 'foo-event',
@@ -251,7 +252,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/trigger', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -265,7 +266,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/trigger', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));

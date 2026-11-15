@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Controller;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 
@@ -36,7 +37,7 @@ class InspectTest extends DbTestCase
     {
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ]);
 
         $actual = (string) $response->getBody();
@@ -76,7 +77,7 @@ JSON;
     {
         $response = $this->sendRequest('/inspect/bar?throw=1', 'GET', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -93,7 +94,7 @@ JSON;
     {
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'POST', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ], \json_encode(['foo' => 'bar']));
 
         $actual = (string) $response->getBody();
@@ -135,7 +136,7 @@ JSON;
     {
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'PUT', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ], \json_encode(['foo' => 'bar']));
 
         $actual = (string) $response->getBody();
@@ -177,7 +178,7 @@ JSON;
     {
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'PATCH', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ], \json_encode(['foo' => 'bar']));
 
         $actual = (string) $response->getBody();
@@ -219,7 +220,7 @@ JSON;
     {
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'DELETE', [
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            'Authorization' => Authorization::FOOAPP_CONSUMER,
         ]);
 
         $actual = (string) $response->getBody();

@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Agent;
 
-use Fusio\Impl\Table;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 
@@ -37,7 +37,7 @@ class CollectionTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/agent', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -68,7 +68,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/agent?search=tes', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body   = (string) $response->getBody();
@@ -97,7 +97,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/agent?count=80', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -128,7 +128,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/agent', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -142,7 +142,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/agent', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -156,7 +156,7 @@ JSON;
     {
         $response = $this->sendRequest('/consumer/agent', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));

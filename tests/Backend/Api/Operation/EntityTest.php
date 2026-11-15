@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Operation;
 
 use Fusio\Impl\Table\Operation as TableRoutes;
 use Fusio\Impl\Tests\Assert;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Tests\Normalizer;
@@ -49,7 +50,7 @@ class EntityTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/operation/' . $this->id, 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -58,7 +59,7 @@ class EntityTest extends DbTestCase
         $expect = <<<JSON
 {
     "kind": "[kind]",
-    "id": 279,
+    "id": 283,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -69,7 +70,7 @@ class EntityTest extends DbTestCase
     "stability": 1,
     "description": "",
     "httpMethod": "GET",
-    "httpPath": "\/foo",
+    "httpPath": "/foo",
     "httpCode": 200,
     "parameters": {
         "startIndex": {
@@ -79,9 +80,9 @@ class EntityTest extends DbTestCase
             "type": "integer"
         }
     },
-    "outgoing": "schema:\/\/Collection-Schema",
+    "outgoing": "schema://Collection-Schema",
     "throws": {},
-    "action": "action:\/\/Sql-Select-All",
+    "action": "action://Sql-Select-All",
     "costs": 0
 }
 JSON;
@@ -94,7 +95,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation/~test.listFoo', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -103,7 +104,7 @@ JSON;
         $expect = <<<JSON
 {
     "kind": "[kind]",
-    "id": 279,
+    "id": 283,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -114,7 +115,7 @@ JSON;
     "stability": 1,
     "description": "",
     "httpMethod": "GET",
-    "httpPath": "\/foo",
+    "httpPath": "/foo",
     "httpCode": 200,
     "parameters": {
         "startIndex": {
@@ -124,9 +125,9 @@ JSON;
             "type": "integer"
         }
     },
-    "outgoing": "schema:\/\/Collection-Schema",
+    "outgoing": "schema://Collection-Schema",
     "throws": {},
-    "action": "action:\/\/Sql-Select-All",
+    "action": "action://Sql-Select-All",
     "costs": 0
 }
 JSON;
@@ -139,7 +140,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation/1000', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -154,7 +155,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation/' . $this->id, 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -172,7 +173,7 @@ JSON;
 
         $response = $this->sendRequest('/backend/operation/' . $this->id, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -205,7 +206,7 @@ JSON;
     "kind": "[kind]",
     "success": true,
     "message": "Operation successfully updated",
-    "id": "279"
+    "id": "283"
 }
 JSON;
 
@@ -224,7 +225,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation/~test.createFoo', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -256,7 +257,7 @@ JSON;
     "kind": "[kind]",
     "success": true,
     "message": "Operation successfully updated",
-    "id": "280"
+    "id": "284"
 }
 JSON;
 
@@ -275,7 +276,7 @@ JSON;
 
         $response = $this->sendRequest('/backend/operation/' . $this->id, 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'active'     => true,
             'public'     => true,
@@ -308,7 +309,7 @@ JSON;
     "kind": "[kind]",
     "success": true,
     "message": "Operation successfully updated",
-    "id": "279"
+    "id": "283"
 }
 JSON;
 
@@ -323,7 +324,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/operation/' . $this->id, 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -334,7 +335,7 @@ JSON;
     "kind": "[kind]",
     "success": true,
     "message": "Operation successfully deleted",
-    "id": "279"
+    "id": "283"
 }
 JSON;
 

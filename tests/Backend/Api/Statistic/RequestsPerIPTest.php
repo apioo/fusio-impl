@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Statistic;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -35,7 +36,7 @@ class RequestsPerIPTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/statistic/requests_per_ip?from=2015-06-01T00:00:00&to=2015-06-30T23:59:59', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();

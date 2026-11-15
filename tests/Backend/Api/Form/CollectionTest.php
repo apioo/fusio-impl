@@ -20,9 +20,9 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Form;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
-use PSX\Json\Parser;
 
 /**
  * CollectionTest
@@ -37,7 +37,7 @@ class CollectionTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/form', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -55,7 +55,7 @@ class CollectionTest extends DbTestCase
             "id": 1,
             "status": 1,
             "name": "my_form",
-            "operationId": 280,
+            "operationId": 284,
             "metadata": {
                 "foo": "bar"
             }
@@ -80,7 +80,7 @@ JSON;
 
         $response = $this->sendRequest('/backend/form', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'name'        => 'new-form',
             'operationId' => 20,
@@ -126,7 +126,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/form', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -140,7 +140,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/form', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
             'foo' => 'bar',
         ]));

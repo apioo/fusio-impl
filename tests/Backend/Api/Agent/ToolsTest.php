@@ -20,7 +20,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Agent;
 
-use Fusio\Impl\Table;
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 
@@ -37,7 +37,7 @@ class ToolsTest extends DbTestCase
     {
         $response = $this->sendRequest('/backend/agent/tools', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+            'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
 
         $body = (string) $response->getBody();
@@ -130,6 +130,22 @@ class ToolsTest extends DbTestCase
         {
             "name": "backend_agent_message_submit",
             "description": "Submits a new agent message"
+        },
+        {
+            "name": "backend_agent_task_cancel",
+            "description": "Cancels a pending or running agent task"
+        },
+        {
+            "name": "backend_agent_task_create",
+            "description": "Creates a new agent task which executes the action of the agent in the background, the optional connection is passed to the action i.e. to create tables on a specific connection"
+        },
+        {
+            "name": "backend_agent_task_get",
+            "description": "Returns a specific agent task including all executed steps"
+        },
+        {
+            "name": "backend_agent_task_getAll",
+            "description": "Returns a paginated list of agent tasks of the current user"
         },
         {
             "name": "backend_agent_update",

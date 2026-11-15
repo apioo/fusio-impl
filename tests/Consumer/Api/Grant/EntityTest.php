@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Grant;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Normalizer;
 
@@ -36,7 +37,7 @@ class EntityTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/grant/1', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -48,7 +49,7 @@ class EntityTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/grant/1', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -62,7 +63,7 @@ class EntityTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/grant/1', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -76,7 +77,7 @@ class EntityTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/grant/1', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();

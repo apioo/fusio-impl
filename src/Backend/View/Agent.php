@@ -92,6 +92,7 @@ class Agent extends ViewAbstract
             'costs' => $builder->fieldInteger(Table\Generated\AgentTable::COLUMN_COSTS),
             'tools' => $builder->fieldJson(Table\Generated\AgentTable::COLUMN_TOOLS),
             'outgoing' => Table\Generated\AgentTable::COLUMN_OUTGOING,
+            'action' => Table\Generated\AgentTable::COLUMN_ACTION,
             'metadata' => $builder->fieldJson(Table\Generated\AgentTable::COLUMN_METADATA),
             'insertDate' => $builder->fieldDateTime(Table\Generated\AgentTable::COLUMN_INSERT_DATE),
         ]);

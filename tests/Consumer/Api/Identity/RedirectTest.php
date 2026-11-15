@@ -20,6 +20,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Identity;
 
+use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
 use PSX\Uri\Url;
 
@@ -36,7 +37,7 @@ class RedirectTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/identity/1/redirect', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -55,7 +56,7 @@ class RedirectTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/identity/1/redirect?redirect_uri=' . urlencode('http://127.0.0.1/callback'), 'GET', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ]);
 
         $body = (string) $response->getBody();
@@ -75,7 +76,7 @@ class RedirectTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/identity/1/redirect', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -89,7 +90,7 @@ class RedirectTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/identity', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
@@ -103,7 +104,7 @@ class RedirectTest extends DbTestCase
     {
         $response = $this->sendRequest('/consumer/identity/1/redirect', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
             'foo' => 'bar',
         ]));
