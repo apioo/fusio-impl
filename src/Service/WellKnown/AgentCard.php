@@ -73,6 +73,9 @@ readonly class AgentCard
         ];
     }
 
+    /**
+     * @return list<array{id: string, name: string, description: string}>
+     */
     private function getSkills(): array
     {
         $skills = [];
@@ -92,6 +95,9 @@ readonly class AgentCard
         return $skills;
     }
 
+    /**
+     * @return list<string>
+     */
     private function getScopes(): array
     {
         $condition = Condition::withAnd();
