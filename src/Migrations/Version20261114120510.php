@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Fusio\Impl\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\StringType;
-use Doctrine\DBAL\Types\Type;
 use Doctrine\Migrations\AbstractMigration;
 use Fusio\Impl\Installation\DataSyncronizer;
 
