@@ -132,6 +132,22 @@ class ToolsTest extends DbTestCase
             "description": "Submits a new agent message"
         },
         {
+            "name": "backend_agent_task_cancel",
+            "description": "Cancels a pending or running agent task"
+        },
+        {
+            "name": "backend_agent_task_create",
+            "description": "Creates a new agent task which executes the action of the agent in the background, the optional connection is passed to the action i.e. to create tables on a specific connection"
+        },
+        {
+            "name": "backend_agent_task_get",
+            "description": "Returns a specific agent task including all executed steps"
+        },
+        {
+            "name": "backend_agent_task_getAll",
+            "description": "Returns a paginated list of agent tasks of the current user"
+        },
+        {
             "name": "backend_agent_update",
             "description": "Updates an existing agent"
         },

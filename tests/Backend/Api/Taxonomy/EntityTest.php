@@ -84,7 +84,7 @@ JSON;
     public function testPost(): void
     {
         $payload = [
-            'operations' => [279],
+            'operations' => [283],
             'actions' => [5],
             'events' => [75],
             'cronjobs' => [2],

@@ -58,7 +58,7 @@ class EntityTest extends DbTestCase
         $expect = <<<JSON
 {
     "kind": "[kind]",
-    "id": 279,
+    "id": 283,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -69,7 +69,7 @@ class EntityTest extends DbTestCase
     "stability": 1,
     "description": "",
     "httpMethod": "GET",
-    "httpPath": "\/foo",
+    "httpPath": "/foo",
     "httpCode": 200,
     "parameters": {
         "startIndex": {
@@ -79,9 +79,9 @@ class EntityTest extends DbTestCase
             "type": "integer"
         }
     },
-    "outgoing": "schema:\/\/Collection-Schema",
+    "outgoing": "schema://Collection-Schema",
     "throws": {},
-    "action": "action:\/\/Sql-Select-All",
+    "action": "action://Sql-Select-All",
     "costs": 0
 }
 JSON;
@@ -103,7 +103,7 @@ JSON;
         $expect = <<<JSON
 {
     "kind": "[kind]",
-    "id": 279,
+    "id": 283,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -114,7 +114,7 @@ JSON;
     "stability": 1,
     "description": "",
     "httpMethod": "GET",
-    "httpPath": "\/foo",
+    "httpPath": "/foo",
     "httpCode": 200,
     "parameters": {
         "startIndex": {
@@ -124,9 +124,9 @@ JSON;
             "type": "integer"
         }
     },
-    "outgoing": "schema:\/\/Collection-Schema",
+    "outgoing": "schema://Collection-Schema",
     "throws": {},
-    "action": "action:\/\/Sql-Select-All",
+    "action": "action://Sql-Select-All",
     "costs": 0
 }
 JSON;
@@ -205,7 +205,7 @@ JSON;
     "kind": "[kind]",
     "success": true,
     "message": "Operation successfully updated",
-    "id": "279"
+    "id": "283"
 }
 JSON;
 
@@ -256,7 +256,7 @@ JSON;
     "kind": "[kind]",
     "success": true,
     "message": "Operation successfully updated",
-    "id": "280"
+    "id": "284"
 }
 JSON;
 
@@ -308,7 +308,7 @@ JSON;
     "kind": "[kind]",
     "success": true,
     "message": "Operation successfully updated",
-    "id": "279"
+    "id": "283"
 }
 JSON;
 
@@ -334,7 +334,7 @@ JSON;
     "kind": "[kind]",
     "success": true,
     "message": "Operation successfully deleted",
-    "id": "279"
+    "id": "283"
 }
 JSON;
 
