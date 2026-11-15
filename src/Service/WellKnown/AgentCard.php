@@ -43,13 +43,16 @@ readonly class AgentCard
     ) {
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function get(): array
     {
         $scopes = $this->getScopes();
 
         return [
-            'name' => $this->configService->getValue('info_title') ?: 'Fusio',
-            'description' => $this->configService->getValue('info_description') ?: null,
+            'name' => $this->configService->getString('info_title') ?: 'Fusio',
+            'description' => $this->configService->getString('info_description') ?: null,
             'url' => $this->frameworkConfig->getDispatchUrl('a2a', 'v1'),
             'skills' => $this->getSkills(),
             'auth' => [
