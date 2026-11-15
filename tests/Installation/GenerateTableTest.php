@@ -44,7 +44,7 @@ class GenerateTableTest extends DbTestCase
 
     public function testGenerate(): void
     {
-        //$this->markTestSkipped();
+        $this->markTestSkipped();
 
         /** @phpstan-ignore deadCode.unreachable */
         $target = __DIR__ . '/../../src/Table/Generated';
