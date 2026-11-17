@@ -65,7 +65,7 @@ readonly class DatabaseExecutor
 
         $success = 0;
         $errors = [];
-        foreach ($tables as $table) {
+        foreach ($this->sortByDependency($tables) as $table) {
             if ($logger->isCanceled()) {
                 break;
             }
@@ -98,5 +98,41 @@ readonly class DatabaseExecutor
         $message .= count($errors) . ' tables produced the following errors: ' . implode(', ', $errors);
 
         return MessageFactory::error($message);
+    }
+
+    /**
+     * Sorts the tables so that a referenced table is created before the table which references it, tables which are
+     * part of a cycle keep their original order
+     *
+     * @param list<\Fusio\Model\Agent\DatabaseTable> $tables
+     * @return list<\Fusio\Model\Agent\DatabaseTable>
+     */
+    private function sortByDependency(array $tables): array
+    {
+        $byName = [];
+        foreach ($tables as $table) {
+            $byName[$table->getName() ?? ''] = $table;
+        }
+
+        $sorted = [];
+        $visited = [];
+        $visit = function (string $name) use (&$visit, &$sorted, &$visited, $byName): void {
+            if (isset($visited[$name]) || !isset($byName[$name])) {
+                return;
+            }
+
+            $visited[$name] = true;
+            foreach ($byName[$name]->getForeignKeys() ?? [] as $foreignKey) {
+                $visit($foreignKey->getForeignTable() ?? '');
+            }
+
+            $sorted[] = $byName[$name];
+        };
+
+        foreach ($tables as $table) {
+            $visit($table->getName() ?? '');
+        }
+
+        return $sorted;
     }
 }

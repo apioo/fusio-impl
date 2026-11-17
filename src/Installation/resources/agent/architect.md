@@ -90,7 +90,7 @@ No information about the current instance is available.
       "action": "Detailed technical steps for the PHP Action"
     }
   ],
-  "database": "Textual description of app_ tables, columns, and foreign keys."
+  "database": "Textual description of app_ tables, columns, and foreign keys. List referenced tables before the tables referencing them and avoid circular foreign keys, for a back-reference describe a nullable column without FK."
 }
 
 # REFERENCE EXAMPLE

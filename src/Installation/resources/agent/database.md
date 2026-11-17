@@ -67,7 +67,9 @@ Add a unique index for columns which must be unique (e.g. an email, slug or sku)
 3. **SYSTEM INTEGRATION**: Check if any entity refers to a "user" and map it to "fusio_user".
 4. **COLUMNS**: Define types, nullability, and auto-increment for PKs (usually "id").
 5. **CONSTRAINTS**: Ensure every table has a `primaryKey`. Map `foreignKeys` using the `foreignTable` and column arrays.
-6. **VALIDATE**: Ensure every `localColumnNames` entry exists in the current table and `foreignColumnNames` exists in the target.
+6. **ORDER**: List the tables in dependency order, a table referenced by a foreign key MUST appear before the table which references it (e.g. "app_question" before "app_answer" if "app_answer" has a foreign key to "app_question"). The tables are created in the given order and a foreign key to a table which does not exist yet fails.
+7. **BREAK CYCLES**: Foreign keys must never form a cycle (e.g. "app_question.accepted_answer_id" -> "app_answer" while "app_answer.question_id" -> "app_question"), since neither table can be created first. For such a back-reference keep the column (nullable) and add a regular index, but DO NOT define a foreign key constraint for it. Keep the constraint on the "owning" side (the child, here "app_answer.question_id").
+8. **VALIDATE**: Ensure every `localColumnNames` entry exists in the current table and `foreignColumnNames` exists in the target.
 
 # OUTPUT RULES
 
