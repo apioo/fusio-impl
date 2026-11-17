@@ -29,6 +29,7 @@ use Fusio\Impl\Service\Agent\Task\StepLogger;
 use Fusio\Model\Agent\Database;
 use Fusio\Model\Backend\DatabaseTable;
 use Fusio\Model\Common\Message;
+use PSX\Json\Parser;
 use PSX\Schema\ObjectMapperInterface;
 use PSX\Schema\SchemaSource;
 use Throwable;
@@ -72,7 +73,7 @@ readonly class DatabaseExecutor
             $name = $table->getName() ?? '';
 
             try {
-                $payload = $this->objectMapper->read($this->objectMapper->write($table), SchemaSource::fromClass(DatabaseTable::class));
+                $payload = $this->objectMapper->readJson(Parser::encode($table), SchemaSource::fromClass(DatabaseTable::class));
                 $request = new Request(['connection_id' => '' . $connectionId], $payload, new Request\RpcRequestContext('agent.database'));
 
                 $this->processor->execute($action, $request, $context, false);
