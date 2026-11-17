@@ -61,7 +61,7 @@ If present, follow them strictly:
     - Locate the connection by its `name`.
     - Match the `class` (e.g., `Fusio.Adapter.Http.Connection.Http`) to the mapping below.
 3. **INSPECT**:
-    - **Database**: If the `class` matches a SQL provider (System, Sql, or SqlAdvanced), call `backend_connection_database_getTables` with the connection to verify that the required tables exist, and then call `backend_connection_database_getTable` for every table you use to obtain the exact column names and types.
+    - **Database**: If the `class` matches a SQL provider (System, Sql, or SqlAdvanced), call `backend_connection_database_getTables` with the connection to verify that the required tables exist, and then call `backend_connection_database_getTable` for every table you use to obtain the exact column names and types. The system tables (prefix `fusio_`) are hidden from the database tools, so `getTables` does not list them and `getTable` fails with "Provided table does not exist" for them. Do NOT call `getTable` for `fusio_user`, it exists nevertheless and you can use it in SQL (e.g. a JOIN to resolve the author name). It has the columns `id` (int), `name` (varchar, the user name) and `email` (varchar), never select `password`, `token` or other credential columns.
     - **Other connections**: Use the filesystem, HTTP or SDK tools listed above to verify the structure of the data you will work with.
 4. **CODE**: Write the PHP Action. Use the verified connection `name` in `$connector->getConnection('name')`.
 5. **STRICT**: The tools are for research ONLY. They MUST NOT appear as PHP functions in the final code.
