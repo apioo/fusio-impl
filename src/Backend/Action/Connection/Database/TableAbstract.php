@@ -76,7 +76,7 @@ abstract readonly class TableAbstract implements ActionInterface
         }
 
         if (!$schemaManager->tablesExist($tableName)) {
-            throw new NotFoundException('Provided table does not exist');
+            throw new NotFoundException('Provided table does not exist: ' . $tableName);
         }
 
         return $schemaManager->introspectTable($tableName);
