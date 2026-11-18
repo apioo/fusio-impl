@@ -46,22 +46,24 @@ readonly class Get implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
+        $connectionId = $request->get('connection_id');
+
         $connection = $this->view->getEntityWithConfig(
-            $request->get('connection_id'),
+            $connectionId,
             $this->frameworkConfig->getProjectKey(),
             $this->connectionParser,
             $context
         );
 
         if (empty($connection)) {
-            throw new StatusCode\NotFoundException('Could not find connection');
+            throw new StatusCode\NotFoundException('Could not find connection: ' . $connectionId);
         }
 
         if ($connection['status'] == Table\Connection::STATUS_DELETED) {
             throw new StatusCode\GoneException('Connection was deleted');
         }
 
-        if ($this->tokenService->isValid($request->get('connection_id'))) {
+        if ($this->tokenService->isValid($connectionId)) {
             // in case the connection supports the oauth2 flow we add a button to start the authorization code flow
             $connection['oauth2'] = true;
         }
