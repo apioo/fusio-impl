@@ -40,6 +40,7 @@ use Fusio\Model\Common\Message;
 use PSX\Json\Parser;
 use PSX\Schema\ObjectMapperInterface;
 use PSX\Schema\SchemaSource;
+use RuntimeException;
 use Throwable;
 
 /**
@@ -331,7 +332,7 @@ readonly class ArchitectExecutor
     {
         $item = $this->invokeAgent($agentId, $prompt, $context);
         if (!$item instanceof ItemObject) {
-            throw new \RuntimeException('The agent returned no structured output');
+            throw new RuntimeException('The agent returned no structured output');
         }
 
         return $item->getPayload();
@@ -341,7 +342,7 @@ readonly class ArchitectExecutor
     {
         $item = $this->invokeAgent($agentId, $prompt, $context);
         if (!$item instanceof ItemText) {
-            throw new \RuntimeException('The agent returned no text output');
+            throw new RuntimeException('The agent returned no text output');
         }
 
         return $item->getContent() ?? '';
