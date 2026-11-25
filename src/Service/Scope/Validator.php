@@ -67,6 +67,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid scope name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('Scope name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->scopeTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Scope already exists');
         }

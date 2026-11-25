@@ -58,6 +58,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid category name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('Category name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->categoryTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Category already exists');
         }

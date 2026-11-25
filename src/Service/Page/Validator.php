@@ -63,6 +63,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid page title');
         }
 
+        if (ctype_digit($title)) {
+            throw new StatusCode\BadRequestException('Page title must not consist only of digits');
+        }
+
         if (($existing === null || $title !== $existing->getTitle()) && $this->pageTable->findOneByTenantAndSlug($tenantId, SlugBuilder::build($title))) {
             throw new StatusCode\BadRequestException('Page already exists');
         }

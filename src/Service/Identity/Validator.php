@@ -58,6 +58,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid identity name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('Identity name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->identityTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Identity already exists');
         }

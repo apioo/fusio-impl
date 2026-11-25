@@ -74,6 +74,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid action name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('Action name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->actionTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Action already exists');
         }

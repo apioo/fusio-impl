@@ -65,6 +65,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid firewall name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('Firewall name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->firewallTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Firewall already exists');
         }

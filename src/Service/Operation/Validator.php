@@ -145,6 +145,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid operation name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('Operation name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->operationTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Operation already exists');
         }

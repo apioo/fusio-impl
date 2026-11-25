@@ -85,6 +85,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid cronjob name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('Cronjob name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->cronjobTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Cronjob already exists');
         }

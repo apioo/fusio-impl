@@ -58,6 +58,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid rate name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('Rate name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->rateTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Rate already exists');
         }

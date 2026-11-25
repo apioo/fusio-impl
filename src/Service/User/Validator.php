@@ -99,6 +99,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid user name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('User name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->userTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('User name already exists');
         }

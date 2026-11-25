@@ -68,6 +68,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid bundle name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('Bundle name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->bundleTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Bundle already exists');
         }

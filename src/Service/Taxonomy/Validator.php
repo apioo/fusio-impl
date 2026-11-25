@@ -78,6 +78,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid taxonomy name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('Taxonomy name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->taxonomyTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Taxonomy already exists');
         }

@@ -62,6 +62,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid connection name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('Connection name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->connectionTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Connection already exists');
         }

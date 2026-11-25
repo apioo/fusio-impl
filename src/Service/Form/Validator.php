@@ -68,6 +68,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid form name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('Form name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->formTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Form already exists');
         }

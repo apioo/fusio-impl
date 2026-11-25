@@ -58,6 +58,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid schema name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('Schema name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->schemaTable->findOneByTenantAndName($tenantId, null, $name)) {
             throw new StatusCode\BadRequestException('Schema already exists');
         }

@@ -58,6 +58,10 @@ readonly class Validator
             throw new StatusCode\BadRequestException('Invalid plan name');
         }
 
+        if (ctype_digit($name)) {
+            throw new StatusCode\BadRequestException('Plan name must not consist only of digits');
+        }
+
         if (($existing === null || $name !== $existing->getName()) && $this->planTable->findOneByTenantAndName($tenantId, $name)) {
             throw new StatusCode\BadRequestException('Plan already exists');
         }
