@@ -32,11 +32,11 @@ use PSX\Sql\Condition;
  */
 class Response extends Generated\WebhookResponseTable
 {
-    public const STATUS_PENDING = 1;
+    public const int STATUS_PENDING = 1;
     
-    public const STATUS_DONE = 2;
+    public const int STATUS_DONE = 2;
     
-    public const STATUS_EXCEEDED = 3;
+    public const int STATUS_EXCEEDED = 3;
 
     /**
      * @return list<array{id: int, status: int, attempts: int, code: int, body: string, execute_date: string}>

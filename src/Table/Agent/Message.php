@@ -37,11 +37,11 @@ use Symfony\Component\Uid\Uuid;
  */
 class Message extends Generated\AgentMessageTable
 {
-    public const ORIGIN_USER      = 0x1;
+    public const int ORIGIN_USER      = 0x1;
     
-    public const ORIGIN_ASSISTANT = 0x2;
+    public const int ORIGIN_ASSISTANT = 0x2;
     
-    public const ORIGIN_SYSTEM    = 0x3;
+    public const int ORIGIN_SYSTEM    = 0x3;
 
     public function addUserMessage(int $agentId, int $userId, ?int $refId, ?string $chatId, Item $item): Generated\AgentMessageRow
     {

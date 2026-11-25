@@ -34,17 +34,17 @@ use PSX\Sql\Condition;
  */
 class Task extends Generated\AgentTaskTable
 {
-    public const STATUS_PENDING   = 1;
+    public const int STATUS_PENDING   = 1;
 
-    public const STATUS_RUNNING   = 2;
+    public const int STATUS_RUNNING   = 2;
 
-    public const STATUS_COMPLETED = 3;
+    public const int STATUS_COMPLETED = 3;
 
-    public const STATUS_FAILED    = 4;
+    public const int STATUS_FAILED    = 4;
 
-    public const STATUS_CANCELED  = 5;
+    public const int STATUS_CANCELED  = 5;
 
-    private const DATE_FORMAT = 'Y-m-d H:i:s';
+    private const string DATE_FORMAT = 'Y-m-d H:i:s';
 
     public static function getStatusName(int $status): string
     {
