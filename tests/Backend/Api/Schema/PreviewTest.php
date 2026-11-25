@@ -34,7 +34,7 @@ class PreviewTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/schema/preview/2', 'GET', [
+        $response = $this->sendRequest('/backend/schema/2/preview', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -46,7 +46,7 @@ class PreviewTest extends DbTestCase
 
     public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/schema/preview/2', 'POST', [
+        $response = $this->sendRequest('/backend/schema/2/preview', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -66,7 +66,7 @@ JSON;
 
     public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/schema/preview/2', 'PUT', [
+        $response = $this->sendRequest('/backend/schema/2/preview', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -78,7 +78,7 @@ JSON;
 
     public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/schema/preview/2', 'DELETE', [
+        $response = $this->sendRequest('/backend/schema/2/preview', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);

@@ -35,7 +35,7 @@ class EntityTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/log/error/1', 'GET', [
+        $response = $this->sendRequest('/backend/error/1', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -62,7 +62,7 @@ JSON;
 
     public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/log/error/1', 'POST', [
+        $response = $this->sendRequest('/backend/error/1', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
@@ -76,7 +76,7 @@ JSON;
 
     public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/log/error/1', 'PUT', [
+        $response = $this->sendRequest('/backend/error/1', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
@@ -90,7 +90,7 @@ JSON;
 
     public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/log/error/1', 'DELETE', [
+        $response = $this->sendRequest('/backend/error/1', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);

@@ -53,19 +53,19 @@ class CollectionTest extends DbTestCase
     "entry": [
         {
             "kind": "[kind]",
-            "id": 62,
+            "id": 63,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
             "kind": "[kind]",
-            "id": 61,
+            "id": 62,
             "name": "bar",
             "description": "Bar access"
         },
         {
             "kind": "[kind]",
-            "id": 60,
+            "id": 61,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -105,7 +105,7 @@ JSON;
     "entry": [
         {
             "kind": "[kind]",
-            "id": 60,
+            "id": 61,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -139,19 +139,19 @@ JSON;
     "entry": [
         {
             "kind": "[kind]",
-            "id": 62,
+            "id": 63,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
             "kind": "[kind]",
-            "id": 61,
+            "id": 62,
             "name": "bar",
             "description": "Bar access"
         },
         {
             "kind": "[kind]",
-            "id": 60,
+            "id": 61,
             "name": "foo",
             "description": "Foo access",
             "metadata": {

@@ -36,7 +36,7 @@ class FormTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/connection/form?class=' . urlencode(Sql::class), 'GET', [
+        $response = $this->sendRequest('/backend/capability/connection/form?class=' . urlencode(Sql::class), 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -111,7 +111,7 @@ JSON;
 
     public function testGetClassDotNotation(): void
     {
-        $response = $this->sendRequest('/backend/connection/form?class=' . ClassName::serialize(Sql::class), 'GET', [
+        $response = $this->sendRequest('/backend/capability/connection/form?class=' . ClassName::serialize(Sql::class), 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);

@@ -35,7 +35,7 @@ class FormTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/action/form?class=' . urlencode(UtilStaticResponse::class), 'GET', [
+        $response = $this->sendRequest('/backend/capability/action/form?class=' . urlencode(UtilStaticResponse::class), 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);

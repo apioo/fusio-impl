@@ -35,7 +35,7 @@ class ListTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/connection/list', 'GET', [
+        $response = $this->sendRequest('/backend/capability/connection/list', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);

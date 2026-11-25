@@ -35,7 +35,7 @@ class GetIndexTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/identity/list', 'GET', [
+        $response = $this->sendRequest('/backend/capability/identity/list', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -77,7 +77,7 @@ JSON;
 
     public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/identity/list', 'POST', [
+        $response = $this->sendRequest('/backend/capability/identity/list', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
@@ -91,7 +91,7 @@ JSON;
 
     public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/identity/list', 'PUT', [
+        $response = $this->sendRequest('/backend/capability/identity/list', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
@@ -105,7 +105,7 @@ JSON;
 
     public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/identity/list', 'DELETE', [
+        $response = $this->sendRequest('/backend/capability/identity/list', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([

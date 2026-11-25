@@ -36,7 +36,7 @@ class GetFormTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/identity/form?class=' . ClassName::serialize(Github::class), 'GET', [
+        $response = $this->sendRequest('/backend/capability/identity/form?class=' . ClassName::serialize(Github::class), 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);

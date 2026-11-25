@@ -66,6 +66,7 @@ class AccountTest extends DbTestCase
         "backend.connection",
         "backend.cronjob",
         "backend.dashboard",
+        "backend.error",
         "backend.event",
         "backend.firewall",
         "backend.form",

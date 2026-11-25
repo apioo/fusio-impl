@@ -35,7 +35,7 @@ class ToolsTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/agent/tools', 'GET', [
+        $response = $this->sendRequest('/backend/capability/agent/tools', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -368,6 +368,14 @@ class ToolsTest extends DbTestCase
             "description": "Returns all available dashboard widgets"
         },
         {
+            "name": "backend_error_get",
+            "description": "Returns a specific error"
+        },
+        {
+            "name": "backend_error_getAll",
+            "description": "Returns a paginated list of log errors"
+        },
+        {
             "name": "backend_event_create",
             "description": "Creates a new event"
         },
@@ -478,14 +486,6 @@ class ToolsTest extends DbTestCase
         {
             "name": "backend_log_getAll",
             "description": "Returns a paginated list of logs"
-        },
-        {
-            "name": "backend_log_getAllErrors",
-            "description": "Returns a paginated list of log errors"
-        },
-        {
-            "name": "backend_log_getError",
-            "description": "Returns a specific error"
         },
         {
             "name": "backend_marketplace_action_get",

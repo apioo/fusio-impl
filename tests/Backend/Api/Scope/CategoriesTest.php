@@ -35,7 +35,7 @@ class CategoriesTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/scope/categories', 'GET', [
+        $response = $this->sendRequest('/backend/capability/scope/categories', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -103,7 +103,7 @@ class CategoriesTest extends DbTestCase
                     "description": ""
                 },
                 {
-                    "id": 24,
+                    "id": 25,
                     "name": "backend.bundle",
                     "description": ""
                 },
@@ -133,6 +133,11 @@ class CategoriesTest extends DbTestCase
                     "description": ""
                 },
                 {
+                    "id": 22,
+                    "name": "backend.error",
+                    "description": ""
+                },
+                {
                     "id": 16,
                     "name": "backend.event",
                     "description": ""
@@ -158,107 +163,107 @@ class CategoriesTest extends DbTestCase
                     "description": ""
                 },
                 {
-                    "id": 22,
+                    "id": 23,
                     "name": "backend.log",
                     "description": ""
                 },
                 {
-                    "id": 23,
+                    "id": 24,
                     "name": "backend.marketplace",
                     "description": ""
                 },
                 {
-                    "id": 29,
+                    "id": 30,
                     "name": "backend.operation",
                     "description": ""
                 },
                 {
-                    "id": 25,
+                    "id": 26,
                     "name": "backend.page",
                     "description": ""
                 },
                 {
-                    "id": 26,
+                    "id": 27,
                     "name": "backend.plan",
                     "description": ""
                 },
                 {
-                    "id": 27,
+                    "id": 28,
                     "name": "backend.rate",
                     "description": ""
                 },
                 {
-                    "id": 28,
+                    "id": 29,
                     "name": "backend.role",
                     "description": ""
                 },
                 {
-                    "id": 30,
+                    "id": 31,
                     "name": "backend.schema",
                     "description": ""
                 },
                 {
-                    "id": 31,
+                    "id": 32,
                     "name": "backend.scope",
                     "description": ""
                 },
                 {
-                    "id": 32,
+                    "id": 33,
                     "name": "backend.sdk",
                     "description": ""
                 },
                 {
-                    "id": 34,
+                    "id": 35,
                     "name": "backend.specification",
                     "description": ""
                 },
                 {
-                    "id": 33,
+                    "id": 34,
                     "name": "backend.statistic",
                     "description": ""
                 },
                 {
-                    "id": 38,
+                    "id": 39,
                     "name": "backend.taxonomy",
                     "description": ""
                 },
                 {
-                    "id": 35,
+                    "id": 36,
                     "name": "backend.tenant",
                     "description": ""
                 },
                 {
-                    "id": 36,
+                    "id": 37,
                     "name": "backend.test",
                     "description": ""
                 },
                 {
-                    "id": 37,
+                    "id": 38,
                     "name": "backend.token",
                     "description": ""
                 },
                 {
-                    "id": 39,
+                    "id": 40,
                     "name": "backend.transaction",
                     "description": ""
                 },
                 {
-                    "id": 40,
+                    "id": 41,
                     "name": "backend.trash",
                     "description": ""
                 },
                 {
-                    "id": 41,
+                    "id": 42,
                     "name": "backend.trigger",
                     "description": ""
                 },
                 {
-                    "id": 42,
+                    "id": 43,
                     "name": "backend.user",
                     "description": ""
                 },
                 {
-                    "id": 43,
+                    "id": 44,
                     "name": "backend.webhook",
                     "description": ""
                 }
@@ -274,77 +279,77 @@ class CategoriesTest extends DbTestCase
                     "description": ""
                 },
                 {
-                    "id": 57,
+                    "id": 58,
                     "name": "consumer.account",
                     "description": ""
                 },
                 {
-                    "id": 44,
+                    "id": 45,
                     "name": "consumer.agent",
                     "description": ""
                 },
                 {
-                    "id": 45,
+                    "id": 46,
                     "name": "consumer.app",
                     "description": ""
                 },
                 {
-                    "id": 46,
+                    "id": 47,
                     "name": "consumer.event",
                     "description": ""
                 },
                 {
-                    "id": 50,
+                    "id": 51,
                     "name": "consumer.form",
                     "description": ""
                 },
                 {
-                    "id": 47,
+                    "id": 48,
                     "name": "consumer.grant",
                     "description": ""
                 },
                 {
-                    "id": 58,
+                    "id": 59,
                     "name": "consumer.identity",
                     "description": ""
                 },
                 {
-                    "id": 48,
+                    "id": 49,
                     "name": "consumer.log",
                     "description": ""
                 },
                 {
-                    "id": 49,
+                    "id": 50,
                     "name": "consumer.page",
                     "description": ""
                 },
                 {
-                    "id": 51,
+                    "id": 52,
                     "name": "consumer.payment",
                     "description": ""
                 },
                 {
-                    "id": 52,
+                    "id": 53,
                     "name": "consumer.plan",
                     "description": ""
                 },
                 {
-                    "id": 53,
+                    "id": 54,
                     "name": "consumer.scope",
                     "description": ""
                 },
                 {
-                    "id": 54,
+                    "id": 55,
                     "name": "consumer.token",
                     "description": ""
                 },
                 {
-                    "id": 56,
+                    "id": 57,
                     "name": "consumer.transaction",
                     "description": ""
                 },
                 {
-                    "id": 55,
+                    "id": 56,
                     "name": "consumer.webhook",
                     "description": ""
                 }
@@ -355,7 +360,7 @@ class CategoriesTest extends DbTestCase
             "name": "default",
             "scopes": [
                 {
-                    "id": 61,
+                    "id": 62,
                     "name": "bar",
                     "description": "Bar access"
                 },
@@ -365,12 +370,12 @@ class CategoriesTest extends DbTestCase
                     "description": ""
                 },
                 {
-                    "id": 60,
+                    "id": 61,
                     "name": "foo",
                     "description": "Foo access"
                 },
                 {
-                    "id": 62,
+                    "id": 63,
                     "name": "plan_scope",
                     "description": "Plan scope access"
                 }
@@ -381,7 +386,7 @@ class CategoriesTest extends DbTestCase
             "name": "system",
             "scopes": [
                 {
-                    "id": 59,
+                    "id": 60,
                     "name": "system",
                     "description": ""
                 }
@@ -397,7 +402,7 @@ JSON;
 
     public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/scope/categories', 'POST', [
+        $response = $this->sendRequest('/backend/capability/scope/categories', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
@@ -411,7 +416,7 @@ JSON;
 
     public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/scope/categories', 'PUT', [
+        $response = $this->sendRequest('/backend/capability/scope/categories', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
@@ -425,7 +430,7 @@ JSON;
 
     public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/scope/categories', 'DELETE', [
+        $response = $this->sendRequest('/backend/capability/scope/categories', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([

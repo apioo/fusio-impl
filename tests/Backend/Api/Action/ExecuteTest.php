@@ -37,7 +37,7 @@ class ExecuteTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/action/execute/3', 'GET', [
+        $response = $this->sendRequest('/backend/action/3/execute', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -49,7 +49,7 @@ class ExecuteTest extends DbTestCase
 
     public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/action/execute/' . ClassName::serialize(GetDebug::class), 'POST', [
+        $response = $this->sendRequest('/backend/action/' . ClassName::serialize(GetDebug::class) . '/execute', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
@@ -86,7 +86,7 @@ JSON;
 
     public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/action/execute/3', 'PUT', [
+        $response = $this->sendRequest('/backend/action/3/execute', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
@@ -100,7 +100,7 @@ JSON;
 
     public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/action/execute/3', 'DELETE', [
+        $response = $this->sendRequest('/backend/action/3/execute', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
