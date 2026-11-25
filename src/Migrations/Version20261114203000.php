@@ -62,6 +62,20 @@ final class Version20261114203000 extends AbstractMigration
 
     public function postUp(Schema $schema): void
     {
+        // renamed operations, we rename them in place so that existing scope assignments are preserved
+        $renames = [
+            'backend.log.getAllErrors' => 'backend.error.getAll',
+            'backend.log.getError' => 'backend.error.get',
+        ];
+
+        foreach ($renames as $oldName => $newName) {
+            $exists = $this->connection->fetchOne('SELECT id FROM fusio_operation WHERE tenant_id IS NULL AND name = :name', ['name' => $newName]);
+            if (empty($exists)) {
+                $this->connection->executeStatement('UPDATE fusio_operation SET name = :new WHERE tenant_id IS NULL AND name = :old', ['new' => $newName, 'old' => $oldName]);
+            }
+        }
+
+        // updates existing operations and inserts missing ones
         DataSyncronizer::sync($this->connection);
     }
 }

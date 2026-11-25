@@ -58,6 +58,18 @@ class DataSyncronizer
 
             if (empty($operationId)) {
                 self::insert($connection, 'fusio_operation', $row);
+            } else {
+                self::update($connection, 'fusio_operation', $operationId, [
+                    'description' => $row['description'],
+                    'http_method' => $row['http_method'],
+                    'http_path' => $row['http_path'],
+                    'http_code' => $row['http_code'],
+                    'parameters' => $row['parameters'],
+                    'incoming' => $row['incoming'],
+                    'outgoing' => $row['outgoing'],
+                    'throws' => $row['throws'],
+                    'action' => $row['action'],
+                ]);
             }
         }
 
