@@ -35,16 +35,18 @@ use PSX\Sql\OrderBy;
  */
 class Scope extends Generated\ScopeTable
 {
-    public const STATUS_ACTIVE  = 1;
+    public const int STATUS_ACTIVE  = 1;
     
-    public const STATUS_DELETED = 0;
+    public const int STATUS_DELETED = 0;
 
     public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id): ?ScopeRow
     {
         if (str_starts_with($id, '~')) {
             return $this->findOneByTenantAndName($tenantId, $categoryId, urldecode(substr($id, 1)));
-        } else {
+        } elseif (ctype_digit($id)) {
             return $this->findOneByTenantAndId($tenantId, $categoryId, (int) $id);
+        } else {
+            return $this->findOneByTenantAndName($tenantId, $categoryId, urldecode($id));
         }
     }
 

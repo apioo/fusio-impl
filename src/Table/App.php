@@ -34,20 +34,22 @@ use PSX\Sql\Condition;
  */
 class App extends Generated\AppTable
 {
-    public const STATUS_ACTIVE      = 0x1;
+    public const int STATUS_ACTIVE      = 0x1;
     
-    public const STATUS_PENDING     = 0x2;
+    public const int STATUS_PENDING     = 0x2;
     
-    public const STATUS_DEACTIVATED = 0x3;
+    public const int STATUS_DEACTIVATED = 0x3;
     
-    public const STATUS_DELETED     = 0x4;
+    public const int STATUS_DELETED     = 0x4;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?AppRow
     {
         if (str_starts_with($id, '~')) {
             return $this->findOneByTenantAndName($tenantId, urldecode(substr($id, 1)));
-        } else {
+        } elseif (ctype_digit($id)) {
             return $this->findOneByTenantAndId($tenantId, (int) $id);
+        } else {
+            return $this->findOneByTenantAndName($tenantId, urldecode($id));
         }
     }
 

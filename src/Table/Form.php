@@ -32,16 +32,18 @@ use PSX\Sql\Condition;
  */
 class Form extends Generated\FormTable
 {
-    public const STATUS_ACTIVE  = 1;
+    public const int STATUS_ACTIVE  = 1;
     
-    public const STATUS_DELETED = 0;
+    public const int STATUS_DELETED = 0;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?FormRow
     {
         if (str_starts_with($id, '~')) {
             return $this->findOneByTenantAndName($tenantId, urldecode(substr($id, 1)));
-        } else {
+        } elseif (ctype_digit($id)) {
             return $this->findOneByTenantAndId($tenantId, (int) $id);
+        } else {
+            return $this->findOneByTenantAndName($tenantId, urldecode($id));
         }
     }
 

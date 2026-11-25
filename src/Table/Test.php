@@ -32,17 +32,17 @@ use PSX\Sql\Condition;
  */
 class Test extends Generated\TestTable
 {
-    const STATUS_PENDING  = 0x1;
+    const int STATUS_PENDING  = 0x1;
     
-    const STATUS_SUCCESS  = 0x2;
+    const int STATUS_SUCCESS  = 0x2;
     
-    const STATUS_WARNING  = 0x3;
+    const int STATUS_WARNING  = 0x3;
     
-    const STATUS_ERROR  = 0x4;
+    const int STATUS_ERROR  = 0x4;
     
-    const STATUS_SKIPPED  = 0x5;
+    const int STATUS_SKIPPED  = 0x5;
     
-    const STATUS_DISABLED = 0x6;
+    const int STATUS_DISABLED = 0x6;
 
     public function findOneByTenantAndId(?string $tenantId, int $categoryId, int $id): ?TestRow
     {

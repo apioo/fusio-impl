@@ -33,28 +33,30 @@ use PSX\Sql\OrderBy;
  */
 class Agent extends Generated\AgentTable
 {
-    public const STATUS_ACTIVE  = 1;
+    public const int STATUS_ACTIVE  = 1;
 
-    public const STATUS_DELETED = 0;
+    public const int STATUS_DELETED = 0;
 
-    public const TYPE_GENERAL = 0;
+    public const int TYPE_GENERAL = 0;
     
-    public const TYPE_ARCHITECT = 1;
+    public const int TYPE_ARCHITECT = 1;
     
-    public const TYPE_ACTION = 2;
+    public const int TYPE_ACTION = 2;
     
-    public const TYPE_SCHEMA = 3;
+    public const int TYPE_SCHEMA = 3;
     
-    public const TYPE_DATABASE = 4;
+    public const int TYPE_DATABASE = 4;
 
-    public const TYPE_SEED = 5;
+    public const int TYPE_SEED = 5;
 
     public function findOneByIdentifier(?string $tenantId, int $categoryId, string $id, ?bool $public = null): ?AgentRow
     {
         if (str_starts_with($id, '~')) {
             return $this->findOneByTenantAndName($tenantId, $categoryId, urldecode(substr($id, 1)), $public);
-        } else {
+        } elseif (ctype_digit($id)) {
             return $this->findOneByTenantAndId($tenantId, $categoryId, (int) $id, $public);
+        } else {
+            return $this->findOneByTenantAndName($tenantId, $categoryId, urldecode($id));
         }
     }
 

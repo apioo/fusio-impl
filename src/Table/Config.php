@@ -32,26 +32,28 @@ use PSX\Sql\Condition;
  */
 class Config extends Generated\ConfigTable
 {
-    public const FORM_STRING   = 1;
+    public const int FORM_STRING   = 1;
     
-    public const FORM_BOOLEAN  = 2;
+    public const int FORM_BOOLEAN  = 2;
     
-    public const FORM_NUMBER   = 3;
+    public const int FORM_NUMBER   = 3;
     
-    public const FORM_DATETIME = 4;
+    public const int FORM_DATETIME = 4;
     
-    public const FORM_EMAIL    = 5;
+    public const int FORM_EMAIL    = 5;
     
-    public const FORM_TEXT     = 6;
+    public const int FORM_TEXT     = 6;
     
-    public const FORM_SECRET   = 7;
+    public const int FORM_SECRET   = 7;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?ConfigRow
     {
         if (str_starts_with($id, '~')) {
             return $this->findOneByTenantAndName($tenantId, urldecode(substr($id, 1)));
-        } else {
+        } elseif (ctype_digit($id)) {
             return $this->findOneByTenantAndId($tenantId, (int) $id);
+        } else {
+            return $this->findOneByTenantAndName($tenantId, urldecode($id));
         }
     }
 

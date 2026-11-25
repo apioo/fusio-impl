@@ -37,8 +37,10 @@ class Transaction extends Generated\TransactionTable
     {
         if (str_starts_with($id, '~')) {
             return $this->findOneByTenantAndTransactionId($tenantId, urldecode(substr($id, 1)));
-        } else {
+        } elseif (ctype_digit($id)) {
             return $this->findOneByTenantAndId($tenantId, (int) $id);
+        } else {
+            return $this->findOneByTenantAndTransactionId($tenantId, urldecode($id));
         }
     }
 

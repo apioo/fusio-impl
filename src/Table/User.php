@@ -33,24 +33,21 @@ use PSX\Sql\Condition;
  */
 class User extends Generated\UserTable
 {
-    public const STATUS_DISABLED = 2;
+    public const int STATUS_DISABLED = 2;
     
-    public const STATUS_ACTIVE   = 1;
+    public const int STATUS_ACTIVE   = 1;
     
-    public const STATUS_DELETED  = 0;
+    public const int STATUS_DELETED  = 0;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?UserRow
     {
-        $condition = Condition::withAnd();
-        $condition->equals(self::COLUMN_TENANT_ID, $tenantId);
-
         if (str_starts_with($id, '~')) {
-            $condition->equals(self::COLUMN_NAME, urldecode(substr($id, 1)));
+            return $this->findOneByTenantAndName($tenantId, urldecode(substr($id, 1)));
+        } elseif (ctype_digit($id)) {
+            return $this->findOneByTenantAndId($tenantId, (int) $id);
         } else {
-            $condition->equals(self::COLUMN_ID, (int) $id);
+            return $this->findOneByTenantAndName($tenantId, urldecode($id));
         }
-
-        return $this->findOneBy($condition);
     }
 
     public function findOneByTenantAndId(?string $tenantId, int $id): ?UserRow

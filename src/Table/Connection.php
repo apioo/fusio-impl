@@ -40,8 +40,10 @@ class Connection extends Generated\ConnectionTable
     {
         if (str_starts_with($id, '~')) {
             return $this->findOneByTenantAndName($tenantId, $categoryId, urldecode(substr($id, 1)));
-        } else {
+        } elseif (ctype_digit($id)) {
             return $this->findOneByTenantAndId($tenantId, $categoryId, (int) $id);
+        } else {
+            return $this->findOneByTenantAndName($tenantId, $categoryId, urldecode($id));
         }
     }
 

@@ -34,9 +34,9 @@ use PSX\Sql\Condition;
  */
 class Token extends Generated\TokenTable
 {
-    const STATUS_ACTIVE  = 0x1;
+    const int STATUS_ACTIVE  = 0x1;
     
-    const STATUS_DELETED = 0x2;
+    const int STATUS_DELETED = 0x2;
 
     public function findOneByTenantAndId(?string $tenantId, int $id, ?int $userId = null): ?TokenRow
     {

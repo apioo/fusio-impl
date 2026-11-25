@@ -34,18 +34,20 @@ use PSX\Sql\Condition;
  */
 class Page extends Generated\PageTable
 {
-    public const STATUS_VISIBLE   = 1;
+    public const int STATUS_VISIBLE   = 1;
     
-    public const STATUS_INVISIBLE = 2;
+    public const int STATUS_INVISIBLE = 2;
     
-    public const STATUS_DELETED   = 0;
+    public const int STATUS_DELETED   = 0;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?PageRow
     {
         if (str_starts_with($id, '~')) {
             return $this->findOneByTenantAndSlug($tenantId, urldecode(substr($id, 1)));
-        } else {
+        } elseif (ctype_digit($id)) {
             return $this->findOneByTenantAndId($tenantId, (int) $id);
+        } else {
+            return $this->findOneByTenantAndSlug($tenantId, urldecode($id));
         }
     }
 

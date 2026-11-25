@@ -32,26 +32,28 @@ use PSX\Sql\Condition;
  */
 class Category extends Generated\CategoryTable
 {
-    public const STATUS_ACTIVE  = 1;
+    public const int STATUS_ACTIVE  = 1;
     
-    public const STATUS_DELETED = 0;
+    public const int STATUS_DELETED = 0;
 
-    public const TYPE_DEFAULT = 'default';
+    public const string TYPE_DEFAULT = 'default';
     
-    public const TYPE_BACKEND = 'backend';
+    public const string TYPE_BACKEND = 'backend';
     
-    public const TYPE_CONSUMER = 'consumer';
+    public const string TYPE_CONSUMER = 'consumer';
     
-    public const TYPE_SYSTEM = 'system';
+    public const string TYPE_SYSTEM = 'system';
     
-    public const TYPE_AUTHORIZATION = 'authorization';
+    public const string TYPE_AUTHORIZATION = 'authorization';
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?CategoryRow
     {
         if (str_starts_with($id, '~')) {
             return $this->findOneByTenantAndName($tenantId, urldecode(substr($id, 1)));
-        } else {
+        } elseif (ctype_digit($id)) {
             return $this->findOneByTenantAndId($tenantId, (int) $id);
+        } else {
+            return $this->findOneByTenantAndName($tenantId, urldecode($id));
         }
     }
 

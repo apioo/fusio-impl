@@ -20,7 +20,6 @@
 
 namespace Fusio\Impl\Table;
 
-use Fusio\Impl\Table\Generated\ScopeRow;
 use Fusio\Impl\Table\Generated\WebhookRow;
 use PSX\Sql\Condition;
 
@@ -33,16 +32,18 @@ use PSX\Sql\Condition;
  */
 class Webhook extends Generated\WebhookTable
 {
-    const STATUS_ACTIVE = 1;
+    const int STATUS_ACTIVE = 1;
     
-    const STATUS_INACTIVE = 2;
+    const int STATUS_INACTIVE = 2;
 
     public function findOneByIdentifier(?string $tenantId, string $id): ?WebhookRow
     {
         if (str_starts_with($id, '~')) {
             return $this->findOneByTenantAndName($tenantId, urldecode(substr($id, 1)));
-        } else {
+        } elseif (ctype_digit($id)) {
             return $this->findOneByTenantAndId($tenantId, (int) $id);
+        } else {
+            return $this->findOneByTenantAndName($tenantId, urldecode($id));
         }
     }
 
