@@ -109,7 +109,7 @@ JSON;
 
     public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/scope/categories', 'POST', [
+        $response = $this->sendRequest('/consumer/scope/categories', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
@@ -123,7 +123,7 @@ JSON;
 
     public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/scope/categories', 'PUT', [
+        $response = $this->sendRequest('/consumer/scope/categories', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([
@@ -137,7 +137,7 @@ JSON;
 
     public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/scope/categories', 'DELETE', [
+        $response = $this->sendRequest('/consumer/scope/categories', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::DEVELOPER_CONSUMER,
         ], json_encode([

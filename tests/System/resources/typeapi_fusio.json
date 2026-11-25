@@ -18,6 +18,7 @@
       "backend.connection",
       "backend.cronjob",
       "backend.dashboard",
+      "backend.error",
       "backend.event",
       "backend.firewall",
       "backend.form",
@@ -252,7 +253,7 @@
       ]
     },
     "backend.action.delete": {
-      "path": "/backend/action/$action_id<[0-9]+|^~>",
+      "path": "/backend/action/:action_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -289,7 +290,7 @@
       ]
     },
     "backend.action.execute": {
-      "path": "/backend/action/execute/:action_id",
+      "path": "/backend/action/:action_id/execute",
       "method": "POST",
       "return": {
         "code": 200,
@@ -333,7 +334,7 @@
       ]
     },
     "backend.action.get": {
-      "path": "/backend/action/$action_id<[0-9]+|^~>",
+      "path": "/backend/action/:action_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -419,7 +420,7 @@
       ]
     },
     "backend.action.getClasses": {
-      "path": "/backend/action/list",
+      "path": "/backend/capability/action/list",
       "method": "GET",
       "return": {
         "code": 200,
@@ -468,7 +469,7 @@
       ]
     },
     "backend.action.getCommits": {
-      "path": "/backend/action/$action_id<[0-9]+|^~>/commit",
+      "path": "/backend/action/:action_id/commit",
       "method": "GET",
       "return": {
         "code": 200,
@@ -523,7 +524,7 @@
       ]
     },
     "backend.action.getForm": {
-      "path": "/backend/action/form",
+      "path": "/backend/capability/action/form",
       "method": "GET",
       "return": {
         "code": 200,
@@ -561,7 +562,7 @@
       ]
     },
     "backend.action.update": {
-      "path": "/backend/action/$action_id<[0-9]+|^~>",
+      "path": "/backend/action/:action_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -643,7 +644,7 @@
       ]
     },
     "backend.agent.delete": {
-      "path": "/backend/agent/$agent_id<[0-9]+|^~>",
+      "path": "/backend/agent/:agent_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -680,7 +681,7 @@
       ]
     },
     "backend.agent.get": {
-      "path": "/backend/agent/$agent_id<[0-9]+|^~>",
+      "path": "/backend/agent/:agent_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -766,7 +767,7 @@
       ]
     },
     "backend.agent.getTools": {
-      "path": "/backend/agent/tools",
+      "path": "/backend/capability/agent/tools",
       "method": "GET",
       "return": {
         "code": 200,
@@ -796,7 +797,7 @@
       ]
     },
     "backend.agent.message.getAll": {
-      "path": "/backend/agent/$agent_id<[0-9]+|^~>/message",
+      "path": "/backend/agent/:agent_id/message",
       "method": "GET",
       "return": {
         "code": 200,
@@ -845,7 +846,7 @@
       ]
     },
     "backend.agent.message.submit": {
-      "path": "/backend/agent/$agent_id<[0-9]+|^~>/message",
+      "path": "/backend/agent/:agent_id/message",
       "method": "POST",
       "return": {
         "code": 201,
@@ -895,7 +896,7 @@
       ]
     },
     "backend.agent.task.cancel": {
-      "path": "/backend/agent/$agent_id<[0-9]+|^~>/task/:task_id",
+      "path": "/backend/agent/:agent_id/task/:task_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -938,7 +939,7 @@
       ]
     },
     "backend.agent.task.create": {
-      "path": "/backend/agent/$agent_id<[0-9]+|^~>/task",
+      "path": "/backend/agent/:agent_id/task",
       "method": "POST",
       "return": {
         "code": 202,
@@ -988,7 +989,7 @@
       ]
     },
     "backend.agent.task.get": {
-      "path": "/backend/agent/$agent_id<[0-9]+|^~>/task/:task_id",
+      "path": "/backend/agent/:agent_id/task/:task_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -1031,7 +1032,7 @@
       ]
     },
     "backend.agent.task.getAll": {
-      "path": "/backend/agent/$agent_id<[0-9]+|^~>/task",
+      "path": "/backend/agent/:agent_id/task",
       "method": "GET",
       "return": {
         "code": 200,
@@ -1080,7 +1081,7 @@
       ]
     },
     "backend.agent.update": {
-      "path": "/backend/agent/$agent_id<[0-9]+|^~>",
+      "path": "/backend/agent/:agent_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -1162,7 +1163,7 @@
       ]
     },
     "backend.app.delete": {
-      "path": "/backend/app/$app_id<[0-9]+|^~>",
+      "path": "/backend/app/:app_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -1199,7 +1200,7 @@
       ]
     },
     "backend.app.deleteToken": {
-      "path": "/backend/app/$app_id<[0-9]+>/token/:token_id",
+      "path": "/backend/app/:app_id/token/:token_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -1242,7 +1243,7 @@
       ]
     },
     "backend.app.get": {
-      "path": "/backend/app/$app_id<[0-9]+|^~>",
+      "path": "/backend/app/:app_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -1328,7 +1329,7 @@
       ]
     },
     "backend.app.update": {
-      "path": "/backend/app/$app_id<[0-9]+|^~>",
+      "path": "/backend/app/:app_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -1372,7 +1373,7 @@
       ]
     },
     "backend.audit.get": {
-      "path": "/backend/audit/$audit_id<[0-9]+>",
+      "path": "/backend/audit/:audit_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -1608,7 +1609,7 @@
       ]
     },
     "backend.bundle.delete": {
-      "path": "/backend/bundle/$bundle_id<[0-9]+|^~>",
+      "path": "/backend/bundle/:bundle_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -1645,7 +1646,7 @@
       ]
     },
     "backend.bundle.get": {
-      "path": "/backend/bundle/$bundle_id<[0-9]+|^~>",
+      "path": "/backend/bundle/:bundle_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -1731,7 +1732,7 @@
       ]
     },
     "backend.bundle.publish": {
-      "path": "/backend/bundle/$bundle_id<[0-9]+|^~>/publish",
+      "path": "/backend/bundle/:bundle_id/publish",
       "method": "POST",
       "return": {
         "code": 200,
@@ -1768,7 +1769,7 @@
       ]
     },
     "backend.bundle.update": {
-      "path": "/backend/bundle/$bundle_id<[0-9]+|^~>",
+      "path": "/backend/bundle/:bundle_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -1850,7 +1851,7 @@
       ]
     },
     "backend.category.delete": {
-      "path": "/backend/category/$category_id<[0-9]+|^~>",
+      "path": "/backend/category/:category_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -1887,7 +1888,7 @@
       ]
     },
     "backend.category.get": {
-      "path": "/backend/category/$category_id<[0-9]+|^~>",
+      "path": "/backend/category/:category_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -1973,7 +1974,7 @@
       ]
     },
     "backend.category.update": {
-      "path": "/backend/category/$category_id<[0-9]+|^~>",
+      "path": "/backend/category/:category_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -2017,7 +2018,7 @@
       ]
     },
     "backend.config.get": {
-      "path": "/backend/config/$config_id<[0-9]+|^~>",
+      "path": "/backend/config/:config_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -2103,7 +2104,7 @@
       ]
     },
     "backend.config.update": {
-      "path": "/backend/config/$config_id<[0-9]+|^~>",
+      "path": "/backend/config/:config_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -2753,7 +2754,7 @@
       ]
     },
     "backend.connection.delete": {
-      "path": "/backend/connection/$connection_id<[0-9]+|^~>",
+      "path": "/backend/connection/:connection_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -3010,7 +3011,7 @@
       ]
     },
     "backend.connection.get": {
-      "path": "/backend/connection/$connection_id<[0-9]+|^~>",
+      "path": "/backend/connection/:connection_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -3102,7 +3103,7 @@
       ]
     },
     "backend.connection.getClasses": {
-      "path": "/backend/connection/list",
+      "path": "/backend/capability/connection/list",
       "method": "GET",
       "return": {
         "code": 200,
@@ -3132,7 +3133,7 @@
       ]
     },
     "backend.connection.getForm": {
-      "path": "/backend/connection/form",
+      "path": "/backend/capability/connection/form",
       "method": "GET",
       "return": {
         "code": 200,
@@ -3287,7 +3288,7 @@
       ]
     },
     "backend.connection.update": {
-      "path": "/backend/connection/$connection_id<[0-9]+|^~>",
+      "path": "/backend/connection/:connection_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -3369,7 +3370,7 @@
       ]
     },
     "backend.cronjob.delete": {
-      "path": "/backend/cronjob/$cronjob_id<[0-9]+|^~>",
+      "path": "/backend/cronjob/:cronjob_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -3406,7 +3407,7 @@
       ]
     },
     "backend.cronjob.get": {
-      "path": "/backend/cronjob/$cronjob_id<[0-9]+|^~>",
+      "path": "/backend/cronjob/:cronjob_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -3498,7 +3499,7 @@
       ]
     },
     "backend.cronjob.update": {
-      "path": "/backend/cronjob/$cronjob_id<[0-9]+|^~>",
+      "path": "/backend/cronjob/:cronjob_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -3571,6 +3572,92 @@
         "dashboard"
       ]
     },
+    "backend.error.get": {
+      "path": "/backend/error/:error_id",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_LogError"
+        }
+      },
+      "arguments": {
+        "error_id": {
+          "in": "path",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a specific error",
+      "stability": 2,
+      "security": [
+        "backend.error"
+      ],
+      "authorization": true,
+      "tags": [
+        "error"
+      ]
+    },
+    "backend.error.getAll": {
+      "path": "/backend/error",
+      "method": "GET",
+      "return": {
+        "code": 200,
+        "schema": {
+          "type": "reference",
+          "target": "Backend_LogErrorCollection"
+        }
+      },
+      "arguments": {
+        "startIndex": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "count": {
+          "in": "query",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        "search": {
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "throws": [
+        {
+          "code": 999,
+          "schema": {
+            "type": "reference",
+            "target": "Common_Message"
+          }
+        }
+      ],
+      "description": "Returns a paginated list of log errors",
+      "stability": 2,
+      "security": [
+        "backend.error"
+      ],
+      "authorization": true,
+      "tags": [
+        "error"
+      ]
+    },
     "backend.event.create": {
       "path": "/backend/event",
       "method": "POST",
@@ -3610,7 +3697,7 @@
       ]
     },
     "backend.event.delete": {
-      "path": "/backend/event/$event_id<[0-9]+|^~>",
+      "path": "/backend/event/:event_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -3647,7 +3734,7 @@
       ]
     },
     "backend.event.get": {
-      "path": "/backend/event/$event_id<[0-9]+|^~>",
+      "path": "/backend/event/:event_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -3739,7 +3826,7 @@
       ]
     },
     "backend.event.update": {
-      "path": "/backend/event/$event_id<[0-9]+|^~>",
+      "path": "/backend/event/:event_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -3821,7 +3908,7 @@
       ]
     },
     "backend.firewall.delete": {
-      "path": "/backend/firewall/$firewall_id<[0-9]+|^~>",
+      "path": "/backend/firewall/:firewall_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -3858,7 +3945,7 @@
       ]
     },
     "backend.firewall.get": {
-      "path": "/backend/firewall/$firewall_id<[0-9]+|^~>",
+      "path": "/backend/firewall/:firewall_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -3944,7 +4031,7 @@
       ]
     },
     "backend.firewall.update": {
-      "path": "/backend/firewall/$firewall_id<[0-9]+|^~>",
+      "path": "/backend/firewall/:firewall_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -4026,7 +4113,7 @@
       ]
     },
     "backend.form.delete": {
-      "path": "/backend/form/$form_id<[0-9]+|^~>",
+      "path": "/backend/form/:form_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -4063,7 +4150,7 @@
       ]
     },
     "backend.form.get": {
-      "path": "/backend/form/$form_id<[0-9]+|^~>",
+      "path": "/backend/form/:form_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -4149,7 +4236,7 @@
       ]
     },
     "backend.form.update": {
-      "path": "/backend/form/$form_id<[0-9]+|^~>",
+      "path": "/backend/form/:form_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -4386,7 +4473,7 @@
       ]
     },
     "backend.identity.delete": {
-      "path": "/backend/identity/$identity_id<[0-9]+|^~>",
+      "path": "/backend/identity/:identity_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -4423,7 +4510,7 @@
       ]
     },
     "backend.identity.get": {
-      "path": "/backend/identity/$identity_id<[0-9]+|^~>",
+      "path": "/backend/identity/:identity_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -4509,7 +4596,7 @@
       ]
     },
     "backend.identity.getClasses": {
-      "path": "/backend/identity/list",
+      "path": "/backend/capability/identity/list",
       "method": "GET",
       "return": {
         "code": 200,
@@ -4539,7 +4626,7 @@
       ]
     },
     "backend.identity.getForm": {
-      "path": "/backend/identity/form",
+      "path": "/backend/capability/identity/form",
       "method": "GET",
       "return": {
         "code": 200,
@@ -4576,7 +4663,7 @@
       ]
     },
     "backend.identity.update": {
-      "path": "/backend/identity/$identity_id<[0-9]+|^~>",
+      "path": "/backend/identity/:identity_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -4620,7 +4707,7 @@
       ]
     },
     "backend.log.get": {
-      "path": "/backend/log/$log_id<[0-9]+>",
+      "path": "/backend/log/:log_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -4764,92 +4851,6 @@
         }
       ],
       "description": "Returns a paginated list of logs",
-      "stability": 2,
-      "security": [
-        "backend.log"
-      ],
-      "authorization": true,
-      "tags": [
-        "log"
-      ]
-    },
-    "backend.log.getAllErrors": {
-      "path": "/backend/log/error",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Backend_LogErrorCollection"
-        }
-      },
-      "arguments": {
-        "startIndex": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "count": {
-          "in": "query",
-          "schema": {
-            "type": "integer"
-          }
-        },
-        "search": {
-          "in": "query",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Returns a paginated list of log errors",
-      "stability": 2,
-      "security": [
-        "backend.log"
-      ],
-      "authorization": true,
-      "tags": [
-        "log"
-      ]
-    },
-    "backend.log.getError": {
-      "path": "/backend/log/error/$error_id<[0-9]+>",
-      "method": "GET",
-      "return": {
-        "code": 200,
-        "schema": {
-          "type": "reference",
-          "target": "Backend_LogError"
-        }
-      },
-      "arguments": {
-        "error_id": {
-          "in": "path",
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "throws": [
-        {
-          "code": 999,
-          "schema": {
-            "type": "reference",
-            "target": "Common_Message"
-          }
-        }
-      ],
-      "description": "Returns a specific error",
       "stability": 2,
       "security": [
         "backend.log"
@@ -5399,7 +5400,7 @@
       ]
     },
     "backend.operation.delete": {
-      "path": "/backend/operation/$operation_id<[0-9]+|^~>",
+      "path": "/backend/operation/:operation_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -5436,7 +5437,7 @@
       ]
     },
     "backend.operation.get": {
-      "path": "/backend/operation/$operation_id<[0-9]+|^~>",
+      "path": "/backend/operation/:operation_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -5528,7 +5529,7 @@
       ]
     },
     "backend.operation.update": {
-      "path": "/backend/operation/$operation_id<[0-9]+|^~>",
+      "path": "/backend/operation/:operation_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -5610,7 +5611,7 @@
       ]
     },
     "backend.page.delete": {
-      "path": "/backend/page/$page_id<[0-9]+|^~>",
+      "path": "/backend/page/:page_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -5647,7 +5648,7 @@
       ]
     },
     "backend.page.get": {
-      "path": "/backend/page/$page_id<[0-9]+|^~>",
+      "path": "/backend/page/:page_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -5733,7 +5734,7 @@
       ]
     },
     "backend.page.update": {
-      "path": "/backend/page/$page_id<[0-9]+|^~>",
+      "path": "/backend/page/:page_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -5815,7 +5816,7 @@
       ]
     },
     "backend.plan.delete": {
-      "path": "/backend/plan/$plan_id<[0-9]+|^~>",
+      "path": "/backend/plan/:plan_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -5852,7 +5853,7 @@
       ]
     },
     "backend.plan.get": {
-      "path": "/backend/plan/$plan_id<[0-9]+|^~>",
+      "path": "/backend/plan/:plan_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -5938,7 +5939,7 @@
       ]
     },
     "backend.plan.update": {
-      "path": "/backend/plan/$plan_id<[0-9]+|^~>",
+      "path": "/backend/plan/:plan_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -6020,7 +6021,7 @@
       ]
     },
     "backend.rate.delete": {
-      "path": "/backend/rate/$rate_id<[0-9]+|^~>",
+      "path": "/backend/rate/:rate_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -6057,7 +6058,7 @@
       ]
     },
     "backend.rate.get": {
-      "path": "/backend/rate/$rate_id<[0-9]+|^~>",
+      "path": "/backend/rate/:rate_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -6143,7 +6144,7 @@
       ]
     },
     "backend.rate.update": {
-      "path": "/backend/rate/$rate_id<[0-9]+|^~>",
+      "path": "/backend/rate/:rate_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -6225,7 +6226,7 @@
       ]
     },
     "backend.role.delete": {
-      "path": "/backend/role/$role_id<[0-9]+|^~>",
+      "path": "/backend/role/:role_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -6262,7 +6263,7 @@
       ]
     },
     "backend.role.get": {
-      "path": "/backend/role/$role_id<[0-9]+|^~>",
+      "path": "/backend/role/:role_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -6348,7 +6349,7 @@
       ]
     },
     "backend.role.update": {
-      "path": "/backend/role/$role_id<[0-9]+|^~>",
+      "path": "/backend/role/:role_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -6430,7 +6431,7 @@
       ]
     },
     "backend.schema.delete": {
-      "path": "/backend/schema/$schema_id<[0-9]+|^~>",
+      "path": "/backend/schema/:schema_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -6467,7 +6468,7 @@
       ]
     },
     "backend.schema.get": {
-      "path": "/backend/schema/$schema_id<[0-9]+|^~>",
+      "path": "/backend/schema/:schema_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -6559,7 +6560,7 @@
       ]
     },
     "backend.schema.getCommits": {
-      "path": "/backend/schema/$schema_id<[0-9]+|^~>/commit",
+      "path": "/backend/schema/:schema_id/commit",
       "method": "GET",
       "return": {
         "code": 200,
@@ -6614,7 +6615,7 @@
       ]
     },
     "backend.schema.getPreview": {
-      "path": "/backend/schema/preview/:schema_id",
+      "path": "/backend/schema/:schema_id/preview",
       "method": "POST",
       "return": {
         "code": 200,
@@ -6651,7 +6652,7 @@
       ]
     },
     "backend.schema.update": {
-      "path": "/backend/schema/$schema_id<[0-9]+|^~>",
+      "path": "/backend/schema/:schema_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -6695,7 +6696,7 @@
       ]
     },
     "backend.schema.updateForm": {
-      "path": "/backend/schema/form/$schema_id<[0-9]+>",
+      "path": "/backend/schema/:schema_id/form",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -6777,7 +6778,7 @@
       ]
     },
     "backend.scope.delete": {
-      "path": "/backend/scope/$scope_id<[0-9]+|^~>",
+      "path": "/backend/scope/:scope_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -6814,7 +6815,7 @@
       ]
     },
     "backend.scope.get": {
-      "path": "/backend/scope/$scope_id<[0-9]+|^~>",
+      "path": "/backend/scope/:scope_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -6900,7 +6901,7 @@
       ]
     },
     "backend.scope.getCategories": {
-      "path": "/backend/scope/categories",
+      "path": "/backend/capability/scope/categories",
       "method": "GET",
       "return": {
         "code": 200,
@@ -6930,7 +6931,7 @@
       ]
     },
     "backend.scope.update": {
-      "path": "/backend/scope/$scope_id<[0-9]+|^~>",
+      "path": "/backend/scope/:scope_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -9118,7 +9119,7 @@
       ]
     },
     "backend.taxonomy.delete": {
-      "path": "/backend/taxonomy/$taxonomy_id<[0-9]+|^~>",
+      "path": "/backend/taxonomy/:taxonomy_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -9155,7 +9156,7 @@
       ]
     },
     "backend.taxonomy.get": {
-      "path": "/backend/taxonomy/$taxonomy_id<[0-9]+|^~>",
+      "path": "/backend/taxonomy/:taxonomy_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -9241,7 +9242,7 @@
       ]
     },
     "backend.taxonomy.move": {
-      "path": "/backend/taxonomy/$taxonomy_id<[0-9]+|^~>",
+      "path": "/backend/taxonomy/:taxonomy_id",
       "method": "POST",
       "return": {
         "code": 200,
@@ -9285,7 +9286,7 @@
       ]
     },
     "backend.taxonomy.update": {
-      "path": "/backend/taxonomy/$taxonomy_id<[0-9]+|^~>",
+      "path": "/backend/taxonomy/:taxonomy_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -9403,7 +9404,7 @@
       ]
     },
     "backend.test.get": {
-      "path": "/backend/test/$test_id<[0-9]+>",
+      "path": "/backend/test/:test_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -9549,7 +9550,7 @@
       ]
     },
     "backend.test.update": {
-      "path": "/backend/test/$test_id<[0-9]+>",
+      "path": "/backend/test/:test_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -9593,7 +9594,7 @@
       ]
     },
     "backend.token.get": {
-      "path": "/backend/token/$token_id<[0-9]+>",
+      "path": "/backend/token/:token_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -9723,7 +9724,7 @@
       ]
     },
     "backend.transaction.get": {
-      "path": "/backend/transaction/$transaction_id<[0-9]+>",
+      "path": "/backend/transaction/:transaction_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -10026,7 +10027,7 @@
       ]
     },
     "backend.trigger.delete": {
-      "path": "/backend/trigger/$trigger_id<[0-9]+|^~>",
+      "path": "/backend/trigger/:trigger_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -10063,7 +10064,7 @@
       ]
     },
     "backend.trigger.get": {
-      "path": "/backend/trigger/$trigger_id<[0-9]+|^~>",
+      "path": "/backend/trigger/:trigger_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -10155,7 +10156,7 @@
       ]
     },
     "backend.trigger.update": {
-      "path": "/backend/trigger/$trigger_id<[0-9]+|^~>",
+      "path": "/backend/trigger/:trigger_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -10237,7 +10238,7 @@
       ]
     },
     "backend.user.delete": {
-      "path": "/backend/user/$user_id<[0-9]+|^~>",
+      "path": "/backend/user/:user_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -10274,7 +10275,7 @@
       ]
     },
     "backend.user.get": {
-      "path": "/backend/user/$user_id<[0-9]+|^~>",
+      "path": "/backend/user/:user_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -10360,7 +10361,7 @@
       ]
     },
     "backend.user.resend": {
-      "path": "/backend/user/$user_id<[0-9]+|^~>/resend",
+      "path": "/backend/user/:user_id/resend",
       "method": "POST",
       "return": {
         "code": 200,
@@ -10404,7 +10405,7 @@
       ]
     },
     "backend.user.update": {
-      "path": "/backend/user/$user_id<[0-9]+|^~>",
+      "path": "/backend/user/:user_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -10486,7 +10487,7 @@
       ]
     },
     "backend.webhook.delete": {
-      "path": "/backend/webhook/$webhook_id<[0-9]+|^~>",
+      "path": "/backend/webhook/:webhook_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -10523,7 +10524,7 @@
       ]
     },
     "backend.webhook.get": {
-      "path": "/backend/webhook/$webhook_id<[0-9]+|^~>",
+      "path": "/backend/webhook/:webhook_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -10609,7 +10610,7 @@
       ]
     },
     "backend.webhook.update": {
-      "path": "/backend/webhook/$webhook_id<[0-9]+|^~>",
+      "path": "/backend/webhook/:webhook_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -11052,7 +11053,7 @@
       ]
     },
     "consumer.agent.get": {
-      "path": "/consumer/agent/$agent_id<[0-9]+|^~>",
+      "path": "/consumer/agent/:agent_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -11138,7 +11139,7 @@
       ]
     },
     "consumer.agent.message.getAll": {
-      "path": "/consumer/agent/$agent_id<[0-9]+|^~>/message",
+      "path": "/consumer/agent/:agent_id/message",
       "method": "GET",
       "return": {
         "code": 200,
@@ -11187,7 +11188,7 @@
       ]
     },
     "consumer.agent.message.submit": {
-      "path": "/consumer/agent/$agent_id<[0-9]+|^~>/message",
+      "path": "/consumer/agent/:agent_id/message",
       "method": "POST",
       "return": {
         "code": 201,
@@ -11275,7 +11276,7 @@
       ]
     },
     "consumer.app.delete": {
-      "path": "/consumer/app/$app_id<[0-9]+|^~>",
+      "path": "/consumer/app/:app_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -11312,7 +11313,7 @@
       ]
     },
     "consumer.app.get": {
-      "path": "/consumer/app/$app_id<[0-9]+|^~>",
+      "path": "/consumer/app/:app_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -11398,7 +11399,7 @@
       ]
     },
     "consumer.app.update": {
-      "path": "/consumer/app/$app_id<[0-9]+|^~>",
+      "path": "/consumer/app/:app_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -11442,7 +11443,7 @@
       ]
     },
     "consumer.event.get": {
-      "path": "/consumer/event/$event_id<[0-9]+|^~>",
+      "path": "/consumer/event/:event_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -11610,7 +11611,7 @@
       ]
     },
     "consumer.grant.delete": {
-      "path": "/consumer/grant/$grant_id<[0-9]+>",
+      "path": "/consumer/grant/:grant_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -11808,7 +11809,7 @@
       ]
     },
     "consumer.log.get": {
-      "path": "/consumer/log/$log_id<[0-9]+>",
+      "path": "/consumer/log/:log_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -12064,7 +12065,7 @@
       ]
     },
     "consumer.plan.get": {
-      "path": "/consumer/plan/$plan_id<[0-9]+|^~>",
+      "path": "/consumer/plan/:plan_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -12267,7 +12268,7 @@
       ]
     },
     "consumer.token.delete": {
-      "path": "/consumer/token/$token_id<[0-9]+|^~>",
+      "path": "/consumer/token/:token_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -12304,7 +12305,7 @@
       ]
     },
     "consumer.token.get": {
-      "path": "/consumer/token/$token_id<[0-9]+|^~>",
+      "path": "/consumer/token/:token_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -12390,7 +12391,7 @@
       ]
     },
     "consumer.token.update": {
-      "path": "/consumer/token/$token_id<[0-9]+|^~>",
+      "path": "/consumer/token/:token_id",
       "method": "PUT",
       "return": {
         "code": 200,
@@ -12434,7 +12435,7 @@
       ]
     },
     "consumer.transaction.get": {
-      "path": "/consumer/transaction/$transaction_id<[0-9]+|^~>",
+      "path": "/consumer/transaction/:transaction_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -12558,7 +12559,7 @@
       ]
     },
     "consumer.webhook.delete": {
-      "path": "/consumer/webhook/$webhook_id<[0-9]+|^~>",
+      "path": "/consumer/webhook/:webhook_id",
       "method": "DELETE",
       "return": {
         "code": 200,
@@ -12595,7 +12596,7 @@
       ]
     },
     "consumer.webhook.get": {
-      "path": "/consumer/webhook/$webhook_id<[0-9]+|^~>",
+      "path": "/consumer/webhook/:webhook_id",
       "method": "GET",
       "return": {
         "code": 200,
@@ -12681,7 +12682,7 @@
       ]
     },
     "consumer.webhook.update": {
-      "path": "/consumer/webhook/$webhook_id<[0-9]+|^~>",
+      "path": "/consumer/webhook/:webhook_id",
       "method": "PUT",
       "return": {
         "code": 200,
