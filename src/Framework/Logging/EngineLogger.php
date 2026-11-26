@@ -23,6 +23,9 @@ namespace Fusio\Impl\Framework\Logging;
 use Doctrine\DBAL\Connection;
 use Monolog\Level;
 use Monolog\Logger;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerTrait;
+use Stringable;
 
 /**
  * EngineLogger
@@ -31,13 +34,17 @@ use Monolog\Logger;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-final class EngineLogger extends Logger
+readonly class EngineLogger implements LoggerInterface
 {
+    use LoggerTrait;
+
     private TableHandler $handler;
+    private LoggerInterface $logger;
 
     public function __construct(Connection $connection)
     {
-        parent::__construct('fusio', [$this->handler = new TableHandler($connection, Level::Debug)]);
+        $this->handler = new TableHandler($connection, Level::Debug);
+        $this->logger = new Logger('fusio', [$this->handler]);
     }
 
     public function push(int $logId): void
@@ -48,5 +55,10 @@ final class EngineLogger extends Logger
     public function pop(): void
     {
         $this->handler->setLogId(null);
+    }
+
+    public function log($level, Stringable|string $message, array $context = []): void
+    {
+        $this->logger->log($level, $message, $context);
     }
 }
