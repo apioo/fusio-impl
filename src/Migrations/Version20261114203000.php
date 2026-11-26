@@ -75,8 +75,10 @@ final class Version20261114203000 extends AbstractMigration
     {
         // renamed operations, we rename them in place so that existing scope assignments are preserved
         $renames = [
-            'backend.log.getAllErrors' => 'backend.error.getAll',
-            'backend.log.getError' => 'backend.error.get',
+            'backend.log.getAll' => 'backend.log.request.getAll',
+            'backend.log.get' => 'backend.log.request.get',
+            'backend.log.getAllErrors' => 'backend.log.error.getAll',
+            'backend.log.getError' => 'backend.log.error.get',
         ];
 
         foreach ($renames as $oldName => $newName) {
