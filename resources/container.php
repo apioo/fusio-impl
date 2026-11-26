@@ -12,6 +12,7 @@ use Fusio\Impl\Cli\Config;
 use Fusio\Impl\Cli\Transport;
 use Fusio\Impl\Framework;
 use Fusio\Impl\Framework\Api\Repository\SDKgen\Config as SDKgenConfig;
+use Fusio\Impl\Framework\Logging\EngineLogger;
 use Fusio\Impl\Mail\SenderInterface as MailSenderInterface;
 use Fusio\Impl\Provider;
 use Fusio\Impl\Repository as ImplRepository;
@@ -79,6 +80,10 @@ return static function (ContainerConfigurator $container) {
 
     $services->alias('test_connector', ConnectorInterface::class)
         ->public();
+
+    $services->set(EngineLogger::class);
+    $services->get(Action\Runtime::class)
+        ->arg('$logger', service(EngineLogger::class));
 
     // impl
     $services->load('Fusio\\Impl\\Authorization\\Action\\', __DIR__ . '/../src/Authorization/Action');
