@@ -53,19 +53,19 @@ class CollectionTest extends DbTestCase
     "entry": [
         {
             "kind": "[kind]",
-            "id": 63,
+            "id": 62,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
             "kind": "[kind]",
-            "id": 62,
+            "id": 61,
             "name": "bar",
             "description": "Bar access"
         },
         {
             "kind": "[kind]",
-            "id": 61,
+            "id": 60,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -105,7 +105,7 @@ JSON;
     "entry": [
         {
             "kind": "[kind]",
-            "id": 61,
+            "id": 60,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -139,19 +139,19 @@ JSON;
     "entry": [
         {
             "kind": "[kind]",
-            "id": 63,
+            "id": 62,
             "name": "plan_scope",
             "description": "Plan scope access"
         },
         {
             "kind": "[kind]",
-            "id": 62,
+            "id": 61,
             "name": "bar",
             "description": "Bar access"
         },
         {
             "kind": "[kind]",
-            "id": 61,
+            "id": 60,
             "name": "foo",
             "description": "Foo access",
             "metadata": {
@@ -229,11 +229,11 @@ JSON;
 
         $this->assertEquals([[
             'scope_id' => $scopeId,
-            'operation_id' => 286,
+            'operation_id' => 288,
             'allow' => 1,
         ], [
             'scope_id' => $scopeId,
-            'operation_id' => 283,
+            'operation_id' => 285,
             'allow' => 1,
         ]], $operations);
     }

@@ -55,7 +55,7 @@ class CollectionTest extends DbTestCase
             "id": 1,
             "status": 1,
             "name": "my_form",
-            "operationId": 284,
+            "operationId": 286,
             "metadata": {
                 "foo": "bar"
             }

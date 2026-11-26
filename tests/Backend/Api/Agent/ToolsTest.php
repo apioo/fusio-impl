@@ -368,14 +368,6 @@ class ToolsTest extends DbTestCase
             "description": "Returns all available dashboard widgets"
         },
         {
-            "name": "backend_error_get",
-            "description": "Returns a specific error"
-        },
-        {
-            "name": "backend_error_getAll",
-            "description": "Returns a paginated list of log errors"
-        },
-        {
             "name": "backend_event_create",
             "description": "Creates a new event"
         },
@@ -480,12 +472,28 @@ class ToolsTest extends DbTestCase
             "description": "Updates an existing identity"
         },
         {
-            "name": "backend_log_get",
-            "description": "Returns a specific log"
+            "name": "backend_log_error_get",
+            "description": "Returns a specific error"
         },
         {
-            "name": "backend_log_getAll",
-            "description": "Returns a paginated list of logs"
+            "name": "backend_log_error_getAll",
+            "description": "Returns a paginated list of log errors"
+        },
+        {
+            "name": "backend_log_message_get",
+            "description": "Returns a specific log message"
+        },
+        {
+            "name": "backend_log_message_getAll",
+            "description": "Returns a paginated list of log messages"
+        },
+        {
+            "name": "backend_log_request_get",
+            "description": "Returns a specific request log"
+        },
+        {
+            "name": "backend_log_request_getAll",
+            "description": "Returns a paginated list of request logs"
         },
         {
             "name": "backend_marketplace_action_get",

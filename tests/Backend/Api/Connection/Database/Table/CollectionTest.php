@@ -43,7 +43,7 @@ class CollectionTest extends DbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 52,
+    "totalResults": 53,
     "itemsPerPage": 16,
     "startIndex": 0,
     "entry": [

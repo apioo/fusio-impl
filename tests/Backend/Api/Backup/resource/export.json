@@ -20,7 +20,7 @@
       "class": "Fusio.Adapter.Worker.Action.WorkerPHPLocal",
       "async": false,
       "config": {
-        "code": "<?php\n\nuse Fusio\\Worker;\nuse Fusio\\Engine;\nuse Psr\\Log\\LoggerInterface;\nuse PSX\\Http\\Environment\\HttpResponseInterface;\n\nreturn fn(Worker\\ExecuteRequest $request, Worker\\ExecuteContext $context, Engine\\ConnectorInterface $connector, Engine\\Response\\FactoryInterface $response, Engine\\DispatcherInterface $dispatcher, LoggerInterface $logger): HttpResponseInterface => $response->ok([\n    'foo' => 'bar',\n]);\n"
+        "code": "<?php\n\nuse Fusio\\Engine;\nuse Fusio\\Worker;\nuse Psr\\Log\\LoggerInterface;\nuse PSX\\Http\\Environment\\HttpResponseInterface;\n\nreturn function (Worker\\ExecuteRequest $request, Worker\\ExecuteContext $context, Engine\\ConnectorInterface $connector, Engine\\Response\\FactoryInterface $response, Engine\\DispatcherInterface $dispatcher, LoggerInterface $logger): HttpResponseInterface {\n    $logger->error('This is an error message', ['foo' => 'bar']);\n\n    return $response->ok([\n        'foo' => 'bar',\n    ]);\n};\n\n"
       },
       "date": "[datetime]"
     },
@@ -474,7 +474,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "operationId": 284,
+          "operationId": 286,
           "authenticated": true
         }
       ]
@@ -492,7 +492,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "operationId": 283
+          "operationId": 285
         }
       ]
     },
@@ -679,7 +679,6 @@
         "backend.connection",
         "backend.cronjob",
         "backend.dashboard",
-        "backend.error",
         "backend.event",
         "backend.firewall",
         "backend.form",
@@ -745,7 +744,6 @@
         "backend.connection",
         "backend.cronjob",
         "backend.dashboard",
-        "backend.error",
         "backend.event",
         "backend.firewall",
         "backend.form",

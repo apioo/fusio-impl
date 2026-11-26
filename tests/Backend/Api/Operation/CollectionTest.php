@@ -55,7 +55,7 @@ class CollectionTest extends DbTestCase
     "entry": [
         {
             "kind": "[kind]",
-            "id": 296,
+            "id": 298,
             "status": 1,
             "active": true,
             "public": false,
@@ -68,7 +68,7 @@ class CollectionTest extends DbTestCase
         },
         {
             "kind": "[kind]",
-            "id": 295,
+            "id": 297,
             "status": 1,
             "active": true,
             "public": false,
@@ -81,7 +81,7 @@ class CollectionTest extends DbTestCase
         },
         {
             "kind": "[kind]",
-            "id": 294,
+            "id": 296,
             "status": 1,
             "active": true,
             "public": false,
@@ -94,7 +94,7 @@ class CollectionTest extends DbTestCase
         },
         {
             "kind": "[kind]",
-            "id": 293,
+            "id": 295,
             "status": 1,
             "active": true,
             "public": false,
@@ -107,7 +107,7 @@ class CollectionTest extends DbTestCase
         },
         {
             "kind": "[kind]",
-            "id": 292,
+            "id": 294,
             "status": 1,
             "active": true,
             "public": false,
@@ -120,7 +120,7 @@ class CollectionTest extends DbTestCase
         },
         {
             "kind": "[kind]",
-            "id": 291,
+            "id": 293,
             "status": 1,
             "active": true,
             "public": false,
@@ -133,7 +133,7 @@ class CollectionTest extends DbTestCase
         },
         {
             "kind": "[kind]",
-            "id": 290,
+            "id": 292,
             "status": 1,
             "active": true,
             "public": false,
@@ -146,7 +146,7 @@ class CollectionTest extends DbTestCase
         },
         {
             "kind": "[kind]",
-            "id": 289,
+            "id": 291,
             "status": 1,
             "active": true,
             "public": false,
@@ -159,7 +159,7 @@ class CollectionTest extends DbTestCase
         },
         {
             "kind": "[kind]",
-            "id": 288,
+            "id": 290,
             "status": 1,
             "active": true,
             "public": false,
@@ -172,7 +172,7 @@ class CollectionTest extends DbTestCase
         },
         {
             "kind": "[kind]",
-            "id": 287,
+            "id": 289,
             "status": 1,
             "active": true,
             "public": false,
@@ -185,7 +185,7 @@ class CollectionTest extends DbTestCase
         },
         {
             "kind": "[kind]",
-            "id": 286,
+            "id": 288,
             "status": 1,
             "active": true,
             "public": false,
@@ -198,7 +198,7 @@ class CollectionTest extends DbTestCase
         },
         {
             "kind": "[kind]",
-            "id": 285,
+            "id": 287,
             "status": 1,
             "active": true,
             "public": false,
@@ -211,7 +211,7 @@ class CollectionTest extends DbTestCase
         },
         {
             "kind": "[kind]",
-            "id": 284,
+            "id": 286,
             "status": 1,
             "active": true,
             "public": false,
@@ -224,7 +224,7 @@ class CollectionTest extends DbTestCase
         },
         {
             "kind": "[kind]",
-            "id": 283,
+            "id": 285,
             "status": 1,
             "active": true,
             "public": true,
@@ -275,7 +275,7 @@ JSON;
     "entry": [
         {
             "kind": "[kind]",
-            "id": 290,
+            "id": 292,
             "status": 1,
             "active": true,
             "public": false,
@@ -288,7 +288,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 289,
+            "id": 291,
             "status": 1,
             "active": true,
             "public": false,
@@ -301,7 +301,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 288,
+            "id": 290,
             "status": 1,
             "active": true,
             "public": false,
@@ -314,7 +314,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 287,
+            "id": 289,
             "status": 1,
             "active": true,
             "public": false,
@@ -327,7 +327,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 286,
+            "id": 288,
             "status": 1,
             "active": true,
             "public": false,
@@ -365,7 +365,7 @@ JSON;
     "entry": [
         {
             "kind": "[kind]",
-            "id": 283,
+            "id": 285,
             "status": 1,
             "active": true,
             "public": true,
@@ -403,7 +403,7 @@ JSON;
     "entry": [
         {
             "kind": "[kind]",
-            "id": 296,
+            "id": 298,
             "status": 1,
             "active": true,
             "public": false,
@@ -416,7 +416,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 295,
+            "id": 297,
             "status": 1,
             "active": true,
             "public": false,
@@ -429,7 +429,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 294,
+            "id": 296,
             "status": 1,
             "active": true,
             "public": false,
@@ -442,7 +442,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 293,
+            "id": 295,
             "status": 1,
             "active": true,
             "public": false,
@@ -455,7 +455,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 292,
+            "id": 294,
             "status": 1,
             "active": true,
             "public": false,
@@ -468,7 +468,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 291,
+            "id": 293,
             "status": 1,
             "active": true,
             "public": false,
@@ -481,7 +481,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 290,
+            "id": 292,
             "status": 1,
             "active": true,
             "public": false,
@@ -494,7 +494,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 289,
+            "id": 291,
             "status": 1,
             "active": true,
             "public": false,
@@ -507,7 +507,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 288,
+            "id": 290,
             "status": 1,
             "active": true,
             "public": false,
@@ -520,7 +520,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 287,
+            "id": 289,
             "status": 1,
             "active": true,
             "public": false,
@@ -533,7 +533,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 286,
+            "id": 288,
             "status": 1,
             "active": true,
             "public": false,
@@ -546,7 +546,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 285,
+            "id": 287,
             "status": 1,
             "active": true,
             "public": false,
@@ -559,7 +559,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 284,
+            "id": 286,
             "status": 1,
             "active": true,
             "public": false,
@@ -572,7 +572,7 @@ JSON;
         },
         {
             "kind": "[kind]",
-            "id": 283,
+            "id": 285,
             "status": 1,
             "active": true,
             "public": true,
@@ -645,7 +645,7 @@ JSON;
     "kind": "[kind]",
     "success": true,
     "message": "Operation successfully created",
-    "id": "297"
+    "id": "299"
 }
 JSON;
 
@@ -695,7 +695,7 @@ JSON;
         $this->assertEquals(201, $response->getStatusCode(), $body);
         $this->assertSame(true, $data->success);
         $this->assertSame('Operation successfully created', $data->message);
-        $this->assertContains($data->id, ['297', '298']); // postgres does not reset the auto increment so we need to check both
+        $this->assertContains($data->id, ['299', '300']); // postgres does not reset the auto increment so we need to check both
 
         // check database
         Assert::assertOperation($this->connection, OperationInterface::STABILITY_EXPERIMENTAL, 'test.bar', 'GET', '/foo/bar', 200, ['foo', 'baz'], $metadata);

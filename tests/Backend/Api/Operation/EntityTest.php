@@ -59,7 +59,7 @@ class EntityTest extends DbTestCase
         $expect = <<<JSON
 {
     "kind": "[kind]",
-    "id": 283,
+    "id": 285,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -104,7 +104,7 @@ JSON;
         $expect = <<<JSON
 {
     "kind": "[kind]",
-    "id": 283,
+    "id": 285,
     "status": 1,
     "name": "test.listFoo",
     "scopes": [
@@ -206,7 +206,7 @@ JSON;
     "kind": "[kind]",
     "success": true,
     "message": "Operation successfully updated",
-    "id": "283"
+    "id": "285"
 }
 JSON;
 
@@ -257,7 +257,7 @@ JSON;
     "kind": "[kind]",
     "success": true,
     "message": "Operation successfully updated",
-    "id": "284"
+    "id": "286"
 }
 JSON;
 
@@ -309,7 +309,7 @@ JSON;
     "kind": "[kind]",
     "success": true,
     "message": "Operation successfully updated",
-    "id": "283"
+    "id": "285"
 }
 JSON;
 
@@ -335,7 +335,7 @@ JSON;
     "kind": "[kind]",
     "success": true,
     "message": "Operation successfully deleted",
-    "id": "283"
+    "id": "285"
 }
 JSON;
 

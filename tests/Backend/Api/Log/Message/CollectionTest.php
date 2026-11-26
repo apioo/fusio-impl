@@ -54,7 +54,7 @@ class CollectionTest extends DbTestCase
             "kind": "[kind]",
             "id": 1,
             "logId": 1,
-            "level": 400,
+            "level": 4,
             "message": "A log message",
             "context": {
                 "foo": "bar"
@@ -90,7 +90,7 @@ JSON;
             "kind": "[kind]",
             "id": 1,
             "logId": 1,
-            "level": 400,
+            "level": 4,
             "message": "A log message",
             "context": {
                 "foo": "bar"
@@ -126,7 +126,7 @@ JSON;
             "kind": "[kind]",
             "id": 1,
             "logId": 1,
-            "level": 400,
+            "level": 4,
             "message": "A log message",
             "context": {
                 "foo": "bar"
