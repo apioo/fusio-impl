@@ -345,6 +345,7 @@ class Fixture
         $data->addLog('default', 'Foo-App', 'Consumer', 'test.listFoo');
         $data->addLog('default', 'Foo-App', 'Developer', 'test.listFoo');
         $data->addLogError(1);
+        $data->addLogMessage(1);
         $data->addPlanUsage('test.listFoo', 'Administrator', 'Foo-App', 1, '2018-10-05 18:18:00');
         $data->addRateAllocation('silver', 'test.listFoo');
         $data->addRateAllocation('gold', 'test.createFoo', null, null, null, true);

@@ -49,6 +49,17 @@ final class Version20261114203000 extends AbstractMigration
             $agentTaskTable->addForeignKeyConstraint($schema->getTable('fusio_agent'), ['agent_id'], ['id'], [], 'agent_task_agent_id');
             $agentTaskTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'agent_task_user_id');
         }
+
+        if (!$schema->hasTable('fusio_log_message')) {
+            $logMessageTable = $schema->createTable('fusio_log_message');
+            $logMessageTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $logMessageTable->addColumn('log_id', 'integer');
+            $logMessageTable->addColumn('level', 'integer');
+            $logMessageTable->addColumn('message', 'string', ['length' => 500]);
+            $logMessageTable->addColumn('context', 'text');
+            $logMessageTable->addColumn('insert_date', 'datetime', ['notnull' => false]);
+            $logMessageTable->setPrimaryKey(['id']);
+        }
     }
 
     public function down(Schema $schema): void

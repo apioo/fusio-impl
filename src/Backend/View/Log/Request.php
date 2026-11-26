@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\View;
+namespace Fusio\Impl\Backend\View\Log;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Backend\Filter\DateQueryFilter;
@@ -33,13 +33,13 @@ use PSX\Sql\OrderBy;
 use PSX\Sql\ViewAbstract;
 
 /**
- * Log
+ * Request
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-class Log extends ViewAbstract
+class Request extends ViewAbstract
 {
     public function getCollection(LogQueryFilter $filter, ContextInterface $context): mixed
     {

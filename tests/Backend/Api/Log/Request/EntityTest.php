@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Log;
+namespace Fusio\Impl\Tests\Backend\Api\Log\Request;
 
 use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
@@ -35,7 +35,7 @@ class EntityTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/log/1', 'GET', [
+        $response = $this->sendRequest('/backend/log/request/1', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -48,7 +48,7 @@ class EntityTest extends DbTestCase
     "kind": "[kind]",
     "id": 1,
     "appId": 3,
-    "operationId": 283,
+    "operationId": 285,
     "ip": "127.0.0.1",
     "userAgent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36",
     "method": "GET",
@@ -74,7 +74,7 @@ JSON;
 
     public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/log/1', 'POST', [
+        $response = $this->sendRequest('/backend/log/request/1', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
@@ -88,7 +88,7 @@ JSON;
 
     public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/log/1', 'PUT', [
+        $response = $this->sendRequest('/backend/log/request/1', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
@@ -102,7 +102,7 @@ JSON;
 
     public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/log/1', 'DELETE', [
+        $response = $this->sendRequest('/backend/log/request/1', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);

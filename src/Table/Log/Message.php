@@ -18,33 +18,17 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Backend\Action\Log;
+namespace Fusio\Impl\Table\Log;
 
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\Filter\Log\LogQueryFilter;
-use Fusio\Impl\Backend\View;
+use Fusio\Impl\Table\Generated;
 
 /**
- * GetAll
+ * Message
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://www.fusio-project.org
  */
-readonly class GetAll implements ActionInterface
+class Message extends Generated\LogMessageTable
 {
-    public function __construct(private View\Log $view)
-    {
-    }
-
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
-    {
-        return $this->view->getCollection(
-            LogQueryFilter::from($request),
-            $context
-        );
-    }
 }

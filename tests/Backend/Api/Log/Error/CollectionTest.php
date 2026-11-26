@@ -35,7 +35,7 @@ class CollectionTest extends DbTestCase
 {
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/error', 'GET', [
+        $response = $this->sendRequest('/backend/log/error', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -69,7 +69,7 @@ JSON;
 
     public function testGetSearch(): void
     {
-        $response = $this->sendRequest('/backend/error?search=JSON', 'GET', [
+        $response = $this->sendRequest('/backend/log/error?search=JSON', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -103,7 +103,7 @@ JSON;
 
     public function testGetCount(): void
     {
-        $response = $this->sendRequest('/backend/error?count=80', 'GET', [
+        $response = $this->sendRequest('/backend/log/error?count=80', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -137,7 +137,7 @@ JSON;
 
     public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/error', 'POST', [
+        $response = $this->sendRequest('/backend/log/error', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
@@ -151,7 +151,7 @@ JSON;
 
     public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/error', 'PUT', [
+        $response = $this->sendRequest('/backend/log/error', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
@@ -165,7 +165,7 @@ JSON;
 
     public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/error', 'DELETE', [
+        $response = $this->sendRequest('/backend/log/error', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([

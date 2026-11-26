@@ -20,12 +20,15 @@
 
 namespace Fusio\Impl\Service;
 
+use DateTime;
 use Doctrine\DBAL\Connection as DBALConnection;
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Framework\Logging\EngineLogger;
 use Fusio\Impl\Table;
 use PSX\Framework\DisplayException;
 use PSX\Http\RequestInterface;
 use PSX\Http\Stream\Util;
+use Throwable;
 
 /**
  * Log
@@ -36,21 +39,18 @@ use PSX\Http\Stream\Util;
  */
 class Log
 {
-    public const START_TIME = 0;
-    public const LOG_ID = 1;
+    public const int START_TIME = 0;
+    public const int LOG_ID = 1;
 
     private static int $level = -1;
-
-    private DBALConnection $connection;
 
     /**
      * @var array<array{0: float, 1: int|null}>
      */
     private array $stack;
 
-    public function __construct(DBALConnection $connection)
+    public function __construct(private readonly DBALConnection $connection, private readonly EngineLogger $logger)
     {
-        $this->connection = $connection;
         $this->stack = [];
     }
 
@@ -63,7 +63,7 @@ class Log
             self::LOG_ID => null
         ];
 
-        $now = new \DateTime();
+        $now = new DateTime();
 
         if (strlen($userAgent) > 255) {
             $userAgent = substr($userAgent, 0, 255);
@@ -88,7 +88,11 @@ class Log
             Table\Generated\LogTable::COLUMN_DATE => $now->format('Y-m-d H:i:s'),
         ));
 
-        $this->stack[self::$level][self::LOG_ID] = (int) $this->connection->lastInsertId();
+        $logId = (int) $this->connection->lastInsertId();
+
+        $this->stack[self::$level][self::LOG_ID] = $logId;
+
+        $this->logger->push($logId);
     }
 
     public function finish(int $responseCode): void
@@ -110,22 +114,23 @@ class Log
         ], [
             Table\Generated\LogTable::COLUMN_ID => $logId,
         ]);
+
+        $this->logger->pop();
     }
 
-    public function error(\Throwable $exception): void
+    public function error(Throwable $exception): void
     {
         if ($exception instanceof DisplayException) {
             return;
         }
 
         $logId = $this->stack[self::$level][self::LOG_ID] ?? null;
-
         if ($logId === null) {
             return;
         }
 
         $previousException = $exception->getPrevious();
-        if ($previousException instanceof \Throwable) {
+        if ($previousException instanceof Throwable) {
             $this->error($previousException);
         }
 

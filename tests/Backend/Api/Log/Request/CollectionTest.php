@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Log;
+namespace Fusio\Impl\Tests\Backend\Api\Log\Request;
 
 use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
@@ -45,7 +45,7 @@ class CollectionTest extends DbTestCase
 
     public function testGet(): void
     {
-        $response = $this->sendRequest('/backend/log?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', [
+        $response = $this->sendRequest('/backend/log/request?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -92,7 +92,7 @@ JSON;
 
     public function testGetSearch(): void
     {
-        $response = $this->sendRequest('/backend/log?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59&search=' . urlencode('/bar'), 'GET', [
+        $response = $this->sendRequest('/backend/log/request?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59&search=' . urlencode('/bar'), 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -139,7 +139,7 @@ JSON;
 
     public function testGetCount(): void
     {
-        $response = $this->sendRequest('/backend/log?count=80&from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', [
+        $response = $this->sendRequest('/backend/log/request?count=80&from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ]);
@@ -186,7 +186,7 @@ JSON;
 
     public function testPost(): void
     {
-        $response = $this->sendRequest('/backend/log', 'POST', [
+        $response = $this->sendRequest('/backend/log/request', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
@@ -200,7 +200,7 @@ JSON;
 
     public function testPut(): void
     {
-        $response = $this->sendRequest('/backend/log', 'PUT', [
+        $response = $this->sendRequest('/backend/log/request', 'PUT', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([
@@ -214,7 +214,7 @@ JSON;
 
     public function testDelete(): void
     {
-        $response = $this->sendRequest('/backend/log', 'DELETE', [
+        $response = $this->sendRequest('/backend/log/request', 'DELETE', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => Authorization::BACKEND_ADMINISTRATOR,
         ], json_encode([

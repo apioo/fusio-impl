@@ -375,6 +375,17 @@ final class Version20230508210151 extends AbstractMigration
             $logErrorTable->setPrimaryKey(['id']);
         }
 
+        if (!$schema->hasTable('fusio_log_message')) {
+            $logMessageTable = $schema->createTable('fusio_log_message');
+            $logMessageTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $logMessageTable->addColumn('log_id', 'integer');
+            $logMessageTable->addColumn('level', 'integer');
+            $logMessageTable->addColumn('message', 'string', ['length' => 500]);
+            $logMessageTable->addColumn('context', 'text');
+            $logMessageTable->addColumn('insert_date', 'datetime', ['notnull' => false]);
+            $logMessageTable->setPrimaryKey(['id']);
+        }
+
         if (!$schema->hasTable('fusio_mcp_session')) {
             $mcpSessionTable = $schema->createTable('fusio_mcp_session');
             $mcpSessionTable->addColumn('id', 'integer', ['autoincrement' => true]);

@@ -21,6 +21,7 @@
 namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\ContextFactory;
+use Fusio\Impl\Framework\Logging\EngineLogger;
 use Fusio\Impl\Service;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;

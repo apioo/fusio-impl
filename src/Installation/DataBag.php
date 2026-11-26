@@ -82,6 +82,7 @@ class DataBag
             'fusio_webhook' => [],
             'fusio_webhook_response' => [],
             'fusio_log_error' => [],
+            'fusio_log_message' => [],
             'fusio_plan_usage' => [],
             'fusio_rate_allocation' => [],
             'fusio_scope_operation' => [],
@@ -597,6 +598,17 @@ class DataBag
             'trace' => '[trace]',
             'file' => '[file]',
             'line' => 74,
+            'insert_date' => (new DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    public function addLogMessage(int $log, ?string $insertDate = null): void
+    {
+        $this->data['fusio_log_message'][] = [
+            'log_id' => $log,
+            'level' => 4,
+            'message' => 'A log message',
+            'context' => \json_encode(['foo' => 'bar']),
             'insert_date' => (new DateTime($insertDate ?? 'now'))->format('Y-m-d H:i:s'),
         ];
     }

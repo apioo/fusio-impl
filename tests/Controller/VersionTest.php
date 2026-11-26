@@ -22,6 +22,7 @@ namespace Fusio\Impl\Tests\Controller;
 
 use Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Tests\DbTestCase;
+use PSX\Json\Parser;
 
 /**
  * VersionTest
@@ -86,5 +87,12 @@ JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $actual);
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+
+        // check log message
+        $row = $this->connection->fetchAssociative('SELECT level, message, context FROM fusio_log_message ORDER BY id DESC');
+
+        $this->assertEquals(3, $row['level']);
+        $this->assertEquals('This is an error message', $row['message']);
+        $this->assertJsonStringEqualsJsonString(Parser::encode(['foo' => 'bar']), $row['context']);
     }
 }

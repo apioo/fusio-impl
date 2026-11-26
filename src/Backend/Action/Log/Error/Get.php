@@ -42,15 +42,15 @@ readonly class Get implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $error = $this->view->getEntity(
+        $log = $this->view->getEntity(
             (int) $request->get('error_id'),
             $context
         );
 
-        if (empty($error)) {
+        if (empty($log)) {
             throw new StatusCode\NotFoundException('Could not find error');
         }
 
-        return $error;
+        return $log;
     }
 }
