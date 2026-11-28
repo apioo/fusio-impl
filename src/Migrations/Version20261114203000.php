@@ -82,10 +82,25 @@ final class Version20261114203000 extends AbstractMigration
         ];
 
         foreach ($renames as $oldName => $newName) {
-            $exists = $this->connection->fetchOne('SELECT id FROM fusio_operation WHERE tenant_id IS NULL AND name = :name', ['name' => $newName]);
-            if (empty($exists)) {
-                $this->connection->executeStatement('UPDATE fusio_operation SET name = :new WHERE tenant_id IS NULL AND name = :old', ['new' => $newName, 'old' => $oldName]);
-            }
+            $this->connection->update('fusio_operation', [
+                'name' => $newName,
+            ], [
+                'name' => $oldName,
+            ]);
+        }
+
+        // deactivate legacy operations
+        $names = [
+            'system.meta.getAPICatalog',
+            'system.meta.getOAuth2Configuration',
+        ];
+
+        foreach ($names as $name) {
+            $this->connection->update('fusio_operation', [
+                'status' => 0,
+            ], [
+                'name' => $name,
+            ]);
         }
 
         // updates existing operations and inserts missing ones
